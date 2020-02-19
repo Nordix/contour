@@ -24,6 +24,7 @@ import (
 	envoy_api_v2_accesslog "github.com/envoyproxy/go-control-plane/envoy/config/filter/accesslog/v2"
 	http "github.com/envoyproxy/go-control-plane/envoy/config/filter/network/http_connection_manager/v2"
 	envoy_config_v2_tcpproxy "github.com/envoyproxy/go-control-plane/envoy/config/filter/network/tcp_proxy/v2"
+	matcher "github.com/envoyproxy/go-control-plane/envoy/type/matcher"
 	"github.com/envoyproxy/go-control-plane/pkg/wellknown"
 	"github.com/google/go-cmp/cmp"
 	"github.com/projectcontour/contour/internal/assert"
@@ -159,45 +160,104 @@ func TestSocketAddress(t *testing.T) {
 
 func TestDownstreamTLSContext(t *testing.T) {
 	const secretName = "default/tls-cert"
+	const subjectName = "client-subject-name"
+	ca := []byte("client-ca-cert")
+	ciphers := []string{
+		"[ECDHE-ECDSA-AES128-GCM-SHA256|ECDHE-ECDSA-CHACHA20-POLY1305]",
+		"[ECDHE-RSA-AES128-GCM-SHA256|ECDHE-RSA-CHACHA20-POLY1305]",
+		"ECDHE-ECDSA-AES128-SHA",
+		"ECDHE-RSA-AES128-SHA",
+		"ECDHE-ECDSA-AES256-GCM-SHA384",
+		"ECDHE-RSA-AES256-GCM-SHA384",
+		"ECDHE-ECDSA-AES256-SHA",
+		"ECDHE-RSA-AES256-SHA",
+	}
 
-	got := DownstreamTLSContext(secretName, envoy_api_v2_auth.TlsParameters_TLSv1_1, "h2", "http/1.1")
-	want := &envoy_api_v2_auth.DownstreamTlsContext{
-		CommonTlsContext: &envoy_api_v2_auth.CommonTlsContext{
-			TlsParams: &envoy_api_v2_auth.TlsParameters{
-				TlsMinimumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_1,
-				TlsMaximumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_3,
-				CipherSuites: []string{
-					"[ECDHE-ECDSA-AES128-GCM-SHA256|ECDHE-ECDSA-CHACHA20-POLY1305]",
-					"[ECDHE-RSA-AES128-GCM-SHA256|ECDHE-RSA-CHACHA20-POLY1305]",
-					"ECDHE-ECDSA-AES128-SHA",
-					"ECDHE-RSA-AES128-SHA",
-					"ECDHE-ECDSA-AES256-GCM-SHA384",
-					"ECDHE-RSA-AES256-GCM-SHA384",
-					"ECDHE-ECDSA-AES256-SHA",
-					"ECDHE-RSA-AES256-SHA",
+	tests := map[string]struct {
+		got  *envoy_api_v2_auth.DownstreamTlsContext
+		want *envoy_api_v2_auth.DownstreamTlsContext
+	}{
+		"TLS context without client authentication": {
+			DownstreamTLSContext(secretName, envoy_api_v2_auth.TlsParameters_TLSv1_1, nil, "", "h2", "http/1.1"),
+			&envoy_api_v2_auth.DownstreamTlsContext{
+				CommonTlsContext: &envoy_api_v2_auth.CommonTlsContext{
+					TlsParams: &envoy_api_v2_auth.TlsParameters{
+						TlsMinimumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_1,
+						TlsMaximumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_3,
+						CipherSuites:              ciphers,
+					},
+					TlsCertificateSdsSecretConfigs: []*envoy_api_v2_auth.SdsSecretConfig{{
+						Name: secretName,
+						SdsConfig: &envoy_api_v2_core.ConfigSource{
+							ConfigSourceSpecifier: &envoy_api_v2_core.ConfigSource_ApiConfigSource{
+								ApiConfigSource: &envoy_api_v2_core.ApiConfigSource{
+									ApiType: envoy_api_v2_core.ApiConfigSource_GRPC,
+									GrpcServices: []*envoy_api_v2_core.GrpcService{{
+										TargetSpecifier: &envoy_api_v2_core.GrpcService_EnvoyGrpc_{
+											EnvoyGrpc: &envoy_api_v2_core.GrpcService_EnvoyGrpc{
+												ClusterName: "contour",
+											},
+										},
+									}},
+								},
+							},
+						},
+					}},
+					AlpnProtocols: []string{"h2", "http/1.1"},
 				},
 			},
-			TlsCertificateSdsSecretConfigs: []*envoy_api_v2_auth.SdsSecretConfig{{
-				Name: secretName,
-				SdsConfig: &envoy_api_v2_core.ConfigSource{
-					ConfigSourceSpecifier: &envoy_api_v2_core.ConfigSource_ApiConfigSource{
-						ApiConfigSource: &envoy_api_v2_core.ApiConfigSource{
-							ApiType: envoy_api_v2_core.ApiConfigSource_GRPC,
-							GrpcServices: []*envoy_api_v2_core.GrpcService{{
-								TargetSpecifier: &envoy_api_v2_core.GrpcService_EnvoyGrpc_{
-									EnvoyGrpc: &envoy_api_v2_core.GrpcService_EnvoyGrpc{
-										ClusterName: "contour",
-									},
+		},
+		"TLS context with client authentication": {
+			DownstreamTLSContext(secretName, envoy_api_v2_auth.TlsParameters_TLSv1_1, ca, subjectName, "h2", "http/1.1"),
+			&envoy_api_v2_auth.DownstreamTlsContext{
+				CommonTlsContext: &envoy_api_v2_auth.CommonTlsContext{
+					TlsParams: &envoy_api_v2_auth.TlsParameters{
+						TlsMinimumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_1,
+						TlsMaximumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_3,
+						CipherSuites:              ciphers,
+					},
+					TlsCertificateSdsSecretConfigs: []*envoy_api_v2_auth.SdsSecretConfig{{
+						Name: secretName,
+						SdsConfig: &envoy_api_v2_core.ConfigSource{
+							ConfigSourceSpecifier: &envoy_api_v2_core.ConfigSource_ApiConfigSource{
+								ApiConfigSource: &envoy_api_v2_core.ApiConfigSource{
+									ApiType: envoy_api_v2_core.ApiConfigSource_GRPC,
+									GrpcServices: []*envoy_api_v2_core.GrpcService{{
+										TargetSpecifier: &envoy_api_v2_core.GrpcService_EnvoyGrpc_{
+											EnvoyGrpc: &envoy_api_v2_core.GrpcService_EnvoyGrpc{
+												ClusterName: "contour",
+											},
+										},
+									}},
 								},
-							}},
+							},
+						},
+					}},
+					ValidationContextType: &envoy_api_v2_auth.CommonTlsContext_ValidationContext{
+						ValidationContext: &envoy_api_v2_auth.CertificateValidationContext{
+							TrustedCa: &envoy_api_v2_core.DataSource{
+								Specifier: &envoy_api_v2_core.DataSource_InlineBytes{
+									InlineBytes: ca,
+								},
+							},
+							MatchSubjectAltNames: []*matcher.StringMatcher{{
+								MatchPattern: &matcher.StringMatcher_Exact{
+									Exact: subjectName,
+								}}},
 						},
 					},
+					AlpnProtocols: []string{"h2", "http/1.1"},
 				},
-			}},
-			AlpnProtocols: []string{"h2", "http/1.1"},
+				RequireClientCertificate: protobuf.Bool(true),
+			},
 		},
 	}
-	assert.Equal(t, want, got)
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			assert.Equal(t, tc.want, tc.got)
+		})
+	}
 }
 
 func TestHTTPConnectionManager(t *testing.T) {

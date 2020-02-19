@@ -51,11 +51,11 @@ func TestDownstreamTLSTransportSocket(t *testing.T) {
 		want *envoy_api_v2_core.TransportSocket
 	}{
 		"default/tls": {
-			ctxt: DownstreamTLSContext("default/tls", envoy_api_v2_auth.TlsParameters_TLSv1_1, "h2", "http/1.1"),
+			ctxt: DownstreamTLSContext("default/tls", envoy_api_v2_auth.TlsParameters_TLSv1_1, nil, "client-subject-name", "h2", "http/1.1"),
 			want: &envoy_api_v2_core.TransportSocket{
 				Name: "envoy.transport_sockets.tls",
 				ConfigType: &envoy_api_v2_core.TransportSocket_TypedConfig{
-					TypedConfig: toAny(DownstreamTLSContext("default/tls", envoy_api_v2_auth.TlsParameters_TLSv1_1, "h2", "http/1.1")),
+					TypedConfig: toAny(DownstreamTLSContext("default/tls", envoy_api_v2_auth.TlsParameters_TLSv1_1, nil, "client-subject-name", "h2", "http/1.1")),
 				},
 			},
 		},

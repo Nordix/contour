@@ -180,7 +180,7 @@ func TestCluster(t *testing.T) {
 			cluster: &dag.Cluster{
 				Upstream: service(s1, "tls"),
 				Protocol: "tls",
-				UpstreamValidation: &dag.UpstreamValidation{
+				UpstreamValidation: &dag.ValidationContext{
 					CACertificate: &dag.Secret{
 						Object: &v1.Secret{
 							ObjectMeta: metav1.ObjectMeta{
@@ -462,7 +462,7 @@ func TestClustername(t *testing.T) {
 					},
 				},
 				LoadBalancerPolicy: "Random",
-				UpstreamValidation: &dag.UpstreamValidation{
+				UpstreamValidation: &dag.ValidationContext{
 					CACertificate: &dag.Secret{
 						Object: &v1.Secret{
 							ObjectMeta: metav1.ObjectMeta{

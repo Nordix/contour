@@ -106,7 +106,7 @@ func upstreamValidationCACert(c *dag.Cluster) []byte {
 		// No validation required
 		return nil
 	}
-	return c.UpstreamValidation.CACertificate.Object.Data[dag.CACertificateKey]
+	return c.UpstreamValidation.ValidationContextCACert()
 }
 
 func upstreamValidationSubjectAltName(c *dag.Cluster) string {

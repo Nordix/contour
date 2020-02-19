@@ -385,6 +385,17 @@ spec:
                     that will be matched on are described in fqdn, the tls.secretName
                     secret must contain a matching certificate
                   properties:
+                    clientValidation:
+                      description: ClientValidation defines how to verify the client
+                        certificate
+                      properties:
+                        caSecret:
+                          description: Name of the Kubernetes secret be used to validate
+                            the certificate presented by the client
+                          type: string
+                      required:
+                      - caSecret
+                      type: object
                     minimumProtocolVersion:
                       description: Minimum TLS version this vhost should negotiate
                       type: string
@@ -1179,6 +1190,17 @@ spec:
                     that will be matched on are described in fqdn, the tls.secretName
                     secret must contain a matching certificate
                   properties:
+                    clientValidation:
+                      description: ClientValidation defines how to verify the client
+                        certificate
+                      properties:
+                        caSecret:
+                          description: Name of the Kubernetes secret be used to validate
+                            the certificate presented by the client
+                          type: string
+                      required:
+                      - caSecret
+                      type: object
                     minimumProtocolVersion:
                       description: Minimum TLS version this vhost should negotiate
                       type: string

@@ -132,6 +132,8 @@ func TestTLSMinimumProtocolVersion(t *testing.T) {
 			envoy.FilterChainTLS(
 				"kuard.example.com",
 				&dag.Secret{Object: sec1},
+				nil,
+				"",
 				envoy.Filters(
 					envoy.HTTPConnectionManager("ingress_https", envoy.FileAccessLogEnvoy("/dev/stdout"), 0),
 				),

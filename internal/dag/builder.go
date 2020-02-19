@@ -488,6 +488,17 @@ func (b *Builder) computeHTTPProxy(proxy *projcontour.HTTPProxy) {
 			svhost := b.lookupSecureVirtualHost(host)
 			svhost.Secret = sec
 			svhost.MinProtoVersion = MinProtoVersion(proxy.Spec.VirtualHost.TLS.MinimumProtocolVersion)
+
+			// Fill in DownstreamValidation when external client validation is enabled
+			if tls.ClientValidation != nil {
+				dv, err := b.lookupDownstreamValidation(tls.ClientValidation,
+					proxy.Namespace,
+					fmt.Sprintf("HTTPProxy: %q", proxy.Name))
+				if err != nil {
+					sw.SetInvalid("%s", err)
+				}
+				svhost.DownstreamValidation = dv
+			}
 		}
 
 		if sec == nil && !tls.Passthrough {
@@ -789,7 +800,7 @@ func (b *Builder) computeRoutes(sw *ObjectStatusWriter, proxy *projcontour.HTTPP
 				return nil
 			}
 
-			var uv *UpstreamValidation
+			var uv *ValidationContext
 			if protocol == "tls" {
 				// we can only validate TLS connections to services that talk TLS
 				uv, err = b.lookupUpstreamValidation(service.UpstreamValidation, proxy.Namespace)
@@ -999,7 +1010,7 @@ func (b *Builder) processIngressRoutes(sw *ObjectStatusWriter, ir *ingressroutev
 					return
 				}
 
-				var uv *UpstreamValidation
+				var uv *ValidationContext
 				var err error
 				if s.Protocol == "tls" {
 					// we can only validate TLS connections to services that talk TLS
@@ -1087,9 +1098,26 @@ func (b *Builder) lookupUpstreamValidation(uv *projcontour.UpstreamValidation, n
 		return nil, errors.New("missing subject alternative name")
 	}
 
-	return &UpstreamValidation{
+	return &ValidationContext{
 		CACertificate: cacert,
 		SubjectName:   uv.SubjectName,
+	}, nil
+}
+
+func (b *Builder) lookupDownstreamValidation(vc *projcontour.DownstreamValidation, namespace string, errorContext string) (*ValidationContext, error) {
+	if vc == nil {
+		// no downstream validation requested, nothing to do
+		return nil, nil
+	}
+
+	cacert := b.lookupSecret(Meta{name: vc.CACertificate, namespace: namespace}, validCA)
+	if cacert == nil {
+		// ValidationContext is requested, but cert is missing or not configured
+		return nil, fmt.Errorf("%s downstreamValidation requested but secret not found or misconfigured", errorContext)
+	}
+
+	return &ValidationContext{
+		CACertificate: cacert,
 	}, nil
 }
 

@@ -4309,7 +4309,7 @@ func TestDAGInsert(t *testing.T) {
 										Protocol:    "tls",
 									},
 									Protocol: "tls",
-									UpstreamValidation: &UpstreamValidation{
+									UpstreamValidation: &ValidationContext{
 										CACertificate: secret(cert1),
 										SubjectName:   "example.com",
 									},
@@ -5277,7 +5277,7 @@ func TestDAGInsert(t *testing.T) {
 										Protocol:    "tls",
 									},
 									Protocol: "tls",
-									UpstreamValidation: &UpstreamValidation{
+									UpstreamValidation: &ValidationContext{
 										CACertificate: secret(cert1),
 										SubjectName:   "example.com",
 									},

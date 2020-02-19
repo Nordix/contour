@@ -120,6 +120,9 @@ type TLS struct {
 	// backing cluster.
 	// +optional
 	Passthrough bool `json:"passthrough,omitempty"`
+	// ClientValidation defines how to verify the client certificate
+	// +optional
+	ClientValidation *DownstreamValidation `json:"clientValidation,omitempty"`
 }
 
 // Route contains the set of routes for a virtual host.
@@ -377,6 +380,12 @@ type UpstreamValidation struct {
 	CACertificate string `json:"caSecret"`
 	// Key which is expected to be present in the 'subjectAltName' of the presented certificate
 	SubjectName string `json:"subjectName"`
+}
+
+// DownstreamValidation defines how to verify the client certificate
+type DownstreamValidation struct {
+	// Name of the Kubernetes secret be used to validate the certificate presented by the client
+	CACertificate string `json:"caSecret"`
 }
 
 // Status reports the current state of the HTTPProxy.

@@ -210,6 +210,8 @@ func filterchaintls(domain string, secret *v1.Secret, filter *envoy_api_v2_liste
 		envoy.FilterChainTLS(
 			domain,
 			&dag.Secret{Object: secret},
+			nil,
+			"",
 			envoy.Filters(filter),
 			envoy_api_v2_auth.TlsParameters_TLSv1_1,
 			alpn...,

@@ -440,6 +440,8 @@ func TestIngressRouteTLSListener(t *testing.T) {
 			envoy.FilterChainTLS(
 				"kuard.example.com",
 				&dag.Secret{Object: secret1},
+				nil,
+				"",
 				envoy.Filters(
 					envoy.HTTPConnectionManager("ingress_https", envoy.FileAccessLogEnvoy("/dev/stdout"), 0),
 				),
@@ -1103,6 +1105,8 @@ func TestIngressRouteMinimumTLSVersion(t *testing.T) {
 			envoy.FilterChainTLS(
 				"kuard.example.com",
 				&dag.Secret{Object: secret1},
+				nil,
+				"",
 				envoy.Filters(
 					envoy.HTTPConnectionManager("ingress_https", envoy.FileAccessLogEnvoy("/dev/stdout"), 0),
 				),
@@ -1165,6 +1169,8 @@ func TestIngressRouteMinimumTLSVersion(t *testing.T) {
 			envoy.FilterChainTLS(
 				"kuard.example.com",
 				&dag.Secret{Object: secret1},
+				nil,
+				"",
 				envoy.Filters(
 					envoy.HTTPConnectionManager("ingress_https", envoy.FileAccessLogEnvoy("/dev/stdout"), 0),
 				),
@@ -1294,6 +1300,8 @@ func filterchaintls(domain string, secret *v1.Secret, filter *envoy_api_v2_liste
 		envoy.FilterChainTLS(
 			domain,
 			&dag.Secret{Object: secret},
+			nil,
+			"",
 			envoy.Filters(filter),
 			envoy_api_v2_auth.TlsParameters_TLSv1_1,
 			alpn...,

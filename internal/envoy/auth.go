@@ -17,6 +17,7 @@ import (
 	envoy_api_v2_auth "github.com/envoyproxy/go-control-plane/envoy/api/v2/auth"
 	envoy_api_v2_core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	matcher "github.com/envoyproxy/go-control-plane/envoy/type/matcher"
+	"github.com/projectcontour/contour/internal/protobuf"
 )
 
 var (
@@ -61,7 +62,7 @@ func UpstreamTLSContext(ca []byte, subjectName string, sni string, alpnProtocols
 	// is an interface, returning nil from validationContext directly into
 	// this field boxes the nil into the unexported type of this grpc OneOf field
 	// which causes proto marshaling to explode later on. Not happy Jan.
-	vc := validationContext(ca, subjectName)
+	vc := validationContext(ca, subjectName, true)
 	if vc != nil {
 		context.CommonTlsContext.ValidationContextType = vc
 	}
@@ -69,18 +70,18 @@ func UpstreamTLSContext(ca []byte, subjectName string, sni string, alpnProtocols
 	return context
 }
 
-func validationContext(ca []byte, subjectName string) *envoy_api_v2_auth.CommonTlsContext_ValidationContext {
+func validationContext(ca []byte, subjectName string, subjectRequired bool) *envoy_api_v2_auth.CommonTlsContext_ValidationContext {
 	if len(ca) < 1 {
 		// no ca provided, nothing to do
 		return nil
 	}
 
-	if len(subjectName) < 1 {
+	if subjectRequired && len(subjectName) < 1 {
 		// no subject name provided, nothing to do
 		return nil
 	}
 
-	return &envoy_api_v2_auth.CommonTlsContext_ValidationContext{
+	vc := &envoy_api_v2_auth.CommonTlsContext_ValidationContext{
 		ValidationContext: &envoy_api_v2_auth.CertificateValidationContext{
 			TrustedCa: &envoy_api_v2_core.DataSource{
 				// TODO(dfc) update this for SDS
@@ -88,18 +89,23 @@ func validationContext(ca []byte, subjectName string) *envoy_api_v2_auth.CommonT
 					InlineBytes: ca,
 				},
 			},
-			MatchSubjectAltNames: []*matcher.StringMatcher{{
-				MatchPattern: &matcher.StringMatcher_Exact{
-					Exact: subjectName,
-				}},
-			},
 		},
 	}
+
+	if len(subjectName) > 0 {
+		vc.ValidationContext.MatchSubjectAltNames = []*matcher.StringMatcher{{
+			MatchPattern: &matcher.StringMatcher_Exact{
+				Exact: subjectName,
+			}},
+		}
+	}
+
+	return vc
 }
 
 // DownstreamTLSContext creates a new DownstreamTlsContext.
-func DownstreamTLSContext(secretName string, tlsMinProtoVersion envoy_api_v2_auth.TlsParameters_TlsProtocol, alpnProtos ...string) *envoy_api_v2_auth.DownstreamTlsContext {
-	return &envoy_api_v2_auth.DownstreamTlsContext{
+func DownstreamTLSContext(secretName string, tlsMinProtoVersion envoy_api_v2_auth.TlsParameters_TlsProtocol, ca []byte, subjectName string, alpnProtos ...string) *envoy_api_v2_auth.DownstreamTlsContext {
+	context := &envoy_api_v2_auth.DownstreamTlsContext{
 		CommonTlsContext: &envoy_api_v2_auth.CommonTlsContext{
 			TlsParams: &envoy_api_v2_auth.TlsParameters{
 				TlsMinimumProtocolVersion: tlsMinProtoVersion,
@@ -113,4 +119,12 @@ func DownstreamTLSContext(secretName string, tlsMinProtoVersion envoy_api_v2_aut
 			AlpnProtocols: alpnProtos,
 		},
 	}
+
+	vc := validationContext(ca, subjectName, false)
+	if vc != nil {
+		context.CommonTlsContext.ValidationContextType = vc
+		context.RequireClientCertificate = protobuf.Bool(true)
+	}
+
+	return context
 }
