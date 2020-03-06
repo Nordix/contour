@@ -366,21 +366,14 @@ func (v *listenerVisitor) visit(vertex dag.Vertex) {
 			alpnProtos = nil // do not offer ALPN
 		}
 
-		var ca []byte
-		var subjectName string
-		if vh.DownstreamValidation != nil {
-			ca = vh.DownstreamValidation.ValidationContextCACert()
-			subjectName = vh.DownstreamValidation.SubjectName
-		}
-
 		fc := envoy.FilterChainTLS(
 			vh.VirtualHost.Name,
-			vh.Secret,
-			ca,
-			subjectName,
+			envoy.DownstreamTLSContext(
+				vh.Secret,
+				max(v.ListenerVisitorConfig.minProtoVersion(), vh.MinProtoVersion), // Choose the higher of the configured or requested tls version.
+				vh.DownstreamValidation,
+				alpnProtos...),
 			filters,
-			max(v.ListenerVisitorConfig.minProtoVersion(), vh.MinProtoVersion), // choose the higher of the configured or requested tls version
-			alpnProtos...,
 		)
 
 		v.listeners[ENVOY_HTTPS_LISTENER].FilterChains = append(v.listeners[ENVOY_HTTPS_LISTENER].FilterChains, fc)

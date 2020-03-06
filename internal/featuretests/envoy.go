@@ -109,7 +109,13 @@ func cluster(name, servicename, statName string) *v2.Cluster {
 
 func tlsCluster(c *v2.Cluster, ca []byte, subjectName string, sni string, alpnProtocols ...string) *v2.Cluster {
 	c.TransportSocket = envoy.UpstreamTLSTransportSocket(
-		envoy.UpstreamTLSContext(ca, subjectName, sni, alpnProtocols...),
+		envoy.UpstreamTLSContext(
+			&dag.PeerValidationContext{
+				CACertificate: &dag.Secret{Object: caSecret(ca)},
+				SubjectName:   subjectName},
+			sni,
+			alpnProtocols...,
+		),
 	)
 	return c
 }
@@ -209,12 +215,12 @@ func filterchaintls(domain string, secret *v1.Secret, filter *envoy_api_v2_liste
 	return []*envoy_api_v2_listener.FilterChain{
 		envoy.FilterChainTLS(
 			domain,
-			&dag.Secret{Object: secret},
-			nil,
-			"",
+			envoy.DownstreamTLSContext(
+				&dag.Secret{Object: secret},
+				envoy_api_v2_auth.TlsParameters_TLSv1_1,
+				nil,
+				alpn...),
 			envoy.Filters(filter),
-			envoy_api_v2_auth.TlsParameters_TLSv1_1,
-			alpn...,
 		),
 	}
 }

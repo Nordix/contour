@@ -17,6 +17,7 @@ import (
 	envoy_api_v2_auth "github.com/envoyproxy/go-control-plane/envoy/api/v2/auth"
 	envoy_api_v2_core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	matcher "github.com/envoyproxy/go-control-plane/envoy/type/matcher"
+	"github.com/projectcontour/contour/internal/dag"
 	"github.com/projectcontour/contour/internal/protobuf"
 )
 
@@ -49,7 +50,7 @@ var (
 // UpstreamTLSContext creates an envoy_api_v2_auth.UpstreamTlsContext. By default
 // UpstreamTLSContext returns a HTTP/1.1 TLS enabled context. A list of
 // additional ALPN protocols can be provided.
-func UpstreamTLSContext(ca []byte, subjectName string, sni string, alpnProtocols ...string) *envoy_api_v2_auth.UpstreamTlsContext {
+func UpstreamTLSContext(peerValidationContext *dag.PeerValidationContext, sni string, alpnProtocols ...string) *envoy_api_v2_auth.UpstreamTlsContext {
 	context := &envoy_api_v2_auth.UpstreamTlsContext{
 		CommonTlsContext: &envoy_api_v2_auth.CommonTlsContext{
 			AlpnProtocols: alpnProtocols,
@@ -57,30 +58,22 @@ func UpstreamTLSContext(ca []byte, subjectName string, sni string, alpnProtocols
 		Sni: sni,
 	}
 
-	// we have to do explicitly assign the value from validationContext
-	// to context.CommonTlsContext.ValidationContextType because the latter
-	// is an interface, returning nil from validationContext directly into
-	// this field boxes the nil into the unexported type of this grpc OneOf field
-	// which causes proto marshaling to explode later on. Not happy Jan.
-	vc := validationContext(ca, subjectName, true)
-	if vc != nil {
-		context.CommonTlsContext.ValidationContextType = vc
+	if peerValidationContext.GetCACertificate() != nil && len(peerValidationContext.GetSubjectName()) > 0 {
+		// We have to do explicitly assign the value from validationContext
+		// to context.CommonTlsContext.ValidationContextType because the latter
+		// is an interface, returning nil from validationContext directly into
+		// this field boxes the nil into the unexported type of this grpc OneOf field
+		// which causes proto marshaling to explode later on. Not happy Jan.
+		vc := validationContext(peerValidationContext.GetCACertificate(), peerValidationContext.GetSubjectName())
+		if vc != nil {
+			context.CommonTlsContext.ValidationContextType = vc
+		}
 	}
 
 	return context
 }
 
-func validationContext(ca []byte, subjectName string, subjectRequired bool) *envoy_api_v2_auth.CommonTlsContext_ValidationContext {
-	if len(ca) < 1 {
-		// no ca provided, nothing to do
-		return nil
-	}
-
-	if subjectRequired && len(subjectName) < 1 {
-		// no subject name provided, nothing to do
-		return nil
-	}
-
+func validationContext(ca []byte, subjectName string) *envoy_api_v2_auth.CommonTlsContext_ValidationContext {
 	vc := &envoy_api_v2_auth.CommonTlsContext_ValidationContext{
 		ValidationContext: &envoy_api_v2_auth.CertificateValidationContext{
 			TrustedCa: &envoy_api_v2_core.DataSource{
@@ -104,7 +97,11 @@ func validationContext(ca []byte, subjectName string, subjectRequired bool) *env
 }
 
 // DownstreamTLSContext creates a new DownstreamTlsContext.
-func DownstreamTLSContext(secretName string, tlsMinProtoVersion envoy_api_v2_auth.TlsParameters_TlsProtocol, ca []byte, subjectName string, alpnProtos ...string) *envoy_api_v2_auth.DownstreamTlsContext {
+func DownstreamTLSContext(serverSecret *dag.Secret, tlsMinProtoVersion envoy_api_v2_auth.TlsParameters_TlsProtocol, peerValidationContext *dag.PeerValidationContext, alpnProtos ...string) *envoy_api_v2_auth.DownstreamTlsContext {
+	if serverSecret == nil {
+		return nil
+	}
+
 	context := &envoy_api_v2_auth.DownstreamTlsContext{
 		CommonTlsContext: &envoy_api_v2_auth.CommonTlsContext{
 			TlsParams: &envoy_api_v2_auth.TlsParameters{
@@ -113,17 +110,19 @@ func DownstreamTLSContext(secretName string, tlsMinProtoVersion envoy_api_v2_aut
 				CipherSuites:              ciphers,
 			},
 			TlsCertificateSdsSecretConfigs: []*envoy_api_v2_auth.SdsSecretConfig{{
-				Name:      secretName,
+				Name:      Secretname(serverSecret),
 				SdsConfig: ConfigSource("contour"),
 			}},
 			AlpnProtocols: alpnProtos,
 		},
 	}
 
-	vc := validationContext(ca, subjectName, false)
-	if vc != nil {
-		context.CommonTlsContext.ValidationContextType = vc
-		context.RequireClientCertificate = protobuf.Bool(true)
+	if peerValidationContext.GetCACertificate() != nil {
+		vc := validationContext(peerValidationContext.GetCACertificate(), "")
+		if vc != nil {
+			context.CommonTlsContext.ValidationContextType = vc
+			context.RequireClientCertificate = protobuf.Bool(true)
+		}
 	}
 
 	return context

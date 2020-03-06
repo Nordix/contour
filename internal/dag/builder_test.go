@@ -2187,6 +2187,33 @@ func TestDAGInsert(t *testing.T) {
 		},
 	}
 
+	proxy18 := &projcontour.HTTPProxy{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "example-com",
+			Namespace: "default",
+		},
+		Spec: projcontour.HTTPProxySpec{
+			VirtualHost: &projcontour.VirtualHost{
+				Fqdn: "example.com",
+				TLS: &projcontour.TLS{
+					SecretName: sec1.Name,
+					ClientValidation: &projcontour.DownstreamValidation{
+						CACertificate: cert1.Name,
+					},
+				},
+			},
+			Routes: []projcontour.Route{{
+				Conditions: []projcontour.Condition{{
+					Prefix: "/",
+				}},
+				Services: []projcontour.Service{{
+					Name: "kuard",
+					Port: 8080,
+				}},
+			}},
+		},
+	}
+
 	// proxy10 has a websocket route
 	proxy10 := &projcontour.HTTPProxy{
 		ObjectMeta: metav1.ObjectMeta{
@@ -4309,7 +4336,7 @@ func TestDAGInsert(t *testing.T) {
 										Protocol:    "tls",
 									},
 									Protocol: "tls",
-									UpstreamValidation: &ValidationContext{
+									UpstreamValidation: &PeerValidationContext{
 										CACertificate: secret(cert1),
 										SubjectName:   "example.com",
 									},
@@ -5259,7 +5286,7 @@ func TestDAGInsert(t *testing.T) {
 				},
 			),
 		},
-		"insert httpproxy expecting verification": {
+		"insert httpproxy expecting upstream verification": {
 			objs: []interface{}{
 				cert1, proxy17, s1a,
 			},
@@ -5277,7 +5304,7 @@ func TestDAGInsert(t *testing.T) {
 										Protocol:    "tls",
 									},
 									Protocol: "tls",
-									UpstreamValidation: &ValidationContext{
+									UpstreamValidation: &PeerValidationContext{
 										CACertificate: secret(cert1),
 										SubjectName:   "example.com",
 									},
@@ -5287,6 +5314,41 @@ func TestDAGInsert(t *testing.T) {
 					),
 				},
 			),
+		},
+		"insert httpproxy with downstream verification": {
+			objs: []interface{}{
+				cert1, proxy18, s1, sec1,
+			},
+			want: listeners(
+				&Listener{
+					Port: 80,
+					VirtualHosts: virtualhosts(
+						virtualhost("example.com", routeUpgrade("/", service(s1))),
+					),
+				}, &Listener{
+					Port: 443,
+					VirtualHosts: virtualhosts(
+						&SecureVirtualHost{
+							VirtualHost: VirtualHost{
+								Name: "example.com",
+								routes: routes(
+									routeUpgrade("/", service(s1))),
+							},
+							MinProtoVersion: envoy_api_v2_auth.TlsParameters_TLSv1_1,
+							Secret:          secret(sec1),
+							DownstreamValidation: &PeerValidationContext{
+								CACertificate: &Secret{Object: cert1},
+							},
+						},
+					),
+				},
+			),
+		},
+		"insert httpproxy with downstream verification, missing ca certificate": {
+			objs: []interface{}{
+				proxy18, s1, sec1,
+			},
+			want: listeners(),
 		},
 		"insert httpproxy with invalid tcpproxy": {
 			objs: []interface{}{proxy37, s1},

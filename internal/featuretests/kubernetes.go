@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/projectcontour/contour/internal/dag"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -87,6 +88,17 @@ func secretdata(cert, key string) map[string][]byte {
 	return map[string][]byte{
 		v1.TLSCertKey:       []byte(cert),
 		v1.TLSPrivateKeyKey: []byte(key),
+	}
+}
+
+func caSecret(ca []byte) *v1.Secret {
+	return &v1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "secret",
+			Namespace: "default",
+		},
+		Type: "kubernetes.io/tls",
+		Data: map[string][]byte{dag.CACertificateKey: ca},
 	}
 }
 

@@ -120,7 +120,10 @@ type TLS struct {
 	// backing cluster.
 	// +optional
 	Passthrough bool `json:"passthrough,omitempty"`
-	// ClientValidation defines how to verify the client certificate
+	// ClientValidation defines how to verify the client certificate. This setting:
+	// 1. Enables TLS client certificate validation.
+	// 2. Requires clients to present a TLS certificate (i.e. not optional validation).
+	// 3. Specifies how the client certificate will be validated.
 	// +optional
 	ClientValidation *DownstreamValidation `json:"clientValidation,omitempty"`
 }
@@ -382,7 +385,7 @@ type UpstreamValidation struct {
 	SubjectName string `json:"subjectName"`
 }
 
-// DownstreamValidation defines how to verify the client certificate
+// DownstreamValidation defines how to verify the client certificate.
 type DownstreamValidation struct {
 	// Name of the Kubernetes secret be used to validate the certificate presented by the client
 	CACertificate string `json:"caSecret"`

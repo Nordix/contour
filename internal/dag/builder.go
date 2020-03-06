@@ -489,13 +489,12 @@ func (b *Builder) computeHTTPProxy(proxy *projcontour.HTTPProxy) {
 			svhost.Secret = sec
 			svhost.MinProtoVersion = MinProtoVersion(proxy.Spec.VirtualHost.TLS.MinimumProtocolVersion)
 
-			// Fill in DownstreamValidation when external client validation is enabled
+			// Fill in DownstreamValidation when external client validation is enabled.
 			if tls.ClientValidation != nil {
-				dv, err := b.lookupDownstreamValidation(tls.ClientValidation,
-					proxy.Namespace,
-					fmt.Sprintf("HTTPProxy: %q", proxy.Name))
+				dv, err := b.lookupDownstreamValidation(tls.ClientValidation, proxy.Namespace)
 				if err != nil {
-					sw.SetInvalid("%s", err)
+					sw.SetInvalid("HTTPProxy [%s]: TLS downstream validation policy error: %s", proxy.Name, err)
+					return
 				}
 				svhost.DownstreamValidation = dv
 			}
@@ -800,7 +799,7 @@ func (b *Builder) computeRoutes(sw *ObjectStatusWriter, proxy *projcontour.HTTPP
 				return nil
 			}
 
-			var uv *ValidationContext
+			var uv *PeerValidationContext
 			if protocol == "tls" {
 				// we can only validate TLS connections to services that talk TLS
 				uv, err = b.lookupUpstreamValidation(service.UpstreamValidation, proxy.Namespace)
@@ -1010,7 +1009,7 @@ func (b *Builder) processIngressRoutes(sw *ObjectStatusWriter, ir *ingressroutev
 					return
 				}
 
-				var uv *ValidationContext
+				var uv *PeerValidationContext
 				var err error
 				if s.Protocol == "tls" {
 					// we can only validate TLS connections to services that talk TLS
@@ -1081,7 +1080,7 @@ func (b *Builder) processIngressRoutes(sw *ObjectStatusWriter, ir *ingressroutev
 	sw.SetValid()
 }
 
-func (b *Builder) lookupUpstreamValidation(uv *projcontour.UpstreamValidation, namespace string) (*UpstreamValidation, error) {
+func (b *Builder) lookupUpstreamValidation(uv *projcontour.UpstreamValidation, namespace string) (*PeerValidationContext, error) {
 	if uv == nil {
 		// no upstream validation requested, nothing to do
 		return nil, nil
@@ -1098,25 +1097,25 @@ func (b *Builder) lookupUpstreamValidation(uv *projcontour.UpstreamValidation, n
 		return nil, errors.New("missing subject alternative name")
 	}
 
-	return &ValidationContext{
+	return &PeerValidationContext{
 		CACertificate: cacert,
 		SubjectName:   uv.SubjectName,
 	}, nil
 }
 
-func (b *Builder) lookupDownstreamValidation(vc *projcontour.DownstreamValidation, namespace string, errorContext string) (*ValidationContext, error) {
+func (b *Builder) lookupDownstreamValidation(vc *projcontour.DownstreamValidation, namespace string) (*PeerValidationContext, error) {
 	if vc == nil {
-		// no downstream validation requested, nothing to do
+		// No downstream validation requested, nothing to do.
 		return nil, nil
 	}
 
 	cacert := b.lookupSecret(Meta{name: vc.CACertificate, namespace: namespace}, validCA)
 	if cacert == nil {
-		// ValidationContext is requested, but cert is missing or not configured
-		return nil, fmt.Errorf("%s downstreamValidation requested but secret not found or misconfigured", errorContext)
+		// ValidationContext is requested, but cert is missing or not configured.
+		return nil, fmt.Errorf("secret not found or misconfigured")
 	}
 
-	return &ValidationContext{
+	return &PeerValidationContext{
 		CACertificate: cacert,
 	}, nil
 }
