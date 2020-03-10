@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: contour-certgen
+  namespace: projectcontour
+$patch: delete
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: contour
+  namespace: projectcontour
+$patch: delete
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: contour-certgen
+  namespace: projectcontour
+$patch: delete
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: contour-certgen
+  namespace: projectcontour
+$patch: delete
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: envoy
+  namespace: projectcontour
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: envoy-initconfig
+        args:
+        - bootstrap
+        - /config/ # parameter replaced
+        - --xds-address=contour
+        - --xds-port=8001
+        - --envoy-cafile=/certs/ca.crt # path replaced
+        - --envoy-cert-file=/certs/tls.crt
+        - --envoy-key-file=/certs/tls.key
+        volumeMounts:
+        - mountPath: /ca
+          name: cacert
+          $patch: delete
+      containers:
+      - name: envoy
+        volumeMounts:
+        - mountPath: /ca
+          name: cacert
+          $patch: delete
+      volumes:
+      - name: cacert
+        $patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: contour
+  name: contour
+  namespace: projectcontour
+spec:
+  template:
+    spec:
+      containers:
+      - name: contour
+        args:
+        - serve
+        - --incluster
+        - --xds-address=0.0.0.0
+        - --xds-port=8001
+        - --envoy-service-http-port=80
+        - --envoy-service-https-port=443
+        - --contour-cafile=/certs/ca.crt  # path replaced
+        - --contour-cert-file=/certs/tls.crt
+        - --contour-key-file=/certs/tls.key
+        - --config-path=/config/contour.yaml
+        volumeMounts:
+        - mountPath: /ca
+          name: cacert
+          $patch: delete
+      volumes:
+      - name: cacert
+        $patch: delete

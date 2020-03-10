@@ -1,0 +1,11 @@
+bases:
+- ../render
+patchesStrategicMerge:
+- certmanager-patch.yaml
+images:
+- name: docker.io/projectcontour/contour
+  newName: projectcontour/contour
+  newTag: latest
+- name: docker.io/envoyproxy/envoy
+  newName: envoy
+  newTag: latest
