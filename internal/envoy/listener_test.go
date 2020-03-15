@@ -174,6 +174,7 @@ func TestDownstreamTLSContext(t *testing.T) {
 			},
 		},
 	}
+
 	tlsParams := &envoy_api_v2_auth.TlsParameters{
 		TlsMinimumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_1,
 		TlsMaximumProtocolVersion: envoy_api_v2_auth.TlsParameters_TLSv1_3,
@@ -188,6 +189,7 @@ func TestDownstreamTLSContext(t *testing.T) {
 			"ECDHE-RSA-AES256-SHA",
 		},
 	}
+
 	tlsCertificateSdsSecretConfigs := []*envoy_api_v2_auth.SdsSecretConfig{{
 		Name: Secretname(serverSecret),
 		SdsConfig: &envoy_api_v2_core.ConfigSource{
@@ -205,6 +207,7 @@ func TestDownstreamTLSContext(t *testing.T) {
 			},
 		},
 	}}
+
 	alpnProtocols := []string{"h2", "http/1.1"}
 	validationContext := &envoy_api_v2_auth.CommonTlsContext_ValidationContext{
 		ValidationContext: &envoy_api_v2_auth.CertificateValidationContext{
@@ -215,6 +218,7 @@ func TestDownstreamTLSContext(t *testing.T) {
 			},
 		},
 	}
+
 	peerValidationContext := &dag.PeerValidationContext{
 		CACertificate: &dag.Secret{
 			Object: &v1.Secret{
@@ -228,6 +232,7 @@ func TestDownstreamTLSContext(t *testing.T) {
 			},
 		},
 	}
+
 	// Negative test case: downstream validation should not contain subjectname.
 	peerValidationContextWithSubjectName := &dag.PeerValidationContext{
 		CACertificate: &dag.Secret{
@@ -243,6 +248,7 @@ func TestDownstreamTLSContext(t *testing.T) {
 		},
 		SubjectName: subjectName,
 	}
+
 	tests := map[string]struct {
 		got  *envoy_api_v2_auth.DownstreamTlsContext
 		want *envoy_api_v2_auth.DownstreamTlsContext

@@ -85,7 +85,7 @@ func TestCluster(t *testing.T) {
 				Name:      "secret",
 				Namespace: "default",
 			},
-			Type: "kubernetes.io/tls",
+			Type: v1.SecretTypeTLS,
 			Data: map[string][]byte{dag.CACertificateKey: []byte("cacert")},
 		},
 	}

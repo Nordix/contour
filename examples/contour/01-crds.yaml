@@ -319,8 +319,10 @@ spec:
                         certificate will be validated.'
                       properties:
                         caSecret:
-                          description: Name of the Kubernetes secret be used to validate
-                            the certificate presented by the client
+                          description: Name of a Kubernetes secret that contains a
+                            CA certificate bundle. The client certificate must validate
+                            against the certificates in the bundle.
+                          minLength: 1
                           type: string
                       required:
                       - caSecret
@@ -1127,8 +1129,10 @@ spec:
                         certificate will be validated.'
                       properties:
                         caSecret:
-                          description: Name of the Kubernetes secret be used to validate
-                            the certificate presented by the client
+                          description: Name of a Kubernetes secret that contains a
+                            CA certificate bundle. The client certificate must validate
+                            against the certificates in the bundle.
+                          minLength: 1
                           type: string
                       required:
                       - caSecret

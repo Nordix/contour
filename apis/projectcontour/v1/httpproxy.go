@@ -387,7 +387,10 @@ type UpstreamValidation struct {
 
 // DownstreamValidation defines how to verify the client certificate.
 type DownstreamValidation struct {
-	// Name of the Kubernetes secret be used to validate the certificate presented by the client
+	// Name of a Kubernetes secret that contains a CA certificate bundle.
+	// The client certificate must validate against the certificates in the bundle.
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinLength=1
 	CACertificate string `json:"caSecret"`
 }
 

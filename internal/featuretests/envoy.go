@@ -31,6 +31,7 @@ import (
 	"github.com/projectcontour/contour/internal/envoy"
 	"github.com/projectcontour/contour/internal/protobuf"
 	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // DefaultCluster returns a copy of c, updated with default values.
@@ -111,8 +112,15 @@ func tlsCluster(c *v2.Cluster, ca []byte, subjectName string, sni string, alpnPr
 	c.TransportSocket = envoy.UpstreamTLSTransportSocket(
 		envoy.UpstreamTLSContext(
 			&dag.PeerValidationContext{
-				CACertificate: &dag.Secret{Object: caSecret(ca)},
-				SubjectName:   subjectName},
+				CACertificate: &dag.Secret{Object: &v1.Secret{
+					ObjectMeta: metav1.ObjectMeta{
+						Name:      "secret",
+						Namespace: "default",
+					},
+					Type: "kubernetes.io/tls",
+					Data: map[string][]byte{dag.CACertificateKey: ca},
+				}},
+				SubjectName: subjectName},
 			sni,
 			alpnProtocols...,
 		),

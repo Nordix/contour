@@ -1074,7 +1074,7 @@ func transportSocket(tlsMinProtoVersion envoy_api_v2_auth.TlsParameters_TlsProto
 				Name:      "secret",
 				Namespace: "default",
 			},
-			Type: "kubernetes.io/tls",
+			Type: v1.SecretTypeTLS,
 			Data: secretdata(CERTIFICATE, RSA_PRIVATE_KEY),
 		},
 	}

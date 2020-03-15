@@ -493,7 +493,7 @@ func (b *Builder) computeHTTPProxy(proxy *projcontour.HTTPProxy) {
 			if tls.ClientValidation != nil {
 				dv, err := b.lookupDownstreamValidation(tls.ClientValidation, proxy.Namespace)
 				if err != nil {
-					sw.SetInvalid("HTTPProxy [%s]: TLS downstream validation policy error: %s", proxy.Name, err)
+					sw.SetInvalid("TLS client validation policy error: %s", err)
 					return
 				}
 				svhost.DownstreamValidation = dv

@@ -98,10 +98,6 @@ func validationContext(ca []byte, subjectName string) *envoy_api_v2_auth.CommonT
 
 // DownstreamTLSContext creates a new DownstreamTlsContext.
 func DownstreamTLSContext(serverSecret *dag.Secret, tlsMinProtoVersion envoy_api_v2_auth.TlsParameters_TlsProtocol, peerValidationContext *dag.PeerValidationContext, alpnProtos ...string) *envoy_api_v2_auth.DownstreamTlsContext {
-	if serverSecret == nil {
-		return nil
-	}
-
 	context := &envoy_api_v2_auth.DownstreamTlsContext{
 		CommonTlsContext: &envoy_api_v2_auth.CommonTlsContext{
 			TlsParams: &envoy_api_v2_auth.TlsParameters{

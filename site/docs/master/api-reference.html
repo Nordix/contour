@@ -351,13 +351,15 @@ HeaderCondition
 <tbody class="border-top">
 <tr>
 <td style="white-space:nowrap">
-<code>caSecret</code></br>
+<code>caSecret</code>
+<br>
 <em>
 string
 </em>
 </td>
 <td>
-<p>Name of the Kubernetes secret be used to validate the certificate presented by the client</p>
+<p>Name of a Kubernetes secret that contains a CA certificate bundle.
+The client certificate must validate against the certificates in the bundle.</p>
 </td>
 </tr>
 </tbody>
@@ -1592,7 +1594,8 @@ backing cluster.</p>
 </tr>
 <tr>
 <td style="white-space:nowrap">
-<code>clientValidation</code></br>
+<code>clientValidation</code>
+<br>
 <em>
 <a href="#projectcontour.io/v1.DownstreamValidation">
 DownstreamValidation
