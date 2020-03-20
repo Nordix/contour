@@ -488,16 +488,6 @@ func (b *Builder) computeHTTPProxy(proxy *projcontour.HTTPProxy) {
 			svhost := b.lookupSecureVirtualHost(host)
 			svhost.Secret = sec
 			svhost.MinProtoVersion = MinProtoVersion(proxy.Spec.VirtualHost.TLS.MinimumProtocolVersion)
-
-			// Fill in DownstreamValidation when external client validation is enabled.
-			if tls.ClientValidation != nil {
-				dv, err := b.lookupDownstreamValidation(tls.ClientValidation, proxy.Namespace)
-				if err != nil {
-					sw.SetInvalid("TLS client validation policy error: %s", err)
-					return
-				}
-				svhost.DownstreamValidation = dv
-			}
 		}
 
 		if sec == nil && !tls.Passthrough {
@@ -1100,23 +1090,6 @@ func (b *Builder) lookupUpstreamValidation(uv *projcontour.UpstreamValidation, n
 	return &PeerValidationContext{
 		CACertificate: cacert,
 		SubjectName:   uv.SubjectName,
-	}, nil
-}
-
-func (b *Builder) lookupDownstreamValidation(vc *projcontour.DownstreamValidation, namespace string) (*PeerValidationContext, error) {
-	if vc == nil {
-		// No downstream validation requested, nothing to do.
-		return nil, nil
-	}
-
-	cacert := b.lookupSecret(Meta{name: vc.CACertificate, namespace: namespace}, validCA)
-	if cacert == nil {
-		// ValidationContext is requested, but cert is missing or not configured.
-		return nil, fmt.Errorf("secret not found or misconfigured")
-	}
-
-	return &PeerValidationContext{
-		CACertificate: cacert,
 	}, nil
 }
 
