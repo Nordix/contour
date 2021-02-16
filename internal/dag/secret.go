@@ -27,6 +27,22 @@ import (
 // CACertificateKey is the key name for accessing TLS CA certificate bundles in Kubernetes Secrets.
 const CACertificateKey = "ca.crt"
 
+// GenericSecretKey is the key name for accessing generic Envoy secrets in Kubernetes Secrets.
+const GenericSecretKey = "secret"
+
+type SecretType string
+
+const (
+	// SecretTypeTLS is a secret with TLS server certificate private key.
+	SecretTypeTLS SecretType = "tls"
+
+	// SecretTypeCA is a secret with CA certificate.
+	SecretTypeCA SecretType = "ca"
+
+	// SecretTypeGeneric is a secret with single secret of other type.
+	SecretTypeGeneric SecretType = "generic"
+)
+
 // isValidSecret returns true if the secret is interesting and well
 // formed. TLS certificate/key pairs must be secrets of type
 // "kubernetes.io/tls". Certificate bundles may be "kubernetes.io/tls"
@@ -53,8 +69,12 @@ func isValidSecret(secret *v1.Secret) (bool, error) {
 			return false, fmt.Errorf("invalid TLS private key: %v", err)
 		}
 
-	// Generic secrets may have a 'ca.crt' only.
+	// Generic secrets can have a 'ca.crt' or 'secret' only.
 	case v1.SecretTypeOpaque, "":
+		if _, ok := secret.Data[GenericSecretKey]; ok {
+			return true, nil
+		}
+
 		if _, ok := secret.Data[v1.TLSCertKey]; ok {
 			return false, nil
 		}

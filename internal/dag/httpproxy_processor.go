@@ -287,6 +287,41 @@ func (p *HTTPProxyProcessor) computeHTTPProxy(proxy *contour_api_v1.HTTPProxy) {
 					svhost.AuthorizationResponseTimeout = timeout
 				}
 			}
+
+			if proxy.Spec.VirtualHost.OAuth2Config != nil {
+				oauth := proxy.Spec.VirtualHost.OAuth2Config
+
+				tokenSecretName := k8s.NamespacedNameFrom(oauth.Credentials.TokenSecretName, k8s.DefaultNamespace(proxy.Namespace))
+				tokenSecret, err := p.source.LookupSecret(tokenSecretName, validOauthSecret)
+				if err != nil {
+					validCond.AddErrorf(contour_api_v1.ConditionTypeSpecError, "SecretNotValid",
+						"Spec.Virtualhost.OAuth2Config.Credentials.TokenSecret Secret %q is invalid: %s", oauth.Credentials.TokenSecretName, err)
+					return
+				}
+
+				hmacSecretName := k8s.NamespacedNameFrom(oauth.Credentials.HmacSecretName, k8s.DefaultNamespace(proxy.Namespace))
+				hmacSecret, err := p.source.LookupSecret(hmacSecretName, validOauthSecret)
+				if err != nil {
+					validCond.AddErrorf(contour_api_v1.ConditionTypeSpecError, "SecretNotValid",
+						"Spec.Virtualhost.OAuth2Config.Credentials.HmacSecret Secret %q is invalid: %s", oauth.Credentials.HmacSecretName, err)
+					return
+				}
+
+				svhost.OAuthConfig = &OAuthConfig{
+					TokenEndpoint:         oauth.TokenEndpoint,
+					AuthorizationEndpoing: oauth.AuthorizationEndpoint,
+					Credentials: OAuthCredentials{
+						ClientId:    oauth.Credentials.ClientId,
+						TokenSecret: tokenSecret,
+						HmacSecret:  hmacSecret,
+					},
+					RedirectURI:         oauth.RedirectURI,
+					RedirectPathMatcher: oauth.RedirectPathMatcher,
+					SignoutPathMatcher:  oauth.SignoutPathMatcher,
+					ForwardBearerToken:  oauth.ForwardBearerToken,
+					PassThroughMatcher:  oauth.PassThroughMatcher,
+				}
+			}
 		}
 	}
 

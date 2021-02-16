@@ -446,6 +446,7 @@ func (v *listenerVisitor) visit(vertex dag.Vertex) {
 
 		if vh.TCPProxy == nil {
 			var authFilter *http.HttpFilter
+			var oAuthFilter *http.HttpFilter
 
 			if vh.AuthorizationService != nil {
 				authFilter = envoy_v3.FilterExternalAuthz(
@@ -453,6 +454,9 @@ func (v *listenerVisitor) visit(vertex dag.Vertex) {
 					vh.AuthorizationFailOpen,
 					vh.AuthorizationResponseTimeout,
 				)
+			}
+			if vh.OAuthConfig != nil {
+				oAuthFilter = envoy_v3.FilterOAuth(vh.OAuthConfig)
 			}
 
 			// Create a uniquely named HTTP connection manager for
@@ -466,6 +470,7 @@ func (v *listenerVisitor) visit(vertex dag.Vertex) {
 				Codec(envoy_v3.CodecForVersions(v.DefaultHTTPVersions...)).
 				AddFilter(envoy_v3.FilterMisdirectedRequests(vh.VirtualHost.Name)).
 				DefaultFilters().
+				AddFilter(oAuthFilter).
 				AddFilter(authFilter).
 				RouteConfigName(path.Join("https", vh.VirtualHost.Name)).
 				MetricsPrefix(ENVOY_HTTPS_LISTENER).

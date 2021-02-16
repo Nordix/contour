@@ -109,6 +109,10 @@ func (v *secretVisitor) visit(vertex dag.Vertex) {
 		if obj.FallbackCertificate != nil {
 			v.addSecret(obj.FallbackCertificate)
 		}
+		if obj.OAuthConfig != nil {
+			v.addSecret(obj.OAuthConfig.Credentials.HmacSecret)
+			v.addSecret(obj.OAuthConfig.Credentials.TokenSecret)
+		}
 	case *dag.Cluster:
 		if obj.ClientCertificate != nil {
 			v.addSecret(obj.ClientCertificate)

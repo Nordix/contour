@@ -451,6 +451,9 @@ type SecureVirtualHost struct {
 	// only reason to set this to `true` is when you are migrating
 	// from internal to external authorization.
 	AuthorizationFailOpen bool
+
+	// OAuthConfig contains OAuth2 client configuration
+	OAuthConfig *OAuthConfig
 }
 
 func (s *SecureVirtualHost) Visit(f func(Vertex)) {
@@ -740,6 +743,30 @@ func (s *Secret) PrivateKey() []byte {
 	return s.Object.Data[v1.TLSPrivateKeyKey]
 }
 
+func (s *Secret) CA() []byte {
+	return s.Object.Data[CACertificateKey]
+}
+
+func (s *Secret) Generic() []byte {
+	return s.Object.Data[GenericSecretKey]
+}
+
+// Type returns the secret's type.
+func (s *Secret) Type() (SecretType, error) {
+	switch s.Object.Type {
+	case v1.SecretTypeTLS:
+		return SecretTypeTLS, nil
+	case v1.SecretTypeOpaque:
+		if _, ok := s.Object.Data[CACertificateKey]; ok {
+			return SecretTypeCA, nil
+		}
+		if _, ok := s.Object.Data[GenericSecretKey]; ok {
+			return SecretTypeGeneric, nil
+		}
+	}
+	return "", errors.New("unknown secret type")
+}
+
 // HTTPHealthCheckPolicy http health check policy
 type HTTPHealthCheckPolicy struct {
 	Path               string
@@ -786,6 +813,46 @@ type ExtensionCluster struct {
 	// ClientCertificate is the optional identifier of the TLS secret containing client certificate and
 	// private key to be used when establishing TLS connection to upstream cluster.
 	ClientCertificate *Secret
+}
+
+// OAuthConfig
+type OAuthConfig struct {
+	// Endpoint on the authorization server to retrieve the access token from.
+	TokenEndpoint string
+
+	// The endpoint redirect to for authorization in response to unauthorized requests.
+	AuthorizationEndpoing string
+
+	// Credentials used for OAuth.
+	Credentials OAuthCredentials
+
+	// The redirect URI passed to the authorization endpoint.
+	// This URI should not contain any query parameters.
+	RedirectURI string
+
+	// Matching criteria used to determine whether a path appears to be the result of a redirect from the authorization server.
+	RedirectPathMatcher string
+
+	// The path to sign a user out, clearing their credential cookies.
+	SignoutPathMatcher string
+
+	// Forward the OAuth token as a Bearer to upstream web service.
+	ForwardBearerToken bool
+
+	// Any request that matches any of the provided matchers will be passed through without OAuth validation.
+	PassThroughMatcher string
+}
+
+// OAuthCredentials
+type OAuthCredentials struct {
+	// The client_id to be used in the authorize calls. This value will be URL encoded when sent to the OAuth server.
+	ClientId string
+
+	// The secret used to retrieve the access token. This value will be URL encoded when sent to the OAuth server.
+	TokenSecret *Secret
+
+	// Configures how the secret token should be created.
+	HmacSecret *Secret
 }
 
 // Visit processes extension clusters.

@@ -78,6 +78,7 @@ func (*ClusterCache) TypeURL() string { return resource.ClusterType }
 
 func (c *ClusterCache) OnChange(root *dag.DAG) {
 	clusters := visitClusters(root)
+	clusters["oauth"] = envoy_v3.DynamicForwardProxyCluster()
 	c.Update(clusters)
 }
 

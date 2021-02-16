@@ -179,6 +179,46 @@ type AuthorizationPolicy struct {
 	Context map[string]string `json:"context,omitempty"`
 }
 
+// OAuthConfig
+type OAuthConfig struct {
+	// Endpoint on the authorization server to retrieve the access token from.
+	TokenEndpoint string `json:"tokenEndpoint,omitempty"`
+
+	// The endpoint redirect to for authorization in response to unauthorized requests.
+	AuthorizationEndpoint string `json:"authorizationEndpoint"`
+
+	// Credentials used for OAuth.
+	Credentials OAuthCredentials `json:"credentials"`
+
+	// The redirect URI passed to the authorization endpoint.
+	// This URI should not contain any query parameters.
+	RedirectURI string `json:"redirectUri"`
+
+	// Matching criteria used to determine whether a path appears to be the result of a redirect from the authorization server.
+	RedirectPathMatcher string `json:"redirectPathMatcher"`
+
+	// The path to sign a user out, clearing their credential cookies.
+	SignoutPathMatcher string `json:"signoutPathMatcher"`
+
+	// Forward the OAuth token as a Bearer to upstream web service.
+	ForwardBearerToken bool `json:"forwardBearerToken,omitempty"`
+
+	// Any request that matches any of the provided matchers will be passed through without OAuth validation.
+	PassThroughMatcher string `json:"passThroughMatcher,omitempty"`
+}
+
+// OAuthCredentials
+type OAuthCredentials struct {
+	// The client_id to be used in the authorize calls. This value will be URL encoded when sent to the OAuth server.
+	ClientId string `json:"clientId"`
+
+	// The secret used to retrieve the access token. This value will be URL encoded when sent to the OAuth server.
+	TokenSecretName string `json:"tokenSecretName"`
+
+	// Configures how the secret token should be created.
+	HmacSecretName string `json:"hmacSecretName"`
+}
+
 // VirtualHost appears at most once. If it is present, the object is considered
 // to be a "root".
 type VirtualHost struct {
@@ -209,6 +249,11 @@ type VirtualHost struct {
 	// The policy for rate limiting on the virtual host.
 	// +optional
 	RateLimitPolicy *RateLimitPolicy `json:"rateLimitPolicy,omitempty"`
+
+	// OAuth2Config configures OAuth2 client for OAuth2 authentication flow
+	//
+	// +optional
+	OAuth2Config *OAuthConfig `json:"oAuth2Config,omitempty"`
 }
 
 // TLS describes tls properties. The SNI names that will be matched on

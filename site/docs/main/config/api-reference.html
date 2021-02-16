@@ -1579,6 +1579,179 @@ HeaderMatchCondition
 </tr>
 </tbody>
 </table>
+<h3 id="projectcontour.io/v1.OAuthConfig">OAuthConfig
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#projectcontour.io/v1.VirtualHost">VirtualHost</a>)
+</p>
+<p>
+<p>OAuthConfig</p>
+</p>
+<table class="table table-striped table-borderless" style="border:none">
+<thead class="border-bottom">
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody class="border-top">
+<tr>
+<td style="white-space:nowrap">
+<code>tokenEndpoint</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Endpoint on the authorization server to retrieve the access token from.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>authorizationEndpoint</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>The endpoint redirect to for authorization in response to unauthorized requests.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>credentials</code>
+<br>
+<em>
+<a href="#projectcontour.io/v1.OAuthCredentials">
+OAuthCredentials
+</a>
+</em>
+</td>
+<td>
+<p>Credentials used for OAuth.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>redirectUri</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>The redirect URI passed to the authorization endpoint.
+This URI should not contain any query parameters.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>redirectPathMatcher</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Matching criteria used to determine whether a path appears to be the result of a redirect from the authorization server.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>signoutPathMatcher</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>The path to sign a user out, clearing their credential cookies.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>forwardBearerToken</code>
+<br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Forward the OAuth token as a Bearer to upstream web service.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>passThroughMatcher</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Any request that matches any of the provided matchers will be passed through without OAuth validation.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="projectcontour.io/v1.OAuthCredentials">OAuthCredentials
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#projectcontour.io/v1.OAuthConfig">OAuthConfig</a>)
+</p>
+<p>
+<p>OAuthCredentials</p>
+</p>
+<table class="table table-striped table-borderless" style="border:none">
+<thead class="border-bottom">
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody class="border-top">
+<tr>
+<td style="white-space:nowrap">
+<code>clientId</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>The client_id to be used in the authorize calls. This value will be URL encoded when sent to the OAuth server.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>tokenSecretName</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>The secret used to retrieve the access token. This value will be URL encoded when sent to the OAuth server.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>hmacSecretName</code>
+<br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Configures how the secret token should be created.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="projectcontour.io/v1.PathRewritePolicy">PathRewritePolicy
 </h3>
 <p>
@@ -3050,6 +3223,21 @@ RateLimitPolicy
 <td>
 <em>(Optional)</em>
 <p>The policy for rate limiting on the virtual host.</p>
+</td>
+</tr>
+<tr>
+<td style="white-space:nowrap">
+<code>oAuth2Config</code>
+<br>
+<em>
+<a href="#projectcontour.io/v1.OAuthConfig">
+OAuthConfig
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>OAuth2Config configures OAuth2 client for OAuth2 authentication flow</p>
 </td>
 </tr>
 </tbody>

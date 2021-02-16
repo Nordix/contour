@@ -145,6 +145,39 @@ func ExtensionCluster(ext *dag.ExtensionCluster) *envoy_cluster_v3.Cluster {
 	return cluster
 }
 
+// DynamicForwardProxyCluster returns a hardcoded cluster for OAuth2 filter to make token reqests
+func DynamicForwardProxyCluster() *envoy_cluster_v3.Cluster {
+	// https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/dynamic_forward_proxy_filter
+	// cluster := &envoy_cluster_v3.Cluster{
+	// 	Name:           "dynamic_forward_proxy_cluster",
+	// 	ConnectTimeout: protobuf.Duration(5 * time.Second),
+	// 	LbPolicy:       envoy_cluster_v3.Cluster_CLUSTER_PROVIDED,
+	// 	ClusterDiscoveryType: &envoy_cluster_v3.Cluster_ClusterType{
+	// 		ClusterType: &envoy_cluster_v3.Cluster_CustomClusterType{
+	// 			Name: "envoy.clusters.dynamic_forward_proxy",
+	// 			TypedConfig: protobuf.MustMarshalAny(&envoy_cluster_forward_proxy_v3.ClusterConfig{
+	// 				DnsCacheConfig: &envoy_common_forward_proxy_v3.DnsCacheConfig{
+	// 					Name:            "dynamic_forward_proxy_cache_config",
+	// 					DnsLookupFamily: envoy_cluster_v3.Cluster_V4_ONLY,
+	// 				},
+	// 			}),
+	// 		},
+	// 	},
+	// }
+
+	cluster := &envoy_cluster_v3.Cluster{
+		Name:           "dynamic_forward_proxy_cluster",
+		ConnectTimeout: protobuf.Duration(5 * time.Second),
+		LbPolicy:       envoy_cluster_v3.Cluster_ROUND_ROBIN,
+		LoadAssignment: &envoy_endpoint_v3.ClusterLoadAssignment{
+			ClusterName: "dynamic_forward_proxy_cluster",
+			Endpoints:   Endpoints(SocketAddress("172.18.0.1", 8081)),
+		},
+	}
+
+	return cluster
+}
+
 // StaticClusterLoadAssignment creates a *envoy_endpoint_v3.ClusterLoadAssignment pointing to the external DNS address of the service
 func StaticClusterLoadAssignment(service *dag.Service) *envoy_endpoint_v3.ClusterLoadAssignment {
 	addr := SocketAddress(service.ExternalName, int(service.Weighted.ServicePort.Port))

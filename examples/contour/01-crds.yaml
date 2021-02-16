@@ -1057,6 +1057,54 @@ spec:
                   fqdn:
                     description: The fully qualified domain name of the root of the ingress tree all leaves of the DAG rooted at this object relate to the fqdn.
                     type: string
+                  oAuth2Config:
+                    description: OAuth2Config configures OAuth2 client for OAuth2 authentication flow
+                    properties:
+                      authorizationEndpoint:
+                        description: The endpoint redirect to for authorization in response to unauthorized requests.
+                        type: string
+                      credentials:
+                        description: Credentials used for OAuth.
+                        properties:
+                          clientId:
+                            description: The client_id to be used in the authorize calls. This value will be URL encoded when sent to the OAuth server.
+                            type: string
+                          hmacSecretName:
+                            description: Configures how the secret token should be created.
+                            type: string
+                          tokenSecretName:
+                            description: The secret used to retrieve the access token. This value will be URL encoded when sent to the OAuth server.
+                            type: string
+                        required:
+                        - clientId
+                        - hmacSecretName
+                        - tokenSecretName
+                        type: object
+                      forwardBearerToken:
+                        description: Forward the OAuth token as a Bearer to upstream web service.
+                        type: boolean
+                      passThroughMatcher:
+                        description: Any request that matches any of the provided matchers will be passed through without OAuth validation.
+                        type: string
+                      redirectPathMatcher:
+                        description: Matching criteria used to determine whether a path appears to be the result of a redirect from the authorization server.
+                        type: string
+                      redirectUri:
+                        description: The redirect URI passed to the authorization endpoint. This URI should not contain any query parameters.
+                        type: string
+                      signoutPathMatcher:
+                        description: The path to sign a user out, clearing their credential cookies.
+                        type: string
+                      tokenEndpoint:
+                        description: Endpoint on the authorization server to retrieve the access token from.
+                        type: string
+                    required:
+                    - authorizationEndpoint
+                    - credentials
+                    - redirectPathMatcher
+                    - redirectUri
+                    - signoutPathMatcher
+                    type: object
                   rateLimitPolicy:
                     description: The policy for rate limiting on the virtual host.
                     properties:

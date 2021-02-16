@@ -28,14 +28,17 @@ import (
 	envoy_config_filter_http_ext_authz_v3 "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/ext_authz/v3"
 	envoy_config_filter_http_local_ratelimit_v3 "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/local_ratelimit/v3"
 	lua "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/lua/v3"
+	envoy_config_filter_http_oauth2 "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/oauth2/v3alpha"
 	envoy_extensions_filters_http_router_v3 "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/router/v3"
 	http "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/http_connection_manager/v3"
 	tcp "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/tcp_proxy/v3"
 	envoy_tls_v3 "github.com/envoyproxy/go-control-plane/envoy/extensions/transport_sockets/tls/v3"
+	matcher "github.com/envoyproxy/go-control-plane/envoy/type/matcher/v3"
 	envoy_type "github.com/envoyproxy/go-control-plane/envoy/type/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/wellknown"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/projectcontour/contour/internal/dag"
 	"github.com/projectcontour/contour/internal/envoy"
 	"github.com/projectcontour/contour/internal/protobuf"
@@ -632,6 +635,61 @@ func FilterExternalAuthz(authzClusterName string, failOpen bool, timeout timeout
 			TypedConfig: protobuf.MustMarshalAny(&authConfig),
 		},
 	}
+}
+
+// FilterOAuth returns OAuth2 filter
+func FilterOAuth(oauth *dag.OAuthConfig) *http.HttpFilter {
+	oAuthConfig := envoy_config_filter_http_oauth2.OAuth2{
+		Config: &envoy_config_filter_http_oauth2.OAuth2Config{
+			TokenEndpoint: &envoy_core_v3.HttpUri{
+				Uri:              oauth.TokenEndpoint,
+				Timeout:          &duration.Duration{Seconds: 5},
+				HttpUpstreamType: &envoy_core_v3.HttpUri_Cluster{Cluster: "dynamic_forward_proxy_cluster"},
+			},
+			AuthorizationEndpoint: oauth.AuthorizationEndpoing,
+			Credentials: &envoy_config_filter_http_oauth2.OAuth2Credentials{
+				ClientId: oauth.Credentials.ClientId,
+				TokenSecret: &envoy_tls_v3.SdsSecretConfig{
+					Name:      envoy.Secretname(oauth.Credentials.TokenSecret),
+					SdsConfig: ConfigSource("contour"),
+				},
+				TokenFormation: &envoy_config_filter_http_oauth2.OAuth2Credentials_HmacSecret{
+					HmacSecret: &envoy_tls_v3.SdsSecretConfig{
+						Name:      envoy.Secretname(oauth.Credentials.HmacSecret),
+						SdsConfig: ConfigSource("contour"),
+					},
+				},
+			},
+			RedirectUri: oauth.RedirectURI,
+			RedirectPathMatcher: &matcher.PathMatcher{
+				Rule: &matcher.PathMatcher_Path{
+					Path: &matcher.StringMatcher{
+						MatchPattern: &matcher.StringMatcher_Exact{
+							Exact: oauth.RedirectPathMatcher,
+						},
+					},
+				},
+			},
+			SignoutPath: &matcher.PathMatcher{
+				Rule: &matcher.PathMatcher_Path{
+					Path: &matcher.StringMatcher{
+						MatchPattern: &matcher.StringMatcher_Exact{
+							Exact: oauth.SignoutPathMatcher,
+						},
+					},
+				},
+			},
+			ForwardBearerToken: oauth.ForwardBearerToken,
+		},
+	}
+
+	return &http.HttpFilter{
+		Name: "envoy.filters.http.oauth2",
+		ConfigType: &http.HttpFilter_TypedConfig{
+			TypedConfig: protobuf.MustMarshalAny(&oAuthConfig),
+		},
+	}
+
 }
 
 // FilterChainTLS returns a TLS enabled envoy_listener_v3.FilterChain.

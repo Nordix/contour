@@ -237,3 +237,8 @@ func validSecret(s *v1.Secret) error {
 
 	return nil
 }
+
+func validOauthSecret(s *v1.Secret) error {
+	// TODO(tsaarni)
+	return nil
+}

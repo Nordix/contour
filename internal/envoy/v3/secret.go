@@ -22,21 +22,52 @@ import (
 
 // Secret creates new envoy_tls_v3.Secret from secret.
 func Secret(s *dag.Secret) *envoy_tls_v3.Secret {
-	return &envoy_tls_v3.Secret{
-		Name: envoy.Secretname(s),
-		Type: &envoy_tls_v3.Secret_TlsCertificate{
-			TlsCertificate: &envoy_tls_v3.TlsCertificate{
-				PrivateKey: &envoy_core_v3.DataSource{
-					Specifier: &envoy_core_v3.DataSource_InlineBytes{
-						InlineBytes: s.PrivateKey(),
+	t, _ := s.Type()
+	switch t {
+	case dag.SecretTypeTLS:
+		return &envoy_tls_v3.Secret{
+			Name: envoy.Secretname(s),
+			Type: &envoy_tls_v3.Secret_TlsCertificate{
+				TlsCertificate: &envoy_tls_v3.TlsCertificate{
+					PrivateKey: &envoy_core_v3.DataSource{
+						Specifier: &envoy_core_v3.DataSource_InlineBytes{
+							InlineBytes: s.PrivateKey(),
+						},
 					},
-				},
-				CertificateChain: &envoy_core_v3.DataSource{
-					Specifier: &envoy_core_v3.DataSource_InlineBytes{
-						InlineBytes: s.Cert(),
+					CertificateChain: &envoy_core_v3.DataSource{
+						Specifier: &envoy_core_v3.DataSource_InlineBytes{
+							InlineBytes: s.Cert(),
+						},
 					},
 				},
 			},
-		},
+		}
+	case dag.SecretTypeCA:
+		return &envoy_tls_v3.Secret{
+			Name: envoy.Secretname(s),
+			Type: &envoy_tls_v3.Secret_ValidationContext{
+				ValidationContext: &envoy_tls_v3.CertificateValidationContext{
+					TrustedCa: &envoy_core_v3.DataSource{
+						Specifier: &envoy_core_v3.DataSource_InlineBytes{
+							InlineBytes: s.CA(),
+						},
+					},
+				},
+			},
+		}
+	case dag.SecretTypeGeneric:
+		return &envoy_tls_v3.Secret{
+			Name: envoy.Secretname(s),
+			Type: &envoy_tls_v3.Secret_GenericSecret{
+				GenericSecret: &envoy_tls_v3.GenericSecret{
+					Secret: &envoy_core_v3.DataSource{
+						Specifier: &envoy_core_v3.DataSource_InlineBytes{
+							InlineBytes: s.Generic(),
+						},
+					},
+				},
+			},
+		}
 	}
+	return nil
 }
