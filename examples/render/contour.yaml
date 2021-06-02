@@ -3062,21 +3062,20 @@ spec:
         args:
           - envoy
           - shutdown-manager
-        image: docker.io/projectcontour/contour:main
-        imagePullPolicy: IfNotPresent
-        lifecycle:
-          preStop:
-            exec:
-              command:
-                - /bin/contour
-                - envoy
-                - shutdown
+        image: projectcontour/contour:3c2377b8
+        imagePullPolicy: Never
         livenessProbe:
           httpGet:
             path: /healthz
             port: 8090
           initialDelaySeconds: 3
           periodSeconds: 10
+        lifecycle:
+          preStop:
+            httpGet:
+              path: /shutdown
+              port: 8090
+              scheme: HTTP
         name: shutdown-manager
       - args:
         - -c

@@ -36,9 +36,6 @@ func main() {
 
 	bootstrap, bootstrapCtx := registerBootstrap(app)
 
-	// Add a "shutdown" command which initiates an Envoy shutdown sequence.
-	sdmShutdown, sdmShutdownCtx := registerShutdown(envoyCmd, log)
-
 	certgenApp, certgenConfig := registerCertGen(app)
 
 	cli := app.Command("cli", "A CLI client for the Contour Kubernetes ingress controller.")
@@ -67,8 +64,6 @@ func main() {
 	switch kingpin.MustParse(app.Parse(args)) {
 	case sdm.FullCommand():
 		doShutdownManager(shutdownManagerCtx)
-	case sdmShutdown.FullCommand():
-		sdmShutdownCtx.shutdownHandler()
 	case bootstrap.FullCommand():
 		err := bootstrapCtx.XDSResourceVersion.Validate()
 		if err != nil {

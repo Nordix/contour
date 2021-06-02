@@ -18,7 +18,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	xdscache_v3 "github.com/projectcontour/contour/internal/xdscache/v3"
@@ -35,12 +34,6 @@ const (
 	prometheusStat           = "envoy_http_downstream_cx_active"
 )
 
-// shutdownReadyFile is the default file path used in the /shutdown endpoint.
-const shutdownReadyFile = "/ok"
-
-// shutdownReadyFile is the default polling interval for the file used in the /shutdown endpoint.
-const shutdownReadyCheckInterval = time.Second * 1
-
 func prometheusLabels() []string {
 	return []string{xdscache_v3.ENVOY_HTTP_LISTENER, xdscache_v3.ENVOY_HTTPS_LISTENER}
 }
@@ -48,15 +41,7 @@ func prometheusLabels() []string {
 type shutdownmanagerContext struct {
 	// httpServePort defines what port the shutdown-manager listens on
 	httpServePort int
-	// shutdownReadyFile is the default file path used in the /shutdown endpoint
-	shutdownReadyFile string
-	// shutdownReadyCheckInterval is the polling interval for the file used in the /shutdown endpoint
-	shutdownReadyCheckInterval time.Duration
 
-	logrus.FieldLogger
-}
-
-type shutdownContext struct {
 	// checkInterval defines time delay between polling Envoy for open connections
 	checkInterval time.Duration
 
@@ -73,25 +58,22 @@ type shutdownContext struct {
 	// adminPort defines the port for our envoy pod, being configurable through --admin-port flag
 	adminPort int
 
+	// maxDrainTime defined the number of seconds to wait until minimum open connections is reached
+	maxDrainTime time.Duration
+
 	logrus.FieldLogger
 }
 
 func newShutdownManagerContext() *shutdownmanagerContext {
 	// Set defaults for parameters which are then overridden via flags, ENV, or ConfigFile
 	return &shutdownmanagerContext{
-		httpServePort:              8090,
-		shutdownReadyFile:          shutdownReadyFile,
-		shutdownReadyCheckInterval: shutdownReadyCheckInterval,
-	}
-}
-
-func newShutdownContext() *shutdownContext {
-	return &shutdownContext{
+		httpServePort:      8090,
 		checkInterval:      5 * time.Second,
 		checkDelay:         60 * time.Second,
 		drainDelay:         0,
 		minOpenConnections: 0,
 		adminPort:          9001,
+		maxDrainTime:       200 * time.Second,
 	}
 }
 
@@ -103,43 +85,15 @@ func (s *shutdownmanagerContext) healthzHandler(w http.ResponseWriter, r *http.R
 	}
 }
 
-// shutdownReadyHandler handles the /shutdown endpoint which is used by Envoy to determine if it can terminate.
-// Once enough connections have drained based upon configuration, a file will be written to "/ok" in
-// the shutdown manager's file system. Any HTTP request to /shutdown will use the existence of this
-// file to understand if it is safe to terminate. The file-based approach is used since the process in which
-// the kubelet calls the shutdown command is different than the HTTP request from Envoy to /shutdown
+// shutdownReadyHandler handles the /shutdown endpoint which is used by kubelet to determine if it can terminate Envoy.
+// It is called from Envoy container's preStop hook and it blocks pod shutdown until Envoy is able to drain connections.
+// Once enough connections have drained based upon min-open threshold, HTTP response will be returned and kubelet will
+// proceed with pod shutdown.
 func (s *shutdownmanagerContext) shutdownReadyHandler(w http.ResponseWriter, r *http.Request) {
 	l := s.WithField("context", "shutdownReadyHandler")
 	ctx := r.Context()
-	for {
-		_, err := os.Stat(s.shutdownReadyFile)
-		if os.IsNotExist(err) {
-			l.Infof("file %s does not exist; checking again in %v", s.shutdownReadyFile,
-				s.shutdownReadyCheckInterval)
-		} else if err == nil {
-			l.Infof("detected file %s; sending HTTP response", s.shutdownReadyFile)
-			http.StatusText(http.StatusOK)
-			if _, err := w.Write([]byte("OK")); err != nil {
-				l.Error(err)
-			}
-			return
-		} else {
-			l.Errorf("error checking for file: %v", err)
-		}
 
-		select {
-		case <-time.After(s.shutdownReadyCheckInterval):
-		case <-ctx.Done():
-			l.Infof("client request cancelled")
-			return
-		}
-	}
-}
-
-// shutdownHandler is called from a pod preStop hook, where it will block pod shutdown
-// until envoy is able to drain connections to below the min-open threshold.
-func (s *shutdownContext) shutdownHandler() {
-	s.WithField("context", "shutdownHandler").Infof("waiting %s before draining connections", s.drainDelay)
+	l.Infof("waiting %s before draining connections", s.drainDelay)
 	time.Sleep(s.drainDelay)
 
 	// Send shutdown signal to Envoy to start draining connections
@@ -163,11 +117,12 @@ func (s *shutdownContext) shutdownHandler() {
 	if err != nil {
 		// May be conflict if max retries were hit, or may be something unrelated
 		// like permissions or a network error
-		s.WithField("context", "shutdownHandler").Errorf("error sending envoy healthcheck fail after 4 attempts: %v", err)
+		l.Errorf("error sending envoy healthcheck fail after 4 attempts: %v", err)
 	}
 
-	s.WithField("context", "shutdownHandler").Infof("waiting %s before polling for draining connections", s.checkDelay)
+	l.Infof("waiting %s before polling for draining connections", s.checkDelay)
 	time.Sleep(s.checkDelay)
+	maxDrainTimeout := time.After(s.maxDrainTime)
 
 	for {
 		openConnections, err := getOpenConnections(s.adminPort)
@@ -175,24 +130,27 @@ func (s *shutdownContext) shutdownHandler() {
 			s.Error(err)
 		} else {
 			if openConnections <= s.minOpenConnections {
-				s.WithField("context", "shutdownHandler").
-					WithField("open_connections", openConnections).
+				l.WithField("open_connections", openConnections).
 					WithField("min_connections", s.minOpenConnections).
-					Info("min number of open connections found, shutting down")
-				file, err := os.Create(shutdownReadyFile)
-				if err != nil {
-					s.Error(err)
-				}
-				defer file.Close()
+					Info("min number of open connections found, sending HTTP response to proceed with shutdown")
 				return
 			}
-			s.WithField("context", "shutdownHandler").
+			l.
 				WithField("open_connections", openConnections).
 				WithField("min_connections", s.minOpenConnections).
 				Info("polled open connections")
 		}
-		time.Sleep(s.checkInterval)
+		select {
+		case <-time.After(s.checkInterval):
+		case <-maxDrainTimeout:
+			l.Infof("maximum drain time reached, sending HTTP response to proceed with shutdown")
+			return
+		case <-ctx.Done():
+			l.Infof("client request cancelled")
+			return
+		}
 	}
+
 }
 
 // shutdownEnvoy sends a POST request to /healthcheck/fail to tell Envoy to start draining connections
@@ -279,21 +237,11 @@ func registerShutdownManager(cmd *kingpin.CmdClause, log logrus.FieldLogger) (*k
 
 	shutdownmgr := cmd.Command("shutdown-manager", "Start envoy shutdown-manager.")
 	shutdownmgr.Flag("serve-port", "Port to serve the http server on.").IntVar(&ctx.httpServePort)
+	shutdownmgr.Flag("admin-port", "Envoy admin interface port.").IntVar(&ctx.adminPort)
+	shutdownmgr.Flag("check-interval", "Time to poll Envoy for open connections.").DurationVar(&ctx.checkInterval)
+	shutdownmgr.Flag("check-delay", "Time to wait before polling Envoy for open connections.").Default("60s").DurationVar(&ctx.checkDelay)
+	shutdownmgr.Flag("drain-delay", "Time to wait before draining Envoy connections.").Default("0s").DurationVar(&ctx.drainDelay)
+	shutdownmgr.Flag("min-open-connections", "Min number of open connections when polling Envoy.").IntVar(&ctx.minOpenConnections)
 
 	return shutdownmgr, ctx
-}
-
-// registerShutdown registers the envoy shutdown sub-command and flags
-func registerShutdown(cmd *kingpin.CmdClause, log logrus.FieldLogger) (*kingpin.CmdClause, *shutdownContext) {
-	ctx := newShutdownContext()
-	ctx.FieldLogger = log.WithField("context", "shutdown")
-
-	shutdown := cmd.Command("shutdown", "Initiate an shutdown sequence which configures Envoy to begin draining connections.")
-	shutdown.Flag("admin-port", "Envoy admin interface port.").IntVar(&ctx.adminPort)
-	shutdown.Flag("check-interval", "Time to poll Envoy for open connections.").DurationVar(&ctx.checkInterval)
-	shutdown.Flag("check-delay", "Time to wait before polling Envoy for open connections.").Default("60s").DurationVar(&ctx.checkDelay)
-	shutdown.Flag("drain-delay", "Time to wait before draining Envoy connections.").Default("0s").DurationVar(&ctx.drainDelay)
-	shutdown.Flag("min-open-connections", "Min number of open connections when polling Envoy.").IntVar(&ctx.minOpenConnections)
-
-	return shutdown, ctx
 }
