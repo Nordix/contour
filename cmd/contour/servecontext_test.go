@@ -513,6 +513,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -619,6 +620,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -731,6 +733,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -837,6 +840,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -948,6 +952,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -1054,6 +1059,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -1163,6 +1169,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -1279,6 +1286,7 @@ func TestConvertServeContext(t *testing.T) {
 					},
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
@@ -1365,6 +1373,7 @@ func TestConvertServeContext(t *testing.T) {
 					DefaultHTTPVersions: nil,
 					Timeouts: &contour_api_v1alpha1.TimeoutParameters{
 						ConnectionIdleTimeout: pointer.StringPtr("60s"),
+						ConnectTimeout:        pointer.StringPtr("2s"),
 					},
 					Cluster: contour_api_v1alpha1.ClusterParameters{
 						DNSLookupFamily: contour_api_v1alpha1.AutoClusterDNSFamily,
