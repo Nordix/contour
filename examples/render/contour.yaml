@@ -4937,6 +4937,15 @@ rules:
 - apiGroups:
   - ""
   resources:
+  - configmaps
+  - events
+  verbs:
+  - create
+  - get
+  - update
+- apiGroups:
+  - ""
+  resources:
   - endpoints
   - namespaces
   - secrets
@@ -4945,14 +4954,6 @@ rules:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - get
-  - update
 - apiGroups:
   - coordination.k8s.io
   resources:
