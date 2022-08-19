@@ -14,6 +14,8 @@
 package v3
 
 import (
+	"syscall"
+
 	envoy_core_v3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	"github.com/projectcontour/contour/internal/envoy"
 )
@@ -57,6 +59,24 @@ func TCPKeepaliveSocketOptions() []*envoy_core_v3.SocketOption {
 			Level:       envoy.IPPROTO_TCP,
 			Name:        envoy.TCP_KEEPCNT,
 			Value:       &envoy_core_v3.SocketOption_IntValue{IntValue: 9},
+			State:       envoy_core_v3.SocketOption_STATE_LISTENING,
+		},
+	}
+}
+
+func DSCPMarkingOptions() []*envoy_core_v3.SocketOption {
+	return []*envoy_core_v3.SocketOption{
+		{
+			Description: "IPv4 DSCP mark",
+			Level:       syscall.IPPROTO_IP,
+			Name:        syscall.IP_TOS,
+			Value:       &envoy_core_v3.SocketOption_IntValue{IntValue: 0},
+			State:       envoy_core_v3.SocketOption_STATE_LISTENING,
+		},
+		{
+			Description: "IPv6 DSCP mark",
+			Level:       syscall.IPPROTO_IPV6,
+			Name:        syscall.IPV6_TCLASS,
 			State:       envoy_core_v3.SocketOption_STATE_LISTENING,
 		},
 	}
