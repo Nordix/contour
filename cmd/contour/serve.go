@@ -160,12 +160,13 @@ func registerServe(app *kingpin.Application) (*kingpin.CmdClause, *serveContext)
 	serve.Flag("leader-election-retry-period", "The interval which Contour will attempt to acquire leadership lease.").Default("2s").DurationVar(&ctx.LeaderElection.RetryPeriod)
 
 	serve.Flag("root-namespaces", "Restrict contour to searching these namespaces for root ingress routes.").PlaceHolder("<ns,ns>").StringVar(&ctx.rootNamespaces)
-	serve.Flag("watch-namespaces", "Restrict contour to search resources in these namespaces only.").PlaceHolder("<ns,ns>").StringVar(&ctx.watchNamespaces)
 
 	serve.Flag("stats-address", "Envoy /stats interface address.").PlaceHolder("<ipaddr>").StringVar(&ctx.statsAddr)
 	serve.Flag("stats-port", "Envoy /stats interface port.").PlaceHolder("<port>").IntVar(&ctx.statsPort)
 
 	serve.Flag("use-proxy-protocol", "Use PROXY protocol for all listeners.").BoolVar(&ctx.useProxyProto)
+
+	serve.Flag("watch-namespaces", "Restrict contour to watch resources in these namespaces only.").PlaceHolder("<ns,ns>").StringVar(&ctx.watchNamespaces)
 
 	serve.Flag("xds-address", "xDS gRPC API address.").PlaceHolder("<ipaddr>").StringVar(&ctx.xdsAddr)
 	serve.Flag("xds-port", "xDS gRPC API port.").PlaceHolder("<port>").IntVar(&ctx.xdsPort)
@@ -213,16 +214,17 @@ func NewServer(log logrus.FieldLogger, ctx *serveContext) (*Server, error) {
 	}
 
 	var cacheFunc ctrl_cache.NewCacheFunc
-	var namespaces string
+	var namespace string
 	if watchedNamespaces := ctx.watchedNamespaces(); watchedNamespaces != nil {
+		// Watch a single namespace
 		if len(watchedNamespaces) == 1 {
-			namespaces = watchedNamespaces[0]
+			namespace = watchedNamespaces[0]
 		}
+		// Watch multiple namespaces
 		if len(watchedNamespaces) > 1 {
 			cacheFunc = ctrl_cache.MultiNamespacedCacheBuilder(watchedNamespaces)
 		}
 		log.WithField("context", "watched-namespaces").Infof("watching namespaces %q", watchedNamespaces)
-
 	}
 
 	// Instantiate a controller-runtime manager.
@@ -230,7 +232,7 @@ func NewServer(log logrus.FieldLogger, ctx *serveContext) (*Server, error) {
 		Scheme:                 scheme,
 		MetricsBindAddress:     "0",
 		HealthProbeBindAddress: "0",
-		Namespace:              namespaces,
+		Namespace:              namespace,
 		NewCache:               cacheFunc,
 	}
 	if ctx.LeaderElection.Disable {
@@ -331,7 +333,7 @@ func (s *Server) doServe() error {
 		informerNamespaces.Insert(rootNamespaces...)
 
 		// The fallback cert and client cert's namespaces only need to be added to informerNamespaces
-		// if we're processing specifici root namespaces, because otherwise, the informers will start
+		// if we're processing specific root namespaces, because otherwise, the informers will start
 		// for all namespaces so the below will automatically be included.
 
 		if fallbackCert := contourConfiguration.HTTPProxy.FallbackCertificate; fallbackCert != nil {
