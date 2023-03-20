@@ -476,6 +476,34 @@ descriptors:
 		})
 	})
 
+	Context("using watch namespaces", func() {
+		watchNamespaces := []string{
+			"watched-ns-1",
+			"watched-ns-2",
+		}
+
+		BeforeEach(func() {
+			if e2e.UsingContourConfigCRD() {
+				// Test only applies to contour configmap.
+				Skip("")
+			}
+			for _, ns := range watchNamespaces {
+				f.CreateNamespace(ns)
+			}
+			additionalContourArgs = []string{
+				"--watch-namespaces=" + strings.Join(watchNamespaces, ","),
+			}
+		})
+
+		AfterEach(func() {
+			for _, ns := range watchNamespaces {
+				f.DeleteNamespace(ns, false)
+			}
+		})
+
+		f.NamespacedTest("nonwatched-ns", testWatchNamespaces(watchNamespaces))
+	})
+
 	f.NamespacedTest("httpproxy-crl", testClientCertRevocation)
 
 	Context("gRPC tests", func() {

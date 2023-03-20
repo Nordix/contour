@@ -23,32 +23,12 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func testRootNamespaces(namespaces []string) e2e.NamespacedTestBody {
+func testWatchNamespaces(namespaces []string) e2e.NamespacedTestBody {
 	return func(testNS string) {
-		Specify("root HTTPProxies outside of root namespaces are not configured", func() {
+		Specify("HTTPProxies outside of watched namespaces are not configured", func() {
 			for _, ns := range namespaces {
 				deployEchoServer(f.T(), f.Client, ns, "echo")
-				p := &contourv1.HTTPProxy{
-					ObjectMeta: metav1.ObjectMeta{
-						Namespace: ns,
-						Name:      "root-proxy",
-					},
-					Spec: contourv1.HTTPProxySpec{
-						VirtualHost: &contourv1.VirtualHost{
-							Fqdn: "root-proxy-" + ns + ".projectcontour.io",
-						},
-						Routes: []contourv1.Route{
-							{
-								Services: []contourv1.Service{
-									{
-										Name: "echo",
-										Port: 80,
-									},
-								},
-							},
-						},
-					},
-				}
+				p := newEchoProxy("proxy", ns)
 				f.CreateHTTPProxyAndWaitFor(p, e2e.HTTPProxyValid)
 
 				res, ok := f.HTTP.RequestUntil(&e2e.HTTPRequestOpts{
@@ -60,28 +40,33 @@ func testRootNamespaces(namespaces []string) e2e.NamespacedTestBody {
 			}
 
 			deployEchoServer(f.T(), f.Client, testNS, "echo")
-			p := &contourv1.HTTPProxy{
-				ObjectMeta: metav1.ObjectMeta{
-					Namespace: testNS,
-					Name:      "root-proxy",
-				},
-				Spec: contourv1.HTTPProxySpec{
-					VirtualHost: &contourv1.VirtualHost{
-						Fqdn: "root-proxy-" + testNS + ".projectcontour.io",
-					},
-					Routes: []contourv1.Route{
-						{
-							Services: []contourv1.Service{
-								{
-									Name: "echo",
-									Port: 80,
-								},
-							},
-						},
-					},
-				},
+			p := newEchoProxy("proxy", testNS)
+			_, ok := f.CreateHTTPProxyAndWaitFor(p, e2e.HTTPProxyNotReconciled)
+			require.Truef(f.T(), ok, "expected HTTPProxy to have status NotReconciled")
+		})
+	}
+}
+
+func testRootNamespaces(namespaces []string) e2e.NamespacedTestBody {
+	return func(testNS string) {
+		Specify("root HTTPProxies outside of root namespaces are not configured", func() {
+			for _, ns := range namespaces {
+				deployEchoServer(f.T(), f.Client, ns, "echo")
+				p := newEchoProxy("root-proxy", ns)
+				f.CreateHTTPProxyAndWaitFor(p, e2e.HTTPProxyValid)
+
+				res, ok := f.HTTP.RequestUntil(&e2e.HTTPRequestOpts{
+					Host:      p.Spec.VirtualHost.Fqdn,
+					Condition: e2e.HasStatusCode(200),
+				})
+				require.NotNil(f.T(), res)
+				require.Truef(f.T(), ok, "expected 200 response code, got %d", res.StatusCode)
 			}
-			f.CreateHTTPProxyAndWaitFor(p, httpProxyRootNotAllowedInNS)
+
+			deployEchoServer(f.T(), f.Client, testNS, "echo")
+			p := newEchoProxy("root-proxy", testNS)
+			_, ok := f.CreateHTTPProxyAndWaitFor(p, httpProxyRootNotAllowedInNS)
+			require.Truef(f.T(), ok, "expected HTTPProxy to have status RootNamespaceError")
 		})
 	}
 }
@@ -104,4 +89,28 @@ func httpProxyRootNotAllowedInNS(proxy *contourv1.HTTPProxy) bool {
 		return false
 	}
 	return subCond.Status == "True"
+}
+
+func newEchoProxy(name, namespace string) *contourv1.HTTPProxy {
+	return &contourv1.HTTPProxy{
+		ObjectMeta: metav1.ObjectMeta{
+			Namespace: namespace,
+			Name:      name,
+		},
+		Spec: contourv1.HTTPProxySpec{
+			VirtualHost: &contourv1.VirtualHost{
+				Fqdn: name + "-" + namespace + ".projectcontour.io",
+			},
+			Routes: []contourv1.Route{
+				{
+					Services: []contourv1.Service{
+						{
+							Name: "echo",
+							Port: 80,
+						},
+					},
+				},
+			},
+		},
+	}
 }
