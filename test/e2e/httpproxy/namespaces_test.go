@@ -24,8 +24,9 @@ import (
 )
 
 func testWatchNamespaces(namespaces []string) e2e.NamespacedTestBody {
-	return func(testNS string) {
+	return func(nonWatchedNS string) {
 		Specify("HTTPProxies outside of watched namespaces are not configured", func() {
+			// Proxy in watched namespace should succeed
 			for _, ns := range namespaces {
 				deployEchoServer(f.T(), f.Client, ns, "echo")
 				p := newEchoProxy("proxy", ns)
@@ -39,17 +40,97 @@ func testWatchNamespaces(namespaces []string) e2e.NamespacedTestBody {
 				require.Truef(f.T(), ok, "expected 200 response code, got %d", res.StatusCode)
 			}
 
-			deployEchoServer(f.T(), f.Client, testNS, "echo")
-			p := newEchoProxy("proxy", testNS)
+			// Proxy in non-watched namespace should fail
+			deployEchoServer(f.T(), f.Client, nonWatchedNS, "echo")
+			p := newEchoProxy("proxy", nonWatchedNS)
 			_, ok := f.CreateHTTPProxyAndWaitFor(p, e2e.HTTPProxyNotReconciled)
 			require.Truef(f.T(), ok, "expected HTTPProxy to have status NotReconciled")
 		})
 	}
 }
 
-func testRootNamespaces(namespaces []string) e2e.NamespacedTestBody {
-	return func(testNS string) {
+func testWatchAndRootNamespaces(rootNamespaces []string, nonRootNamespace string) e2e.NamespacedTestBody {
+	return func(nonWatchedNS string) {
 		Specify("root HTTPProxies outside of root namespaces are not configured", func() {
+			// Root proxy in root namespace should succeed
+			for _, ns := range rootNamespaces {
+				deployEchoServer(f.T(), f.Client, ns, "echo")
+				p := newEchoProxy("root-proxy", ns)
+				f.CreateHTTPProxyAndWaitFor(p, e2e.HTTPProxyValid)
+
+				res, ok := f.HTTP.RequestUntil(&e2e.HTTPRequestOpts{
+					Host:      p.Spec.VirtualHost.Fqdn,
+					Condition: e2e.HasStatusCode(200),
+				})
+				require.NotNil(f.T(), res)
+				require.Truef(f.T(), ok, "expected 200 response code, got %d", res.StatusCode)
+			}
+
+			deployEchoServer(f.T(), f.Client, nonRootNamespace, "echo")
+
+			// Root proxy in non-root namespace should fail
+			p := newEchoProxy("root-proxy", nonRootNamespace)
+			_, ok := f.CreateHTTPProxyAndWaitFor(p, httpProxyRootNotAllowedInNS)
+			require.Truef(f.T(), ok, "expected HTTPProxy to have status RootNamespaceError")
+
+			// Leaf proxy in non-root (but watched) namespace should succeed
+			lp := &contourv1.HTTPProxy{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: nonRootNamespace,
+					Name:      "leaf-proxy",
+				},
+				Spec: contourv1.HTTPProxySpec{
+					Routes: []contourv1.Route{
+						{
+							Services: []contourv1.Service{
+								{
+									Name: "echo",
+									Port: 80,
+								},
+							},
+						},
+					},
+				},
+			}
+			p = &contourv1.HTTPProxy{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: rootNamespaces[0],
+					Name:      "root",
+				},
+				Spec: contourv1.HTTPProxySpec{
+					VirtualHost: &contourv1.VirtualHost{
+						Fqdn: "root-" + rootNamespaces[0] + ".projectcontour.io",
+					},
+					Includes: []contourv1.Include{
+						{
+							Name:      "leaf-proxy",
+							Namespace: nonRootNamespace,
+						},
+					},
+				},
+			}
+			f.CreateHTTPProxy(lp)
+			f.CreateHTTPProxyAndWaitFor(p, e2e.HTTPProxyValid)
+			res, ok := f.HTTP.RequestUntil(&e2e.HTTPRequestOpts{
+				Host:      p.Spec.VirtualHost.Fqdn,
+				Condition: e2e.HasStatusCode(200),
+			})
+			require.NotNil(f.T(), res)
+			require.Truef(f.T(), ok, "expected 200 response code, got %d", res.StatusCode)
+
+			// Root proxy in non-watched namespace should fail
+			deployEchoServer(f.T(), f.Client, nonWatchedNS, "echo")
+			p = newEchoProxy("root-proxy", nonWatchedNS)
+			_, ok = f.CreateHTTPProxyAndWaitFor(p, e2e.HTTPProxyNotReconciled)
+			require.Truef(f.T(), ok, "expected HTTPProxy to have status NotReconciled")
+		})
+	}
+}
+
+func testRootNamespaces(namespaces []string) e2e.NamespacedTestBody {
+	return func(nonrootNS string) {
+		Specify("root HTTPProxies outside of root namespaces are not configured", func() {
+			// Root proxy in root namespace should succeed
 			for _, ns := range namespaces {
 				deployEchoServer(f.T(), f.Client, ns, "echo")
 				p := newEchoProxy("root-proxy", ns)
@@ -63,8 +144,9 @@ func testRootNamespaces(namespaces []string) e2e.NamespacedTestBody {
 				require.Truef(f.T(), ok, "expected 200 response code, got %d", res.StatusCode)
 			}
 
-			deployEchoServer(f.T(), f.Client, testNS, "echo")
-			p := newEchoProxy("root-proxy", testNS)
+			// Root proxy in non-root namespace should fail
+			deployEchoServer(f.T(), f.Client, nonrootNS, "echo")
+			p := newEchoProxy("root-proxy", nonrootNS)
 			_, ok := f.CreateHTTPProxyAndWaitFor(p, httpProxyRootNotAllowedInNS)
 			require.Truef(f.T(), ok, "expected HTTPProxy to have status RootNamespaceError")
 		})
