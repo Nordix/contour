@@ -36,7 +36,8 @@ Many of these flags are mirrored in the [Contour Configuration File](#configurat
 | `--contour-cert-file=</path/to/file\|CONTOUR_CERT_FILE>` | Contour certificate file name for serving gRPC over TLS                |
 | `--contour-key-file=</path/to/file\|CONTOUR_KEY_FILE>`   | Contour key file name for serving gRPC over TLS                        |
 | `--insecure`                                             | Allow serving without TLS secured gRPC                                 |
-| `--root-namespaces=<ns,ns>`                              | Restrict contour to searching these namespaces for root ingress routes |
+| `--root-namespaces=<ns,ns>`                              | Restrict root httpproxies and secrets to these namespaces              |
+| `--watch-namespaces=<ns,ns>`                             | Restrict contour to searching these namespaces for all resources       |
 | `--ingress-class-name=<name>`                            | Contour IngressClass name (comma-separated list allowed)               |
 | `--ingress-status-address=<address>`                     | Address to set in Ingress object status                                |
 | `--envoy-http-access-log=</path/to/file>`                | Envoy HTTP access log                                                  |
