@@ -32,6 +32,7 @@ func TestDetermineSNI(t *testing.T) {
 		routeRequestHeaders   *HeadersPolicy
 		clusterRequestHeaders *HeadersPolicy
 		service               *Service
+		upstreamValidation    *PeerValidationContext
 		want                  string
 	}{
 		"default SNI": {
@@ -94,11 +95,31 @@ func TestDetermineSNI(t *testing.T) {
 			},
 			want: "externalname.com",
 		},
+		"upstreamValidation set": {
+			routeRequestHeaders:   nil,
+			clusterRequestHeaders: nil,
+			upstreamValidation: &PeerValidationContext{
+				SubjectNames: []string{"upstream.com"},
+			},
+			service: &Service{},
+			want:    "upstream.com",
+		},
+		"upstreamValidation override externalName": {
+			routeRequestHeaders:   nil,
+			clusterRequestHeaders: nil,
+			upstreamValidation: &PeerValidationContext{
+				SubjectNames: []string{"upstream.com"},
+			},
+			service: &Service{
+				ExternalName: "externalname.com",
+			},
+			want: "upstream.com",
+		},
 	}
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := determineSNI(tc.routeRequestHeaders, tc.clusterRequestHeaders, tc.service)
+			got := determineSNI(tc.routeRequestHeaders, tc.clusterRequestHeaders, tc.service, tc.upstreamValidation)
 			assert.Equal(t, tc.want, got)
 		})
 	}

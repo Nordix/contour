@@ -1018,7 +1018,7 @@ func (p *HTTPProxyProcessor) computeRoutes(
 				ResponseHeadersPolicy:         respHP,
 				CookieRewritePolicies:         cookieRP,
 				Protocol:                      protocol,
-				SNI:                           determineSNI(r.RequestHeadersPolicy, reqHP, s),
+				SNI:                           determineSNI(r.RequestHeadersPolicy, reqHP, s, uv),
 				DNSLookupFamily:               string(p.DNSLookupFamily),
 				ClientCertificate:             clientCertSecret,
 				TimeoutPolicy:                 ctp,
@@ -1228,7 +1228,7 @@ func (p *HTTPProxyProcessor) processHTTPProxyTCPProxy(validCond *contour_api_v1.
 				Protocol:             protocol,
 				LoadBalancerPolicy:   lbPolicy,
 				TCPHealthCheckPolicy: healthPolicy,
-				SNI:                  s.ExternalName,
+				SNI:                  determineSNI(nil, nil, s, uv),
 				TimeoutPolicy:        ClusterTimeoutPolicy{ConnectTimeout: p.ConnectTimeout},
 				UpstreamTLS:          p.UpstreamTLS,
 				UpstreamValidation:   uv,
@@ -1631,7 +1631,7 @@ func getProtocol(service contour_api_v1.Service, s *Service) (string, error) {
 // determineSNI decides what the SNI should be on the request. It is configured via RequestHeadersPolicy.Host key.
 // Policies set on service are used before policies set on a route. Otherwise the value of the externalService
 // is used if the route is configured to proxy to an externalService type.
-func determineSNI(routeRequestHeaders, clusterRequestHeaders *HeadersPolicy, service *Service) string {
+func determineSNI(routeRequestHeaders, clusterRequestHeaders *HeadersPolicy, service *Service, uv *PeerValidationContext) string {
 	// Service RequestHeadersPolicy take precedence
 	if clusterRequestHeaders != nil {
 		if clusterRequestHeaders.HostRewrite != "" {
@@ -1644,6 +1644,11 @@ func determineSNI(routeRequestHeaders, clusterRequestHeaders *HeadersPolicy, ser
 		if routeRequestHeaders.HostRewrite != "" {
 			return routeRequestHeaders.HostRewrite
 		}
+	}
+
+	// If we have a peer validation context, use the first subject name
+	if uv != nil && len(uv.SubjectNames) > 0 {
+		return uv.SubjectNames[0]
 	}
 
 	return service.ExternalName
