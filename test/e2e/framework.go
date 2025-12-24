@@ -27,7 +27,6 @@ import (
 	"time"
 
 	"github.com/bombsimon/logrusr/v4"
-	certmanagerv1 "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega/gexec"
@@ -74,7 +73,7 @@ type Framework struct {
 	// HTTP provides helpers for making HTTP/HTTPS requests.
 	HTTP *HTTP
 
-	// Certs provides helpers for creating cert-manager certificates
+	// Certs provides helpers for creating certificates
 	// and related resources.
 	Certs *Certs
 
@@ -108,7 +107,6 @@ func NewFramework(inClusterTestSuite bool) *Framework {
 	require.NoError(t, gatewayapi_v1alpha2.Install(scheme))
 	require.NoError(t, gatewayapi_v1alpha3.Install(scheme))
 	require.NoError(t, gatewayapi_v1.Install(scheme))
-	require.NoError(t, certmanagerv1.AddToScheme(scheme))
 	require.NoError(t, apiextensions_v1.AddToScheme(scheme))
 
 	ipV6Cluster := os.Getenv("IPV6_CLUSTER") == "true"

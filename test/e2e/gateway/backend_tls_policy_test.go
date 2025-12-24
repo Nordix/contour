@@ -19,11 +19,10 @@ import (
 	"context"
 	"encoding/json"
 
-	certmanagerv1 "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
-	certmanagermeta_v1 "github.com/cert-manager/cert-manager/pkg/apis/meta/v1"
 	. "github.com/onsi/ginkgo/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/tsaarni/certyaml"
 	apps_v1 "k8s.io/api/apps/v1"
 	core_v1 "k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,6 +31,7 @@ import (
 	gatewayapi_v1alpha2 "sigs.k8s.io/gateway-api/apis/v1alpha2"
 	gatewayapi_v1alpha3 "sigs.k8s.io/gateway-api/apis/v1alpha3"
 
+	"github.com/projectcontour/contour/internal/dag"
 	"github.com/projectcontour/contour/internal/gatewayapi"
 	"github.com/projectcontour/contour/test/e2e"
 )
@@ -41,77 +41,19 @@ func testBackendTLSPolicy(namespace string, gateway types.NamespacedName) {
 		protocolVersion := "TLSv1.3"
 		t := f.T()
 
-		// Top level issuer.
-		selfSignedIssuer := &certmanagerv1.Issuer{
-			ObjectMeta: meta_v1.ObjectMeta{
-				Namespace: namespace,
-				Name:      "selfsigned",
-			},
-			Spec: certmanagerv1.IssuerSpec{
-				IssuerConfig: certmanagerv1.IssuerConfig{
-					SelfSigned: &certmanagerv1.SelfSignedIssuer{},
-				},
-			},
-		}
-		require.NoError(f.T(), f.Client.Create(context.TODO(), selfSignedIssuer))
+		// Backend server cert and CA cert.
+		ca := certyaml.Certificate{Subject: "CN=ca-cert"}
+		server := certyaml.Certificate{Subject: "CN=echo-secure", Issuer: &ca, SubjectAltNames: []string{"DNS:echo-secure"}}
 
-		// CA to sign backend certs with.
-		caCertificate := &certmanagerv1.Certificate{
-			ObjectMeta: meta_v1.ObjectMeta{
-				Namespace: namespace,
-				Name:      "ca-cert",
+		require.NoError(f.T(), f.Client.Create(context.TODO(), &core_v1.Secret{
+			ObjectMeta: meta_v1.ObjectMeta{Namespace: namespace, Name: "backend-server-cert"},
+			Type:       core_v1.SecretTypeTLS,
+			Data: map[string][]byte{
+				core_v1.TLSCertKey:       server.CertPEM(),
+				core_v1.TLSPrivateKeyKey: server.KeyPEM(),
+				dag.CACertificateKey:     ca.CertPEM(), // Include CA for using the secret for downstream validation.
 			},
-			Spec: certmanagerv1.CertificateSpec{
-				IsCA: true,
-				Usages: []certmanagerv1.KeyUsage{
-					certmanagerv1.UsageSigning,
-					certmanagerv1.UsageCertSign,
-				},
-				CommonName: "ca-cert",
-				SecretName: "ca-cert",
-				IssuerRef: certmanagermeta_v1.ObjectReference{
-					Name: "selfsigned",
-				},
-			},
-		}
-		require.NoError(f.T(), f.Client.Create(context.TODO(), caCertificate))
-
-		// Issuer based on CA to generate new certs with.
-		basedOnCAIssuer := &certmanagerv1.Issuer{
-			ObjectMeta: meta_v1.ObjectMeta{
-				Namespace: namespace,
-				Name:      "ca-issuer",
-			},
-			Spec: certmanagerv1.IssuerSpec{
-				IssuerConfig: certmanagerv1.IssuerConfig{
-					CA: &certmanagerv1.CAIssuer{
-						SecretName: "ca-cert",
-					},
-				},
-			},
-		}
-		require.NoError(f.T(), f.Client.Create(context.TODO(), basedOnCAIssuer))
-
-		// Backend server cert signed by CA.
-		backendServerCert := &certmanagerv1.Certificate{
-			ObjectMeta: meta_v1.ObjectMeta{
-				Namespace: namespace,
-				Name:      "backend-server-cert",
-			},
-			Spec: certmanagerv1.CertificateSpec{
-				Usages: []certmanagerv1.KeyUsage{
-					certmanagerv1.UsageServerAuth,
-				},
-				CommonName: "echo-secure",
-				DNSNames:   []string{"echo-secure"},
-				SecretName: "backend-server-cert",
-				IssuerRef: certmanagermeta_v1.ObjectReference{
-					Name: "ca-issuer",
-				},
-			},
-		}
-
-		require.NoError(f.T(), f.Client.Create(context.TODO(), backendServerCert))
+		}))
 		f.Fixtures.EchoSecure.Deploy(namespace, "echo-secure", func(_ *apps_v1.Deployment, service *core_v1.Service) {
 			delete(service.Annotations, "projectcontour.io/upstream-protocol.tls")
 		})

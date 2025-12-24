@@ -4,8 +4,6 @@
 The [make-kind-cluster.sh](./make-kind-cluster.sh) script will bring up
 a local kind cluster. This underlying VM [config](./kind-expose-port.yaml)
 forwards the Envoy ports 80 and 443 locally as port 9080 and 9443.
-The script installs [cert-manager](https://cert-manager.io), which is
-needed for tests that use TLS.
 
 The [install-contour-working.sh](.install-contour-working.sh) script
 builds and installs Contour from the working repository.
