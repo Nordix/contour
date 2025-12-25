@@ -31,20 +31,19 @@ import (
 	"github.com/projectcontour/contour/internal/dag"
 )
 
-// Certs provides helpers for creating certificates
-// and related resources.
+// Certs provides helpers for creating certificates.
 type Certs struct {
 	client        client.Client
 	retryInterval time.Duration
 	retryTimeout  time.Duration
 	t             ginkgo.GinkgoTInterface
-	// issuers stores in-memory CA credentials keyed by "ns/name" for signing child certs.
+	// issuers stores in-memory CA credentials keyed by "ns/name" for signing end-entity certs.
 	issuers map[string]*certyaml.Certificate
 }
 
-// CreateSelfSignedCert creates a self-signed server certificate as a TLS Secret.
-// It returns a cleanup function that deletes the Secret.
-func (c *Certs) CreateSelfSignedCert(ns, name, secretName, dnsName string) func() {
+// CreateSelfSignedCert creates a self-signed server certificate as a TLS Secret
+// and registers a Ginkgo cleanup that deletes the Secret automatically.
+func (c *Certs) CreateSelfSignedCert(ns, name, secretName, dnsName string) {
 	cert := certyaml.Certificate{
 		Subject:         "CN=" + name,
 		SubjectAltNames: []string{"DNS:" + dnsName},
@@ -59,14 +58,15 @@ func (c *Certs) CreateSelfSignedCert(ns, name, secretName, dnsName string) func(
 		Data: map[string][]byte{
 			core_v1.TLSCertKey:       cert.CertPEM(),
 			core_v1.TLSPrivateKeyKey: cert.KeyPEM(),
-			dag.CACertificateKey:     cert.CertPEM(),
+			dag.CACertificateKey:     cert.CertPEM(), // Include CA for (re)using the secret for validation.
 		},
 	}
 	require.NoError(c.t, c.client.Create(context.TODO(), secret))
 
-	return func() {
-		require.NoError(c.t, c.client.Delete(context.TODO(), secret))
-	}
+	// Clean up the Secret when the current Ginkgo scope completes.
+	ginkgo.DeferCleanup(func() error {
+		return c.client.Delete(context.TODO(), secret)
+	})
 }
 
 // GetTLSCertificate returns a tls.Certificate containing the data in the specified
@@ -89,8 +89,9 @@ func (c *Certs) GetTLSCertificate(secretNamespace, secretName string) (tls.Certi
 	return cert, caBundle
 }
 
-// CreateCA creates a root CA and stores it as an opaque Secret with cert and key.
-func (c *Certs) CreateCA(ns, name string) func() {
+// CreateCA creates a root CA and stores it as an opaque Secret with cert and key,
+// registering a Ginkgo cleanup to delete it automatically.
+func (c *Certs) CreateCA(ns, name string) {
 	ca := certyaml.Certificate{
 		Subject: "CN=" + name,
 	}
@@ -113,14 +114,17 @@ func (c *Certs) CreateCA(ns, name string) func() {
 	}
 	require.NoError(c.t, c.client.Create(context.TODO(), caSecret))
 
-	return func() {
-		require.NoError(c.t, c.client.Delete(context.TODO(), caSecret))
-	}
+	ginkgo.DeferCleanup(func() error {
+		// Remove issuer from in-memory map.
+		delete(c.issuers, ns+"/"+name)
+		// Delete the Secret.
+		return c.client.Delete(context.TODO(), caSecret)
+	})
 }
 
-// CreateCert creates an end-entity TLS Secret signed by the given CA created via CreateCA.
-// Optionally accepts DNS names to set SubjectAltNames.
-func (c *Certs) CreateCert(ns, name, issuer string, dnsNames ...string) func() {
+// CreateCert creates an end-entity TLS Secret signed by the given CA created via CreateCA
+// and registers a cleanup to delete the Secret. Optionally accepts DNS names to set SubjectAltNames.
+func (c *Certs) CreateCert(ns, name, issuer string, dnsNames ...string) {
 	ca, ok := c.issuers[ns+"/"+issuer]
 	require.True(c.t, ok, "issuer %s/%s not found; call CreateCA first", ns, issuer)
 
@@ -152,7 +156,7 @@ func (c *Certs) CreateCert(ns, name, issuer string, dnsNames ...string) func() {
 	}
 	require.NoError(c.t, c.client.Create(context.TODO(), secret))
 
-	return func() {
-		require.NoError(c.t, c.client.Delete(context.TODO(), secret))
-	}
+	ginkgo.DeferCleanup(func() error {
+		return c.client.Delete(context.TODO(), secret)
+	})
 }

@@ -31,9 +31,6 @@ import (
 
 var (
 	f = e2e.NewFramework(false)
-
-	// Functions called after suite to clean up resources.
-	cleanup []func()
 )
 
 func TestInfra(t *testing.T) {
@@ -59,21 +56,15 @@ var _ = BeforeSuite(func() {
 
 	require.NoError(f.T(), f.Deployment.EnsureResourcesForLocalContour())
 
-	// Create certificate and key for metrics over HTTPS.
-	cleanup = append(cleanup,
-		f.Certs.CreateCA("projectcontour", "metrics-ca"),
-		f.Certs.CreateCert("projectcontour", "metrics-server", "metrics-ca", "localhost"),
-		f.Certs.CreateCert("projectcontour", "metrics-client", "metrics-ca"),
-	)
+	// Create certificate and key for metrics over HTTPS; cleanup is auto-registered
+	// via ginkgo.DeferCleanup in the cert helpers.
+	f.Certs.CreateCA("projectcontour", "metrics-ca")
+	f.Certs.CreateCert("projectcontour", "metrics-server", "metrics-ca", "localhost")
+	f.Certs.CreateCert("projectcontour", "metrics-client", "metrics-ca")
 })
 
 var _ = AfterSuite(func() {
-	// Delete resources individually instead of deleting the entire contour
-	// namespace as a performance optimization, because deleting non-empty
-	// namespaces can take up to a couple of minutes to complete.
-	for _, c := range cleanup {
-		c()
-	}
+	// Certificate resources registered by the helper are cleaned up automatically.
 	require.NoError(f.T(), f.Deployment.DeleteResourcesForLocalContour())
 	gexec.CleanupBuildArtifacts()
 })

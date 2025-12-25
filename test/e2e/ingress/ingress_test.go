@@ -16,16 +16,12 @@
 package ingress
 
 import (
-	"context"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
 	"github.com/stretchr/testify/require"
-	"github.com/tsaarni/certyaml"
-	core_v1 "k8s.io/api/core/v1"
-	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/ptr"
 
 	contour_v1alpha1 "github.com/projectcontour/contour/apis/projectcontour/v1alpha1"
@@ -95,17 +91,9 @@ var _ = Describe("Ingress", func() {
 	f.NamespacedTest("backend-tls", func(namespace string) {
 		Context("with backend tls", func() {
 			BeforeEach(func() {
-				// Backend server cert and CA cert.
-				ca := certyaml.Certificate{Subject: "CN=ca-cert"}
-				client := certyaml.Certificate{Subject: "CN=client", Issuer: &ca}
-				require.NoError(f.T(), f.Client.Create(context.TODO(), &core_v1.Secret{
-					ObjectMeta: meta_v1.ObjectMeta{Namespace: namespace, Name: "backend-client-cert"},
-					Type:       core_v1.SecretTypeTLS,
-					Data: map[string][]byte{
-						core_v1.TLSCertKey:       client.CertPEM(),
-						core_v1.TLSPrivateKeyKey: client.KeyPEM(),
-					},
-				}))
+				// Backend client cert signed by CA using helpers.
+				f.Certs.CreateCA(namespace, "backend-ca")
+				f.Certs.CreateCert(namespace, "backend-client-cert", "backend-ca")
 
 				contourConfig.TLS = config.TLSParameters{
 					ClientCertificate: config.NamespacedName{

@@ -16,13 +16,11 @@
 package gateway
 
 import (
-	"context"
 	"encoding/json"
 
 	. "github.com/onsi/ginkgo/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tsaarni/certyaml"
 	apps_v1 "k8s.io/api/apps/v1"
 	core_v1 "k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,7 +29,6 @@ import (
 	gatewayapi_v1alpha2 "sigs.k8s.io/gateway-api/apis/v1alpha2"
 	gatewayapi_v1alpha3 "sigs.k8s.io/gateway-api/apis/v1alpha3"
 
-	"github.com/projectcontour/contour/internal/dag"
 	"github.com/projectcontour/contour/internal/gatewayapi"
 	"github.com/projectcontour/contour/test/e2e"
 )
@@ -41,19 +38,9 @@ func testBackendTLSPolicy(namespace string, gateway types.NamespacedName) {
 		protocolVersion := "TLSv1.3"
 		t := f.T()
 
-		// Backend server cert and CA cert.
-		ca := certyaml.Certificate{Subject: "CN=ca-cert"}
-		server := certyaml.Certificate{Subject: "CN=echo-secure", Issuer: &ca, SubjectAltNames: []string{"DNS:echo-secure"}}
-
-		require.NoError(f.T(), f.Client.Create(context.TODO(), &core_v1.Secret{
-			ObjectMeta: meta_v1.ObjectMeta{Namespace: namespace, Name: "backend-server-cert"},
-			Type:       core_v1.SecretTypeTLS,
-			Data: map[string][]byte{
-				core_v1.TLSCertKey:       server.CertPEM(),
-				core_v1.TLSPrivateKeyKey: server.KeyPEM(),
-				dag.CACertificateKey:     ca.CertPEM(), // Include CA for using the secret for downstream validation.
-			},
-		}))
+		// Backend server cert and CA cert via helpers.
+		f.Certs.CreateCA(namespace, "backend-ca")
+		f.Certs.CreateCert(namespace, "backend-server-cert", "backend-ca", "echo-secure")
 		f.Fixtures.EchoSecure.Deploy(namespace, "echo-secure", func(_ *apps_v1.Deployment, service *core_v1.Service) {
 			delete(service.Annotations, "projectcontour.io/upstream-protocol.tls")
 		})
@@ -100,7 +87,7 @@ func testBackendTLSPolicy(namespace string, gateway types.NamespacedName) {
 						{
 							Group: "",
 							Kind:  "Secret",
-							Name:  "backend-server-cert",
+							Name:  "backend-ca",
 						},
 					},
 					Hostname: "echo-secure",

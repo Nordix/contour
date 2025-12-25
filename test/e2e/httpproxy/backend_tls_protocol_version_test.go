@@ -16,35 +16,22 @@
 package httpproxy
 
 import (
-	"context"
 	"encoding/json"
 
 	. "github.com/onsi/ginkgo/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tsaarni/certyaml"
-	core_v1 "k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	contour_v1 "github.com/projectcontour/contour/apis/projectcontour/v1"
-	"github.com/projectcontour/contour/internal/dag"
 	"github.com/projectcontour/contour/test/e2e"
 )
 
 func testBackendTLSProtocolVersion(namespace, protocolVersion string) {
 	Specify("backend connection uses configured TLS version", func() {
-		// Backend server cert and CA cert.
-		ca := certyaml.Certificate{Subject: "CN=ca-cert"}
-		server := certyaml.Certificate{Subject: "CN=echo-secure", Issuer: &ca, SubjectAltNames: []string{"DNS:echo-secure"}}
-		require.NoError(f.T(), f.Client.Create(context.TODO(), &core_v1.Secret{
-			ObjectMeta: meta_v1.ObjectMeta{Namespace: namespace, Name: "backend-server-cert"},
-			Type:       core_v1.SecretTypeTLS,
-			Data: map[string][]byte{
-				core_v1.TLSCertKey:       server.CertPEM(),
-				core_v1.TLSPrivateKeyKey: server.KeyPEM(),
-				dag.CACertificateKey:     ca.CertPEM(), // Include CA for using the secret for downstream validation.
-			},
-		}))
+		// Backend server cert and CA cert via helpers.
+		f.Certs.CreateCA(namespace, "backend-ca")
+		f.Certs.CreateCert(namespace, "backend-server-cert", "backend-ca", "echo-secure")
 		f.Fixtures.EchoSecure.Deploy(namespace, "echo-secure", nil)
 
 		p := &contour_v1.HTTPProxy{
@@ -63,7 +50,7 @@ func testBackendTLSProtocolVersion(namespace, protocolVersion string) {
 								Name: "echo-secure",
 								Port: 443,
 								UpstreamValidation: &contour_v1.UpstreamValidation{
-									CACertificate: "backend-server-cert",
+									CACertificate: "backend-ca",
 									SubjectName:   "echo-secure",
 								},
 							},
