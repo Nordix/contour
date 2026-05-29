@@ -178,6 +178,10 @@ type TLSParameters struct {
 	// to be used when establishing TLS connection to upstream
 	// cluster.
 	ClientCertificate NamespacedName `yaml:"envoy-client-certificate,omitempty"`
+
+	// Fingerprint defines TLS fingerprinting configuration.
+	// This only applies to listener TLS (not upstream TLS).
+	Fingerprint *TLSFingerprint `yaml:"fingerprint,omitempty"`
 }
 
 // ProtocolParameters holds configuration details for TLS protocol specifics.
@@ -191,9 +195,6 @@ type ProtocolParameters struct {
 	// by advanced users. Note that these will be ignored when TLS 1.3 is in
 	// use.
 	CipherSuites TLSCiphers `yaml:"cipher-suites,omitempty"`
-
-	// Fingerprint defines TLS fingerprinting configuration.
-	Fingerprint TLSFingerprint `yaml:"fingerprint,omitempty"`
 }
 
 // TLSFingerprint defines TLS fingerprinting configuration.

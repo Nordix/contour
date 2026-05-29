@@ -127,7 +127,7 @@ For JSON access logging, the following fields can be added (these are Contour-sp
 
 ### Logging TLS Fingerprints (JA3/JA4)
 
-When [JA3/JA4 TLS fingerprinting is enabled](../tls-fingerprinting) in the Contour configuration, fingerprints can be logged in access logs.
+When JA3/JA4 TLS fingerprinting is enabled in [configuration file](../configuration#tls-fingerprint) or [ContourConfiguration resource](api-reference.html#projectcontour.io/v1alpha1.TLSFingerprint), fingerprints can be logged in access logs.
 
 For text-based access logging, the following command operators can be used:
 - `%TLS_JA3_FINGERPRINT%` - JA3 fingerprint hash (MD5 of the TLS ClientHello)
