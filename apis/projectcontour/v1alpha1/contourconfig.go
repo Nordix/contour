@@ -430,6 +430,14 @@ type EnvoyListenerConfig struct {
 	// +kubebuilder:validation:Minimum=1
 	// +optional
 	MaxConnectionsPerListener *uint32 `json:"maxConnectionsPerListener,omitempty"`
+
+	// MaxRequestHeadersKB defines the maximum request headers size in KiB
+	// for incoming connections. If not set, the Envoy default of 60 KiB is used.
+	//
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Maximum=8192
+	// +optional
+	MaxRequestHeadersKB *uint32 `json:"maxRequestHeadersKB,omitempty"`
 }
 
 // SocketOptions defines configurable socket options for Envoy listeners.

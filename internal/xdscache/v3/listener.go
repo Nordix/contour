@@ -138,6 +138,10 @@ type ListenerConfig struct {
 
 	HTTP2MaxConcurrentStreams *uint32
 
+	// MaxRequestHeadersKB defines the maximum request headers size in KiB
+	// for incoming connections. If not set, the Envoy default of 60 KiB is used.
+	MaxRequestHeadersKB *uint32
+
 	// PerConnectionBufferLimitBytes defines the soft limit on size of the listener’s new connection read and write buffers
 	// If unspecified, an implementation defined default is applied (1MiB).
 	PerConnectionBufferLimitBytes *uint32
@@ -404,6 +408,7 @@ func (c *ListenerCache) OnChange(root *dag.DAG) {
 				StripTrailingHostDot(cfg.StripTrailingHostDot).
 				MaxRequestsPerConnection(cfg.MaxRequestsPerConnection).
 				HTTP2MaxConcurrentStreams(cfg.HTTP2MaxConcurrentStreams).
+				MaxRequestHeadersKB(cfg.MaxRequestHeadersKB).
 				AddFilter(httpGlobalExternalAuthConfig(cfg.GlobalExternalAuthConfig)).
 				Tracing(envoy_v3.TracingConfig(envoyTracingConfig(cfg.TracingConfig))).
 				AddFilter(envoy_v3.GlobalRateLimitFilter(envoyGlobalRateLimitConfig(cfg.RateLimitConfig))).
@@ -484,6 +489,7 @@ func (c *ListenerCache) OnChange(root *dag.DAG) {
 					ForwardClientCertificate(forwardClientCertificate).
 					MaxRequestsPerConnection(cfg.MaxRequestsPerConnection).
 					HTTP2MaxConcurrentStreams(cfg.HTTP2MaxConcurrentStreams).
+					MaxRequestHeadersKB(cfg.MaxRequestHeadersKB).
 					EnableWebsockets(listener.EnableWebsockets).
 					Get()
 
@@ -567,6 +573,7 @@ func (c *ListenerCache) OnChange(root *dag.DAG) {
 					ForwardClientCertificate(forwardClientCertificate).
 					MaxRequestsPerConnection(cfg.MaxRequestsPerConnection).
 					HTTP2MaxConcurrentStreams(cfg.HTTP2MaxConcurrentStreams).
+					MaxRequestHeadersKB(cfg.MaxRequestHeadersKB).
 					EnableWebsockets(listener.EnableWebsockets).
 					Get()
 

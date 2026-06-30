@@ -529,6 +529,12 @@ type ListenerParameters struct {
 	//
 	// +optional
 	MaxConnectionsPerListener *uint32 `yaml:"max-connections-per-listener,omitempty"`
+
+	// Defines the maximum request headers size in KiB for incoming connections.
+	// If not set, the Envoy default of 60 KiB is used.
+	// Valid range: 1-8192.
+	// +optional
+	MaxRequestHeadersKB *uint32 `yaml:"max-request-headers-kb,omitempty"`
 }
 
 func (p *ListenerParameters) Validate() error {
@@ -558,6 +564,10 @@ func (p *ListenerParameters) Validate() error {
 
 	if p.MaxConnectionsPerListener != nil && *p.MaxConnectionsPerListener < 1 {
 		return fmt.Errorf("invalid max connections per listener value %d set on listener, minimum value is 1", *p.MaxConnectionsPerListener)
+	}
+
+	if p.MaxRequestHeadersKB != nil && (*p.MaxRequestHeadersKB < 1 || *p.MaxRequestHeadersKB > 8192) {
+		return fmt.Errorf("invalid max request headers KB value %d set on listener, must be between 1 and 8192", *p.MaxRequestHeadersKB)
 	}
 
 	return p.SocketOptions.Validate()

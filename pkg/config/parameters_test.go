@@ -499,6 +499,13 @@ listener:
 `)
 
 	check(func(t *testing.T, conf *Parameters) {
+		assert.Equal(t, ptr.To(uint32(128)), conf.Listener.MaxRequestHeadersKB)
+	}, `
+listener:
+  max-request-headers-kb: 128
+`)
+
+	check(func(t *testing.T, conf *Parameters) {
 		assert.Equal(t, ptr.To(uint32(1)), conf.Cluster.MaxRequestsPerConnection)
 	}, `
 cluster:
@@ -644,6 +651,27 @@ func TestListenerValidation(t *testing.T) {
 	require.NoError(t, l.Validate())
 	l = &ListenerParameters{
 		MaxConnectionsPerListener: ptr.To(uint32(0)),
+	}
+	require.Error(t, l.Validate())
+
+	l = &ListenerParameters{
+		MaxRequestHeadersKB: ptr.To(uint32(1)),
+	}
+	require.NoError(t, l.Validate())
+	l = &ListenerParameters{
+		MaxRequestHeadersKB: ptr.To(uint32(128)),
+	}
+	require.NoError(t, l.Validate())
+	l = &ListenerParameters{
+		MaxRequestHeadersKB: ptr.To(uint32(8192)),
+	}
+	require.NoError(t, l.Validate())
+	l = &ListenerParameters{
+		MaxRequestHeadersKB: ptr.To(uint32(0)),
+	}
+	require.Error(t, l.Validate())
+	l = &ListenerParameters{
+		MaxRequestHeadersKB: ptr.To(uint32(8193)),
 	}
 	require.Error(t, l.Validate())
 }

@@ -467,6 +467,7 @@ func (s *Server) doServe() error {
 		ConnectionBalancer:            contourConfiguration.Envoy.Listener.ConnectionBalancer,
 		MaxRequestsPerConnection:      contourConfiguration.Envoy.Listener.MaxRequestsPerConnection,
 		HTTP2MaxConcurrentStreams:     contourConfiguration.Envoy.Listener.HTTP2MaxConcurrentStreams,
+		MaxRequestHeadersKB:          contourConfiguration.Envoy.Listener.MaxRequestHeadersKB,
 		PerConnectionBufferLimitBytes: contourConfiguration.Envoy.Listener.PerConnectionBufferLimitBytes,
 		SocketOptions:                 contourConfiguration.Envoy.Listener.SocketOptions,
 	}

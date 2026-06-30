@@ -557,6 +557,14 @@ spec:
                         format: int32
                         minimum: 1
                         type: integer
+                      maxRequestHeadersKB:
+                        description: |-
+                          MaxRequestHeadersKB defines the maximum request headers size in KiB
+                          for incoming connections. If not set, the Envoy default of 60 KiB is used.
+                        format: int32
+                        maximum: 8192
+                        minimum: 1
+                        type: integer
                       maxRequestsPerConnection:
                         description: |-
                           Defines the maximum requests for downstream connections. If not specified, there is no limit.
@@ -4641,6 +4649,14 @@ spec:
                               Defines the limit on number of active connections to a listener. The limit is applied
                               per listener. The default value when this is not set is unlimited.
                             format: int32
+                            minimum: 1
+                            type: integer
+                          maxRequestHeadersKB:
+                            description: |-
+                              MaxRequestHeadersKB defines the maximum request headers size in KiB
+                              for incoming connections. If not set, the Envoy default of 60 KiB is used.
+                            format: int32
+                            maximum: 8192
                             minimum: 1
                             type: integer
                           maxRequestsPerConnection:

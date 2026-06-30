@@ -678,6 +678,7 @@ func TestHTTPConnectionManager(t *testing.T) {
 		stripTrailingHostDot          bool
 		maxRequestsPerConnection      *uint32
 		http2MaxConcurrentStreams     *uint32
+		maxRequestHeadersKB          *uint32
 		want                          *envoy_config_listener_v3.Filter
 	}{
 		"default": {
@@ -1520,6 +1521,54 @@ func TestHTTPConnectionManager(t *testing.T) {
 				},
 			},
 		},
+		"maxRequestHeadersKB set": {
+			routename:           "default/kuard",
+			accesslogger:        FileAccessLogEnvoy("/dev/stdout", "", nil, contour_v1alpha1.LogLevelInfo),
+			maxRequestHeadersKB: ptr.To(uint32(128)),
+			want: &envoy_config_listener_v3.Filter{
+				Name: wellknown.HTTPConnectionManager,
+				ConfigType: &envoy_config_listener_v3.Filter_TypedConfig{
+					TypedConfig: protobuf.MustMarshalAny(&envoy_filter_network_http_connection_manager_v3.HttpConnectionManager{
+						StatPrefix: "default/kuard",
+						RouteSpecifier: &envoy_filter_network_http_connection_manager_v3.HttpConnectionManager_Rds{
+							Rds: &envoy_filter_network_http_connection_manager_v3.Rds{
+								RouteConfigName: "default/kuard",
+								ConfigSource: &envoy_config_core_v3.ConfigSource{
+									ResourceApiVersion: envoy_config_core_v3.ApiVersion_V3,
+									ConfigSourceSpecifier: &envoy_config_core_v3.ConfigSource_ApiConfigSource{
+										ApiConfigSource: &envoy_config_core_v3.ApiConfigSource{
+											ApiType:             envoy_config_core_v3.ApiConfigSource_GRPC,
+											TransportApiVersion: envoy_config_core_v3.ApiVersion_V3,
+											GrpcServices: []*envoy_config_core_v3.GrpcService{{
+												TargetSpecifier: &envoy_config_core_v3.GrpcService_EnvoyGrpc_{
+													EnvoyGrpc: &envoy_config_core_v3.GrpcService_EnvoyGrpc{
+														ClusterName: "contour",
+														Authority:   "contour",
+													},
+												},
+											}},
+										},
+									},
+								},
+							},
+						},
+						HttpFilters: defaultHTTPFilters,
+						HttpProtocolOptions: &envoy_config_core_v3.Http1ProtocolOptions{
+							// Enable support for HTTP/1.0 requests that carry
+							// a Host: header. See #537.
+							AcceptHttp_10: true,
+						},
+						CommonHttpProtocolOptions: &envoy_config_core_v3.HttpProtocolOptions{},
+						MaxRequestHeadersKb:       wrapperspb.UInt32(128),
+						AccessLog:                 FileAccessLogEnvoy("/dev/stdout", "", nil, contour_v1alpha1.LogLevelInfo),
+						UseRemoteAddress:          wrapperspb.Bool(true),
+						NormalizePath:             wrapperspb.Bool(true),
+						PreserveExternalRequestId: true,
+						MergeSlashes:              false,
+					}),
+				},
+			},
+		},
 	}
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
@@ -1541,6 +1590,7 @@ func TestHTTPConnectionManager(t *testing.T) {
 				ForwardClientCertificate(tc.forwardClientCertificate).
 				MaxRequestsPerConnection(tc.maxRequestsPerConnection).
 				HTTP2MaxConcurrentStreams(tc.http2MaxConcurrentStreams).
+				MaxRequestHeadersKB(tc.maxRequestHeadersKB).
 				DefaultFilters().
 				Get()
 

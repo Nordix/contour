@@ -59,6 +59,7 @@ func TestOverlayOnDefaults(t *testing.T) {
 				},
 				MaxRequestsPerConnection:   ptr.To(uint32(1)),
 				HTTP2MaxConcurrentStreams:  ptr.To(uint32(10)),
+				MaxRequestHeadersKB:        ptr.To(uint32(128)),
 				DisableAllowChunkedLength:  ptr.To(true),
 				DisableMergeSlashes:        ptr.To(true),
 				ServerHeaderTransformation: contour_v1alpha1.PassThroughServerHeader,

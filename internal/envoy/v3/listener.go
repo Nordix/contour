@@ -206,6 +206,7 @@ type httpConnectionManagerBuilder struct {
 	tracingConfig                 *envoy_filter_network_http_connection_manager_v3.HttpConnectionManager_Tracing
 	maxRequestsPerConnection      *uint32
 	http2MaxConcurrentStreams     *uint32
+	maxRequestHeadersKB          *uint32
 	enableWebsockets              bool
 	compression                   *contour_v1alpha1.EnvoyCompression
 }
@@ -338,6 +339,12 @@ func (b *httpConnectionManagerBuilder) MaxRequestsPerConnection(maxRequestsPerCo
 
 func (b *httpConnectionManagerBuilder) HTTP2MaxConcurrentStreams(http2MaxConcurrentStreams *uint32) *httpConnectionManagerBuilder {
 	b.http2MaxConcurrentStreams = http2MaxConcurrentStreams
+	return b
+}
+
+// MaxRequestHeadersKB sets the maximum request header size in KiB.
+func (b *httpConnectionManagerBuilder) MaxRequestHeadersKB(maxRequestHeadersKB *uint32) *httpConnectionManagerBuilder {
+	b.maxRequestHeadersKB = maxRequestHeadersKB
 	return b
 }
 
@@ -622,6 +629,10 @@ func (b *httpConnectionManagerBuilder) Get() *envoy_config_listener_v3.Filter {
 		cm.Http2ProtocolOptions = &envoy_config_core_v3.Http2ProtocolOptions{
 			MaxConcurrentStreams: wrapperspb.UInt32(*b.http2MaxConcurrentStreams),
 		}
+	}
+
+	if b.maxRequestHeadersKB != nil {
+		cm.MaxRequestHeadersKb = wrapperspb.UInt32(*b.maxRequestHeadersKB)
 	}
 
 	if b.enableWebsockets {
