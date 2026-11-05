@@ -83,7 +83,7 @@ func TestUpstreamTLSWithHTTPProxy(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			tlsCluster(
-				cluster("default/backend/443/950c17581f", "default/backend/http", "default_backend_443"),
+				cluster("default/backend/443/84bf79d040d43f6c0b22", "default/backend/http", "default_backend_443"),
 				caSecret,
 				"subjname",
 				"",
@@ -129,7 +129,7 @@ func TestUpstreamTLSWithIngress(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			tlsCluster(
-				cluster("default/kuard/443/4929fca9d4", "default/kuard/securebackend", "default_kuard_443"),
+				cluster("default/kuard/443/69dd9ec532a697347f9b", "default/kuard/securebackend", "default_kuard_443"),
 				nil,
 				"",
 				"",
@@ -330,7 +330,7 @@ func TestUpstreamTLSWithHTTPRoute(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			tlsCluster(
-				cluster("default/backend/443/867941ed65", "default/backend/http", "default_backend_443"),
+				cluster("default/backend/443/774b27008cfe5ea97106", "default/backend/http", "default_backend_443"),
 				sec2,
 				"subjname",
 				"",
@@ -446,7 +446,7 @@ func TestBackendTLSPolicyPrecedenceOverUpstreamProtocolAnnotationWithHTTPRoute(t
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			tlsCluster(
-				cluster("default/backend/443/242c9163af", "default/backend/http", "default_backend_443"),
+				cluster("default/backend/443/5eda464fe68a26716586", "default/backend/http", "default_backend_443"),
 				sec1,
 				"subjname",
 				"",
@@ -591,7 +591,7 @@ func TestUpstreamTLSWithHTTPRouteANDHTTPProxy(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			tlsCluster(
-				cluster("default/backend/443/242c9163af", "default/backend/http", "default_backend_443"),
+				cluster("default/backend/443/5eda464fe68a26716586", "default/backend/http", "default_backend_443"),
 				sec1,
 				"subjname",
 				"",
@@ -601,7 +601,7 @@ func TestUpstreamTLSWithHTTPRouteANDHTTPProxy(t *testing.T) {
 					MaximumProtocolVersion: "1.2",
 				}),
 			tlsCluster(
-				cluster("default/backend/443/950c17581f", "default/backend/http", "default_backend_443"),
+				cluster("default/backend/443/84bf79d040d43f6c0b22", "default/backend/http", "default_backend_443"),
 				caSecret,
 				"subjname",
 				"",

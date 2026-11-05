@@ -63,7 +63,7 @@ func TestHeaderPolicy_ReplaceHeader_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeHostRewrite("default/svc1/80/3eb3d00648", "goodbye.planet"),
+						Action: routeHostRewrite("default/svc1/80/dc158d4df894ad0d8f41", "goodbye.planet"),
 					},
 				),
 			),
@@ -96,7 +96,7 @@ func TestHeaderPolicy_ReplaceHeader_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 						RequestHeadersToAdd: []*envoy_config_core_v3.HeaderValueOption{{
 							Header: &envoy_config_core_v3.HeaderValue{
 								Key:   "X-Header",
@@ -135,7 +135,7 @@ func TestHeaderPolicy_ReplaceHeader_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -193,7 +193,7 @@ func TestHeaderPolicy_ReplaceHeader_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeHostRewrite("default/externalname/443/9ebffe8f28", "goodbye.planet"),
+						Action: routeHostRewrite("default/externalname/443/251cd6fab35dd23e68cb", "goodbye.planet"),
 					},
 				)),
 		),
@@ -202,7 +202,7 @@ func TestHeaderPolicy_ReplaceHeader_HTTProxy(t *testing.T) {
 
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
-			tlsCluster(externalNameCluster("default/externalname/443/9ebffe8f28", "default/externalname/https", "default_externalname_443", "goodbye.planet", 443), nil, "goodbye.planet", "goodbye.planet", nil, nil),
+			tlsCluster(externalNameCluster("default/externalname/443/251cd6fab35dd23e68cb", "default/externalname/https", "default_externalname_443", "goodbye.planet", 443), nil, "goodbye.planet", "goodbye.planet", nil, nil),
 		),
 		TypeUrl: clusterType,
 	})
@@ -243,7 +243,7 @@ func TestHeaderPolicy_ReplaceHostHeader_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeHostRewriteHeader("default/svc1/80/da39a3ee5e", "X-Goodbye-Planet"),
+						Action: routeHostRewriteHeader("default/svc1/80/d723398eb9fad288c4ea", "X-Goodbye-Planet"),
 					},
 				),
 			),
@@ -301,7 +301,7 @@ func TestHeaderPolicy_ReplaceHostHeader_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeHostRewriteHeader("default/externalname/443/9ebffe8f28", "X-Goodbye-Planet"),
+						Action: routeHostRewriteHeader("default/externalname/443/251cd6fab35dd23e68cb", "X-Goodbye-Planet"),
 					},
 				)),
 		),
@@ -310,7 +310,7 @@ func TestHeaderPolicy_ReplaceHostHeader_HTTProxy(t *testing.T) {
 
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
-			tlsCluster(externalNameCluster("default/externalname/443/9ebffe8f28", "default/externalname/https", "default_externalname_443", "goodbye.planet", 443), nil, "goodbye.planet", "goodbye.planet", nil, nil),
+			tlsCluster(externalNameCluster("default/externalname/443/251cd6fab35dd23e68cb", "default/externalname/https", "default_externalname_443", "goodbye.planet", 443), nil, "goodbye.planet", "goodbye.planet", nil, nil),
 		),
 		TypeUrl: clusterType,
 	})

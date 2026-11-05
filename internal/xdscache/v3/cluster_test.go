@@ -49,7 +49,7 @@ func TestClusterCacheContents(t *testing.T) {
 		"simple": {
 			contents: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/kuard/443/da39a3ee5e",
+					Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 					AltStatName:          "default_kuard_443",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -59,7 +59,7 @@ func TestClusterCacheContents(t *testing.T) {
 				}),
 			want: []proto.Message{
 				cluster(&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/kuard/443/da39a3ee5e",
+					Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 					AltStatName:          "default_kuard_443",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -115,7 +115,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/kuard/443/da39a3ee5e",
+					Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 					AltStatName:          "default_kuard_443",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -151,7 +151,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/kuard/443/da39a3ee5e",
+					Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 					AltStatName:          "default_kuard_443",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -191,7 +191,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/kuard/80/f4f94965ec",
+					Name:                 "default/kuard/80/90d29d686d4d97fe00e6",
 					AltStatName:          "default_kuard_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -233,7 +233,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "beurocra-7fe4b4/tiny-cog-7fe4b4/443/da39a3ee5e",
+					Name:                 "beurocratic-com/tiny-cog-depart/443/3a03193409286e7b0680",
 					AltStatName:          "beurocratic-company-test-domain-1_tiny-cog-department-test-instance_443",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -281,7 +281,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/da39a3ee5e",
+					Name:                 "default/backend/80/2bacce1a3d1c59f98d22",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -290,7 +290,7 @@ func TestClusterVisit(t *testing.T) {
 					},
 				},
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/8080/da39a3ee5e",
+					Name:                 "default/backend/8080/8b91cacfeba7e16dbc71",
 					AltStatName:          "default_backend_8080",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -334,7 +334,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/c184349821",
+					Name:                 "default/backend/80/4bf45581df4358be5554",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -396,7 +396,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/7f8051653a",
+					Name:                 "default/backend/80/08c4a2f162d7b05bc31e",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -453,7 +453,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/da39a3ee5e",
+					Name:                 "default/backend/80/2bacce1a3d1c59f98d22",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -497,7 +497,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/8bf87fefba",
+					Name:                 "default/backend/80/2018770cd1cec577ccef",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -542,7 +542,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/58d888c08a",
+					Name:                 "default/backend/80/5146767a662997049256",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -594,7 +594,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/1a2ffc1fef",
+					Name:                 "default/backend/80/3fb35004dd000386d550",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -641,7 +641,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/backend/80/da39a3ee5e",
+					Name:                 "default/backend/80/2bacce1a3d1c59f98d22",
 					AltStatName:          "default_backend_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -686,7 +686,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/kuard/80/da39a3ee5e",
+					Name:                 "default/kuard/80/3acee2fa4febcd64e2b0",
 					AltStatName:          "default_kuard_80",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -740,7 +740,7 @@ func TestClusterVisit(t *testing.T) {
 			},
 			want: clustermap(
 				&envoy_config_cluster_v3.Cluster{
-					Name:                 "default/kuard/443/da39a3ee5e",
+					Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 					AltStatName:          "default_kuard_443",
 					ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 					EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{

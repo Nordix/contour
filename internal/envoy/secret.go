@@ -14,17 +14,17 @@
 package envoy
 
 import (
-	"crypto/sha1" // nolint:gosec
+	"crypto/sha256"
 	"fmt"
+	"strconv"
 
 	"github.com/projectcontour/contour/internal/dag"
 )
 
 // Secretname returns the name of the SDS secret for this secret.
+// The name looks like default/secret/92e2d87ab4868b426840.
 func Secretname(s *dag.Secret) string {
-	// This isn't a crypto hash, we just want a unique name.
-	hash := sha1.Sum(s.Cert()) // nolint:gosec
-	ns := s.Namespace()
-	name := s.Name()
-	return Hashname(60, ns, name, fmt.Sprintf("%x", hash[:5]))
+	buf := strconv.Quote(s.Namespace()) + strconv.Quote(s.Name()) + string(s.Cert())
+	hash := sha256.Sum256([]byte(buf))
+	return truncatedPath(s.Namespace(), s.Name()) + fmt.Sprintf("/%x", hash[:10])
 }

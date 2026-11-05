@@ -18,6 +18,7 @@ package infra
 import (
 	"slices"
 	"sort"
+	"strings"
 
 	envoy_config_cluster_v3 "github.com/envoyproxy/go-control-plane/envoy/admin/v3"
 	. "github.com/onsi/ginkgo/v2"
@@ -123,7 +124,7 @@ func GetIPsFromAdminRequest() ([]string, error) {
 	}
 
 	for _, cluster := range clusters.ClusterStatuses {
-		if cluster.Name == "simple-endpoint-slice/echo/80/da39a3ee5e" {
+		if strings.HasPrefix(cluster.Name, "simple-endpoint-slice/echo/80/") {
 			for _, host := range cluster.HostStatuses {
 				ips = append(ips, host.Address.GetSocketAddress().Address)
 			}

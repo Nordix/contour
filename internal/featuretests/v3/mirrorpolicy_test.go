@@ -66,7 +66,7 @@ func TestMirrorPolicy(t *testing.T) {
 				envoy_v3.VirtualHost(p1.Spec.VirtualHost.Fqdn,
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withMirrorPolicy(routeCluster("default/kuard/8080/da39a3ee5e"), "default/mirror/8080/da39a3ee5e", 100),
+						Action: withMirrorPolicy(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), "default/mirror/8080/24bf7f7c321a2e42b655", 100),
 					},
 				),
 			),
@@ -78,8 +78,8 @@ func TestMirrorPolicy(t *testing.T) {
 	// and one for the mirror service.
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
-			cluster("default/kuard/8080/da39a3ee5e", "default/kuard", "default_kuard_8080"),
-			cluster("default/mirror/8080/da39a3ee5e", "default/mirror", "default_mirror_8080"),
+			cluster("default/kuard/8080/b22243c6f0853102c24e", "default/kuard", "default_kuard_8080"),
+			cluster("default/mirror/8080/24bf7f7c321a2e42b655", "default/mirror", "default_mirror_8080"),
 		),
 		TypeUrl: clusterType,
 	})
@@ -125,7 +125,7 @@ func TestFractionalMirrorPolicy(t *testing.T) {
 				envoy_v3.VirtualHost(p1.Spec.VirtualHost.Fqdn,
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withMirrorPolicy(routeCluster("default/kuard/8080/da39a3ee5e"), "default/mirror/8080/da39a3ee5e", 15),
+						Action: withMirrorPolicy(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), "default/mirror/8080/24bf7f7c321a2e42b655", 15),
 					},
 				),
 			),

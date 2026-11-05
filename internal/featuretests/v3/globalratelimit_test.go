@@ -155,7 +155,7 @@ func globalRateLimitNoRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWra
 					envoy_v3.VirtualHost("foo.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routeCluster("default/s1/80/da39a3ee5e"),
+							Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						},
 					),
 				),
@@ -170,7 +170,7 @@ func globalRateLimitNoRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWra
 						envoy_v3.VirtualHost("foo.com",
 							&envoy_config_route_v3.Route{
 								Match:  routePrefix("/"),
-								Action: routeCluster("default/s1/80/da39a3ee5e"),
+								Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 							},
 						),
 					),
@@ -186,7 +186,7 @@ func globalRateLimitNoRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWra
 					envoy_v3.VirtualHost("foo.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routeCluster("default/s1/80/da39a3ee5e"),
+							Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						},
 					),
 				),
@@ -246,7 +246,7 @@ func globalRateLimitVhostRateLimitDefined(t *testing.T, rh ResourceEventHandlerW
 
 	route := &envoy_config_route_v3.Route{
 		Match:  routePrefix("/"),
-		Action: routeCluster("default/s1/80/da39a3ee5e"),
+		Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 	}
 
 	vhost := envoy_v3.VirtualHost("foo.com", route)
@@ -343,7 +343,7 @@ func globalRateLimitRouteRateLimitDefined(t *testing.T, rh ResourceEventHandlerW
 
 	route := &envoy_config_route_v3.Route{
 		Match: routePrefix("/"),
-		Action: routeCluster("default/s1/80/da39a3ee5e", func(r *envoy_config_route_v3.Route_Route) {
+		Action: routeCluster("default/s1/80/b664a94e69a45e3bac25", func(r *envoy_config_route_v3.Route_Route) {
 			r.Route.RateLimits = []*envoy_config_route_v3.RateLimit{
 				{
 					Actions: []*envoy_config_route_v3.RateLimit_Action{
@@ -452,7 +452,7 @@ func globalRateLimitVhostAndRouteRateLimitDefined(t *testing.T, rh ResourceEvent
 
 	route := &envoy_config_route_v3.Route{
 		Match: routePrefix("/"),
-		Action: routeCluster("default/s1/80/da39a3ee5e", func(r *envoy_config_route_v3.Route_Route) {
+		Action: routeCluster("default/s1/80/b664a94e69a45e3bac25", func(r *envoy_config_route_v3.Route_Route) {
 			r.Route.RateLimits = []*envoy_config_route_v3.RateLimit{
 				{
 					Actions: []*envoy_config_route_v3.RateLimit_Action{
@@ -561,7 +561,7 @@ func defaultGlobalRateLimitVhostRateLimitDefined(t *testing.T, rh ResourceEventH
 
 	route := &envoy_config_route_v3.Route{
 		Match: routePrefix("/"),
-		Action: routeCluster("default/s1/80/da39a3ee5e", func(r *envoy_config_route_v3.Route_Route) {
+		Action: routeCluster("default/s1/80/b664a94e69a45e3bac25", func(r *envoy_config_route_v3.Route_Route) {
 			r.Route.RateLimits = []*envoy_config_route_v3.RateLimit{
 				{
 					Actions: []*envoy_config_route_v3.RateLimit_Action{
@@ -678,7 +678,7 @@ func globalRateLimitMultipleDescriptorsAndEntries(t *testing.T, rh ResourceEvent
 
 	route := &envoy_config_route_v3.Route{
 		Match: routePrefix("/"),
-		Action: routeCluster("default/s1/80/da39a3ee5e", func(r *envoy_config_route_v3.Route_Route) {
+		Action: routeCluster("default/s1/80/b664a94e69a45e3bac25", func(r *envoy_config_route_v3.Route_Route) {
 			r.Route.RateLimits = []*envoy_config_route_v3.RateLimit{
 				{
 					Actions: []*envoy_config_route_v3.RateLimit_Action{

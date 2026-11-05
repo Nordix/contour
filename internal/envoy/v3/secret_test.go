@@ -46,7 +46,7 @@ func TestSecret(t *testing.T) {
 				},
 			},
 			want: &envoy_transport_socket_tls_v3.Secret{
-				Name: "default/simple/cd1b506996",
+				Name: "default/simple/5b0ac8a025d0006c29a9",
 				Type: &envoy_transport_socket_tls_v3.Secret_TlsCertificate{
 					TlsCertificate: &envoy_transport_socket_tls_v3.TlsCertificate{
 						PrivateKey: &envoy_config_core_v3.DataSource{
@@ -91,7 +91,7 @@ func TestSecretname(t *testing.T) {
 					},
 				},
 			},
-			want: "default/simple/cd1b506996",
+			want: "default/simple/5b0ac8a025d0006c29a9",
 		},
 		"far too long": {
 			secret: &dag.Secret{
@@ -106,7 +106,7 @@ func TestSecretname(t *testing.T) {
 					},
 				},
 			},
-			want: "it-is-a-truth-7e164b/must-be-in-wa-7e164b/cd1b506996",
+			want: "it-is-a-truth-u/must-be-in-want/8110ad57a08654867e5a",
 		},
 	}
 

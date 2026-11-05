@@ -61,7 +61,7 @@ func TestHTTPProxy_RouteWithAServiceWeight(t *testing.T) {
 		envoy_v3.VirtualHost("test2.test.com",
 			&envoy_config_route_v3.Route{
 				Match:  routePrefix("/a"),
-				Action: routecluster("default/kuard/80/da39a3ee5e"),
+				Action: routecluster("default/kuard/80/3acee2fa4febcd64e2b0"),
 			},
 		),
 	), nil)
@@ -91,8 +91,8 @@ func TestHTTPProxy_RouteWithAServiceWeight(t *testing.T) {
 			&envoy_config_route_v3.Route{
 				Match: routePrefix("/a"),
 				Action: routeWeightedCluster(
-					weightedCluster{"default/kuard/80/da39a3ee5e", 60},
-					weightedCluster{"default/kuard/80/da39a3ee5e", 90}),
+					weightedCluster{"default/kuard/80/3acee2fa4febcd64e2b0", 60},
+					weightedCluster{"default/kuard/80/3acee2fa4febcd64e2b0", 90}),
 			},
 		),
 	), nil)
@@ -137,7 +137,7 @@ func TestHTTPProxy_TCPProxyWithAServiceWeight(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("ingress_https", "default/kuard-1/443/da39a3ee5e"),
+						tcpproxy("ingress_https", "default/kuard-1/443/a096f892e683dae26881"),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
 						ServerNames: []string{"tcpproxy.test.com"},
@@ -191,8 +191,8 @@ func TestHTTPProxy_TCPProxyWithAServiceWeight(t *testing.T) {
 					Filters: envoy_v3.Filters(
 						tcpproxyWeighted(
 							"ingress_https",
-							clusterWeight{name: "default/kuard-1/443/da39a3ee5e", weight: 7},
-							clusterWeight{name: "default/kuard-2/443/da39a3ee5e", weight: 77},
+							clusterWeight{name: "default/kuard-1/443/a096f892e683dae26881", weight: 7},
+							clusterWeight{name: "default/kuard-2/443/8080951e5455d6f4c8fd", weight: 77},
 						),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
@@ -247,8 +247,8 @@ func TestHTTPProxy_TCPProxyWithAServiceWeight(t *testing.T) {
 					Filters: envoy_v3.Filters(
 						tcpproxyWeighted(
 							"ingress_https",
-							clusterWeight{name: "default/kuard-1/443/da39a3ee5e", weight: 1},
-							clusterWeight{name: "default/kuard-2/443/da39a3ee5e", weight: 1},
+							clusterWeight{name: "default/kuard-1/443/a096f892e683dae26881", weight: 1},
+							clusterWeight{name: "default/kuard-2/443/8080951e5455d6f4c8fd", weight: 1},
 						),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
@@ -304,8 +304,8 @@ func TestHTTPProxy_TCPProxyWithAServiceWeight(t *testing.T) {
 					Filters: envoy_v3.Filters(
 						tcpproxyWeighted(
 							"ingress_https",
-							clusterWeight{name: "default/kuard-1/443/da39a3ee5e", weight: 77},
-							clusterWeight{name: "default/kuard-3/443/da39a3ee5e", weight: 7},
+							clusterWeight{name: "default/kuard-1/443/a096f892e683dae26881", weight: 77},
+							clusterWeight{name: "default/kuard-3/443/b2f661584bb20578f827", weight: 7},
 						),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
@@ -403,7 +403,7 @@ func TestHTTPRoute_RouteWithAServiceWeight(t *testing.T) {
 		Resources: resources(t, envoy_v3.RouteConfiguration("http-80", envoy_v3.VirtualHost("test.projectcontour.io",
 			&envoy_config_route_v3.Route{
 				Match:  routeSegmentPrefix("/blog"),
-				Action: routecluster("default/svc1/80/da39a3ee5e"),
+				Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 			},
 		))),
 	})
@@ -440,8 +440,8 @@ func TestHTTPRoute_RouteWithAServiceWeight(t *testing.T) {
 			&envoy_config_route_v3.Route{
 				Match: routeSegmentPrefix("/blog"),
 				Action: routeWeightedCluster(
-					weightedCluster{"default/svc1/80/da39a3ee5e", 60},
-					weightedCluster{"default/svc2/80/da39a3ee5e", 90},
+					weightedCluster{"default/svc1/80/d723398eb9fad288c4ea", 60},
+					weightedCluster{"default/svc2/80/f5fd1e067250ece39430", 90},
 				),
 			},
 		))),
@@ -523,7 +523,7 @@ func TestTLSRoute_RouteWithAServiceWeight(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("https-443", "default/svc1/443/da39a3ee5e"),
+						tcpproxy("https-443", "default/svc1/443/597a1615fb55ce2dfa01"),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
 						ServerNames: []string{"test.projectcontour.io"},
@@ -575,8 +575,8 @@ func TestTLSRoute_RouteWithAServiceWeight(t *testing.T) {
 					Filters: envoy_v3.Filters(
 						tcpproxyWeighted(
 							"https-443",
-							clusterWeight{name: "default/svc1/443/da39a3ee5e", weight: 1},
-							clusterWeight{name: "default/svc2/443/da39a3ee5e", weight: 7},
+							clusterWeight{name: "default/svc1/443/597a1615fb55ce2dfa01", weight: 1},
+							clusterWeight{name: "default/svc2/443/9db6babe229c54971e23", weight: 7},
 						),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{

@@ -1606,7 +1606,7 @@ func TestGatewayListenersSetAddress(t *testing.T) {
 						ServerNames: []string{"tcp.projectcontour.io"},
 					},
 					Filters: envoy_v3.Filters(
-						tcpproxy("https-8443", "default/svc1/80/da39a3ee5e"),
+						tcpproxy("https-8443", "default/svc1/80/d723398eb9fad288c4ea"),
 					),
 				}},
 				SocketOptions: envoy_v3.NewSocketOptions().TCPKeepalive().Build(),
@@ -1622,7 +1622,7 @@ func TestGatewayListenersSetAddress(t *testing.T) {
 				Address: envoy_v3.SocketAddress("127.0.0.100", 35017),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("tcp-27017", "default/svc1/80/da39a3ee5e"),
+						tcpproxy("tcp-27017", "default/svc1/80/d723398eb9fad288c4ea"),
 					),
 				}},
 				SocketOptions: envoy_v3.NewSocketOptions().TCPKeepalive().Build(),

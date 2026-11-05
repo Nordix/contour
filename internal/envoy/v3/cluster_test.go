@@ -150,7 +150,7 @@ func TestCluster(t *testing.T) {
 				Upstream: service(s1),
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -165,7 +165,7 @@ func TestCluster(t *testing.T) {
 				Protocol: "h2c",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/f4f94965ec",
+				Name:                 "default/kuard/443/3f81ee05c11151b41804",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -190,7 +190,7 @@ func TestCluster(t *testing.T) {
 				Protocol: "h2",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/bf1c365741",
+				Name:                 "default/kuard/443/797a85fc2bc7816a573a",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -217,7 +217,7 @@ func TestCluster(t *testing.T) {
 				Upstream: service(s2),
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_STRICT_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(service(s2)),
@@ -228,7 +228,7 @@ func TestCluster(t *testing.T) {
 				Upstream: healthcheckService(s3),
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_STRICT_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(healthcheckService(s3)),
@@ -240,7 +240,7 @@ func TestCluster(t *testing.T) {
 				DNSLookupFamily: "v4",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_STRICT_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(service(s2)),
@@ -253,7 +253,7 @@ func TestCluster(t *testing.T) {
 				DNSLookupFamily: "v6",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_STRICT_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(service(s2)),
@@ -266,7 +266,7 @@ func TestCluster(t *testing.T) {
 				DNSLookupFamily: "auto",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_STRICT_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(service(s2)),
@@ -279,7 +279,7 @@ func TestCluster(t *testing.T) {
 				DNSLookupFamily: "all",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_LOGICAL_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(service(s2)),
@@ -292,7 +292,7 @@ func TestCluster(t *testing.T) {
 				// DNSLookupFamily: "auto",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_STRICT_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(service(s2)),
@@ -305,7 +305,7 @@ func TestCluster(t *testing.T) {
 				Protocol: "tls",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/4929fca9d4",
+				Name:                 "default/kuard/443/69dd9ec532a697347f9b",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -324,7 +324,7 @@ func TestCluster(t *testing.T) {
 				SNI:      "projectcontour.local",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/a996a742af",
+				Name:                 "default/kuard/443/e85a402bb6b6b4916d43",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_STRICT_DNS),
 				LoadAssignment:       externalNameClusterLoadAssignment(service(svcExternal, "tls")),
@@ -345,7 +345,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/62d1f9ad02",
+				Name:                 "default/kuard/443/72eca9e3945168b1766a",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -382,7 +382,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/62d1f9ad02",
+				Name:                 "default/kuard/443/72eca9e3945168b1766a",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -423,7 +423,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -457,7 +457,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -491,7 +491,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -525,7 +525,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -559,7 +559,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -583,7 +583,7 @@ func TestCluster(t *testing.T) {
 				LoadBalancerPolicy: "Random",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/58d888c08a",
+				Name:                 "default/kuard/443/98eeea77e0126fd1671f",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -599,7 +599,7 @@ func TestCluster(t *testing.T) {
 				LoadBalancerPolicy: "Cookie",
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/e4f81994fe",
+				Name:                 "default/kuard/443/cba600fd9ff1b5240edb",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -615,7 +615,7 @@ func TestCluster(t *testing.T) {
 				Upstream: service(s1),
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -635,7 +635,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/fcf31a56953760d3df0f",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -661,7 +661,7 @@ func TestCluster(t *testing.T) {
 				ClientCertificate: clientSecret,
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/4929fca9d4",
+				Name:                 "default/kuard/443/69dd9ec532a697347f9b",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -679,7 +679,7 @@ func TestCluster(t *testing.T) {
 				TimeoutPolicy: dag.ClusterTimeoutPolicy{ConnectTimeout: 10 * time.Second},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -695,7 +695,7 @@ func TestCluster(t *testing.T) {
 				TimeoutPolicy: dag.ClusterTimeoutPolicy{IdleConnectionTimeout: timeout.DurationSetting(10 * time.Second)},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/357c84df09",
+				Name:                 "default/kuard/443/3aff83f0a6d350a23789",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -728,7 +728,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/2c8f64025b",
+				Name:                 "default/kuard/443/40d4359f8f93ad909589",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -762,7 +762,7 @@ func TestCluster(t *testing.T) {
 				LoadBalancerPolicy: dag.LoadBalancerPolicyWeightedLeastRequest,
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/0b01a6912a",
+				Name:                 "default/kuard/443/67e2d354e461657adec6",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -792,7 +792,7 @@ func TestCluster(t *testing.T) {
 				PerConnectionBufferLimitBytes: ptr.To(uint32(32768)),
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -808,7 +808,7 @@ func TestCluster(t *testing.T) {
 				MaxRequestsPerConnection: ptr.To(uint32(1)),
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/da39a3ee5e",
+				Name:                 "default/kuard/443/c1438f2ef18e4fe45050",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -840,7 +840,7 @@ func TestCluster(t *testing.T) {
 				},
 			},
 			want: &envoy_config_cluster_v3.Cluster{
-				Name:                 "default/kuard/443/47b66db27a",
+				Name:                 "default/kuard/443/b872698d7b4dbf217857",
 				AltStatName:          "default_kuard_443",
 				ClusterDiscoveryType: ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -1107,7 +1107,7 @@ func TestClustername(t *testing.T) {
 				},
 			},
 		},
-		want: "default/backend/80/da39a3ee5e",
+		want: "default/backend/80/2bacce1a3d1c59f98d22",
 	})
 
 	run(t, "far too long", testcase{
@@ -1126,7 +1126,7 @@ func TestClustername(t *testing.T) {
 				},
 			},
 		},
-		want: "it-is-a--dea8b0/must-be--dea8b0/9999/da39a3ee5e",
+		want: "it-is-a-truth-u/must-be-in-want/9999/8072ae738a2d14070ab9",
 	})
 
 	run(t, "various healthcheck params", testcase{
@@ -1153,7 +1153,7 @@ func TestClustername(t *testing.T) {
 				HealthyThreshold:   1,
 			},
 		},
-		want: "default/backend/80/5c26077e1d",
+		want: "default/backend/80/228d81025bf8f5ffd4bd",
 	})
 
 	cluster1 := &dag.Cluster{
@@ -1191,19 +1191,19 @@ func TestClustername(t *testing.T) {
 
 	run(t, "upstream tls validation with subject alt name", testcase{
 		cluster: cluster1,
-		want:    "default/backend/80/6bf46b7b3a",
+		want:    "default/backend/80/f40c1d9912d77e149e62",
 	})
 
 	cluster1.SNI = "foo.bar"
 	run(t, "upstream tls validation with subject alt name with SNI", testcase{
 		cluster: cluster1,
-		want:    "default/backend/80/b8a2ccb774",
+		want:    "default/backend/80/988b5fea43775214e350",
 	})
 
 	cluster1.Protocol = "h2"
 	run(t, "upstream tls validation with subject alt name with Protocol", testcase{
 		cluster: cluster1,
-		want:    "default/backend/80/50abc1400c",
+		want:    "default/backend/80/8ec356ccb7c409d6265a",
 	})
 }
 

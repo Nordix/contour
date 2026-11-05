@@ -341,11 +341,11 @@ func authzOverrideDisabled(t *testing.T, rh ResourceEventHandlerWrapper, c *Cont
 				envoy_v3.VirtualHost(disabled,
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/enabled"),
-						Action: routeCluster("default/app-server/80/da39a3ee5e"),
+						Action: routeCluster("default/app-server/80/a7a0b15c16a9b4d9e527"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:                routePrefix("/default"),
-						Action:               routeCluster("default/app-server/80/da39a3ee5e"),
+						Action:               routeCluster("default/app-server/80/a7a0b15c16a9b4d9e527"),
 						TypedPerFilterConfig: envoy_v3.DisabledExtAuthConfig(),
 					},
 				),
@@ -355,12 +355,12 @@ func authzOverrideDisabled(t *testing.T, rh ResourceEventHandlerWrapper, c *Cont
 				envoy_v3.VirtualHost(enabled,
 					&envoy_config_route_v3.Route{
 						Match:                routePrefix("/disabled"),
-						Action:               routeCluster("default/app-server/80/da39a3ee5e"),
+						Action:               routeCluster("default/app-server/80/a7a0b15c16a9b4d9e527"),
 						TypedPerFilterConfig: envoy_v3.DisabledExtAuthConfig(),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/default"),
-						Action: routeCluster("default/app-server/80/da39a3ee5e"),
+						Action: routeCluster("default/app-server/80/a7a0b15c16a9b4d9e527"),
 					},
 				),
 			),
@@ -454,7 +454,7 @@ func authzMergeRouteContext(t *testing.T, rh ResourceEventHandlerWrapper, c *Con
 				envoy_v3.VirtualHost(fqdn,
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/app-server/80/da39a3ee5e"),
+						Action: routeCluster("default/app-server/80/a7a0b15c16a9b4d9e527"),
 						TypedPerFilterConfig: withFilterConfig(envoy_v3.ExtAuthzFilterName,
 							&envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute{
 								Override: &envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute_CheckSettings{

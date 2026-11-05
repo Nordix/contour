@@ -96,7 +96,7 @@ func noRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWrapper, c *Contou
 				envoy_v3.VirtualHost("foo.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 					},
 				),
 			),
@@ -138,7 +138,7 @@ func vhostRateLimitDefined(t *testing.T, rh ResourceEventHandlerWrapper, c *Cont
 	vhost := envoy_v3.VirtualHost("foo.com",
 		&envoy_config_route_v3.Route{
 			Match:  routePrefix("/"),
-			Action: routeCluster("default/s1/80/da39a3ee5e"),
+			Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 		})
 	vhost.TypedPerFilterConfig = withFilterConfig(envoy_v3.LocalRateLimitFilterName,
 		&envoy_filter_http_local_ratelimit_v3.LocalRateLimit{
@@ -230,7 +230,7 @@ func routeRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWrapper, c *Con
 		// is reverse alphabetic.
 		&envoy_config_route_v3.Route{
 			Match:  routePrefix("/s2"),
-			Action: routeCluster("default/s2/80/da39a3ee5e"),
+			Action: routeCluster("default/s2/80/dc6f607485059a0b8c3e"),
 			TypedPerFilterConfig: withFilterConfig(envoy_v3.LocalRateLimitFilterName,
 				&envoy_filter_http_local_ratelimit_v3.LocalRateLimit{
 					StatPrefix: "vhost.foo.com",
@@ -255,7 +255,7 @@ func routeRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWrapper, c *Con
 		},
 		&envoy_config_route_v3.Route{
 			Match:  routePrefix("/s1"),
-			Action: routeCluster("default/s1/80/da39a3ee5e"),
+			Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 			TypedPerFilterConfig: withFilterConfig(envoy_v3.LocalRateLimitFilterName,
 				&envoy_filter_http_local_ratelimit_v3.LocalRateLimit{
 					StatPrefix: "vhost.foo.com",
@@ -355,7 +355,7 @@ func vhostAndRouteRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWrapper
 		// is reverse alphabetic.
 		&envoy_config_route_v3.Route{
 			Match:  routePrefix("/s2"),
-			Action: routeCluster("default/s2/80/da39a3ee5e"),
+			Action: routeCluster("default/s2/80/dc6f607485059a0b8c3e"),
 			TypedPerFilterConfig: withFilterConfig(envoy_v3.LocalRateLimitFilterName,
 				&envoy_filter_http_local_ratelimit_v3.LocalRateLimit{
 					StatPrefix: "vhost.foo.com",
@@ -380,7 +380,7 @@ func vhostAndRouteRateLimitsDefined(t *testing.T, rh ResourceEventHandlerWrapper
 		},
 		&envoy_config_route_v3.Route{
 			Match:  routePrefix("/s1"),
-			Action: routeCluster("default/s1/80/da39a3ee5e"),
+			Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 			TypedPerFilterConfig: withFilterConfig(envoy_v3.LocalRateLimitFilterName,
 				&envoy_filter_http_local_ratelimit_v3.LocalRateLimit{
 					StatPrefix: "vhost.foo.com",
@@ -474,7 +474,7 @@ func customResponseCode(t *testing.T, rh ResourceEventHandlerWrapper, c *Contour
 	vhost := envoy_v3.VirtualHost("foo.com",
 		&envoy_config_route_v3.Route{
 			Match:  routePrefix("/s1"),
-			Action: routeCluster("default/s1/80/da39a3ee5e"),
+			Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 			TypedPerFilterConfig: withFilterConfig(envoy_v3.LocalRateLimitFilterName,
 				&envoy_filter_http_local_ratelimit_v3.LocalRateLimit{
 					StatPrefix: "vhost.foo.com",
@@ -560,7 +560,7 @@ func customResponseHeaders(t *testing.T, rh ResourceEventHandlerWrapper, c *Cont
 	vhost := envoy_v3.VirtualHost("foo.com",
 		&envoy_config_route_v3.Route{
 			Match:  routePrefix("/s1"),
-			Action: routeCluster("default/s1/80/da39a3ee5e"),
+			Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 			TypedPerFilterConfig: withFilterConfig(envoy_v3.LocalRateLimitFilterName,
 				&envoy_filter_http_local_ratelimit_v3.LocalRateLimit{
 					StatPrefix: "vhost.foo.com",

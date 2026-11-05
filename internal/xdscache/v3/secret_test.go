@@ -42,10 +42,10 @@ func TestSecretCacheContents(t *testing.T) {
 		},
 		"simple": {
 			contents: secretmap(
-				secret("default/secret/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret/41404a0e7bddac631589", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			),
 			want: []proto.Message{
-				secret("default/secret/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret/41404a0e7bddac631589", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			},
 		},
 	}
@@ -117,7 +117,7 @@ func TestSecretVisit(t *testing.T) {
 				tlssecret("default", "secret", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			},
 			want: secretmap(
-				secret("default/secret/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret/41404a0e7bddac631589", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			),
 		},
 		"multiple ingresses with shared secret": {
@@ -183,7 +183,7 @@ func TestSecretVisit(t *testing.T) {
 				tlssecret("default", "secret", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			},
 			want: secretmap(
-				secret("default/secret/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret/41404a0e7bddac631589", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			),
 		},
 		"multiple ingresses with different secrets": {
@@ -250,8 +250,8 @@ func TestSecretVisit(t *testing.T) {
 				tlssecret("default", "secret-b", secretdata(CERTIFICATE_2, RSA_PRIVATE_KEY)),
 			},
 			want: secretmap(
-				secret("default/secret-a/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
-				secret("default/secret-b/5397c67313", secretdata(CERTIFICATE_2, RSA_PRIVATE_KEY)),
+				secret("default/secret-a/8b589dd8f2c78101a8f2", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret-b/12f399aa2158b64cd433", secretdata(CERTIFICATE_2, RSA_PRIVATE_KEY)),
 			),
 		},
 		"simple httpproxy with secret": {
@@ -293,7 +293,7 @@ func TestSecretVisit(t *testing.T) {
 				tlssecret("default", "secret", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			},
 			want: secretmap(
-				secret("default/secret/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret/41404a0e7bddac631589", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			),
 		},
 		"multiple httpproxies with shared secret": {
@@ -355,7 +355,7 @@ func TestSecretVisit(t *testing.T) {
 				tlssecret("default", "secret", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			},
 			want: secretmap(
-				secret("default/secret/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret/41404a0e7bddac631589", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
 			),
 		},
 		"multiple httpproxies with different secret": {
@@ -418,8 +418,8 @@ func TestSecretVisit(t *testing.T) {
 				tlssecret("default", "secret-b", secretdata(CERTIFICATE_2, RSA_PRIVATE_KEY_2)),
 			},
 			want: secretmap(
-				secret("default/secret-a/0567f551af", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
-				secret("default/secret-b/5397c67313", secretdata(CERTIFICATE_2, RSA_PRIVATE_KEY_2)),
+				secret("default/secret-a/8b589dd8f2c78101a8f2", secretdata(CERTIFICATE, RSA_PRIVATE_KEY)),
+				secret("default/secret-b/12f399aa2158b64cd433", secretdata(CERTIFICATE_2, RSA_PRIVATE_KEY_2)),
 			),
 		},
 	}

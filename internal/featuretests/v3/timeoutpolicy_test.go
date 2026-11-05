@@ -54,7 +54,7 @@ func TestTimeoutPolicyRequestTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("*",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withResponseTimeout(routeCluster("default/kuard/8080/da39a3ee5e"), 80*time.Second),
+						Action: withResponseTimeout(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), 80*time.Second),
 					},
 				),
 			),
@@ -77,7 +77,7 @@ func TestTimeoutPolicyRequestTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("*",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withResponseTimeout(routeCluster("default/kuard/8080/da39a3ee5e"), 0), // zero means infinity
+						Action: withResponseTimeout(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), 0), // zero means infinity
 					},
 				),
 			),
@@ -100,7 +100,7 @@ func TestTimeoutPolicyRequestTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("*",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/kuard/8080/da39a3ee5e"),
+						Action: routeCluster("default/kuard/8080/b22243c6f0853102c24e"),
 					},
 				),
 			),
@@ -124,7 +124,7 @@ func TestTimeoutPolicyRequestTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("*",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withResponseTimeout(routeCluster("default/kuard/8080/da39a3ee5e"), 99*time.Second),
+						Action: withResponseTimeout(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), 99*time.Second),
 					},
 				),
 			),
@@ -154,7 +154,7 @@ func TestTimeoutPolicyRequestTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("test2.test.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withResponseTimeout(routeCluster("default/kuard/8080/da39a3ee5e"), 180*time.Second),
+						Action: withResponseTimeout(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), 180*time.Second),
 					},
 				),
 			),
@@ -172,7 +172,7 @@ func TestTimeoutPolicyRequestTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("test2.test.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withResponseTimeout(routeCluster("default/kuard/8080/da39a3ee5e"), 0), // zero means infinity
+						Action: withResponseTimeout(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), 0), // zero means infinity
 					},
 				),
 			),
@@ -209,7 +209,7 @@ func TestTimeoutPolicyIdleStreamTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("test2.test.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withIdleTimeout(routeCluster("default/kuard/8080/da39a3ee5e"), 180*time.Second),
+						Action: withIdleTimeout(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), 180*time.Second),
 					},
 				),
 			),
@@ -227,7 +227,7 @@ func TestTimeoutPolicyIdleStreamTimeout(t *testing.T) {
 				envoy_v3.VirtualHost("test2.test.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: withIdleTimeout(routeCluster("default/kuard/8080/da39a3ee5e"), 0), // zero means infinity
+						Action: withIdleTimeout(routeCluster("default/kuard/8080/b22243c6f0853102c24e"), 0), // zero means infinity
 					},
 				),
 			),
@@ -257,7 +257,7 @@ func TestTimeoutPolicyIdleConnectionTimeout(t *testing.T) {
 
 	// Check that cluster has connection timeout set.
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
-		Resources: resources(t, withConnectionTimeout(cluster("default/kuard/8080/b7427dbbf9", "default/kuard", "default_kuard_8080"), 3*time.Minute, envoy_v3.HTTPVersion1)),
+		Resources: resources(t, withConnectionTimeout(cluster("default/kuard/8080/162c59717cf6e8b56af7", "default/kuard", "default_kuard_8080"), 3*time.Minute, envoy_v3.HTTPVersion1)),
 		TypeUrl:   clusterType,
 	})
 
@@ -266,7 +266,7 @@ func TestTimeoutPolicyIdleConnectionTimeout(t *testing.T) {
 
 	// Check that cluster has connection timeout set to zero (infinite).
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
-		Resources: resources(t, withConnectionTimeout(cluster("default/kuard/8080/97705cb30a", "default/kuard", "default_kuard_8080"), 0, envoy_v3.HTTPVersion1)),
+		Resources: resources(t, withConnectionTimeout(cluster("default/kuard/8080/7a6ec430241c8c63bd79", "default/kuard", "default_kuard_8080"), 0, envoy_v3.HTTPVersion1)),
 		TypeUrl:   clusterType,
 	})
 }

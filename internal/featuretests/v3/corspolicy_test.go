@@ -72,7 +72,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -123,7 +123,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -166,7 +166,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -209,7 +209,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -254,7 +254,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -301,7 +301,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -346,7 +346,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -388,7 +388,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),
@@ -433,7 +433,7 @@ func TestCorsPolicy(t *testing.T) {
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routecluster("default/svc1/80/da39a3ee5e"),
+						Action: routecluster("default/svc1/80/d723398eb9fad288c4ea"),
 					}),
 			),
 		),

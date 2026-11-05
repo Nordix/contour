@@ -66,7 +66,7 @@ func TestInternalRedirectPolicy_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/"),
-						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/da39a3ee5e"), &envoy_config_route_v3.InternalRedirectPolicy{
+						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/d723398eb9fad288c4ea"), &envoy_config_route_v3.InternalRedirectPolicy{
 							MaxInternalRedirects:     nil,
 							RedirectResponseCodes:    []uint32{},
 							Predicates:               nil,
@@ -102,7 +102,7 @@ func TestInternalRedirectPolicy_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/"),
-						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/da39a3ee5e"), &envoy_config_route_v3.InternalRedirectPolicy{
+						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/d723398eb9fad288c4ea"), &envoy_config_route_v3.InternalRedirectPolicy{
 							AllowCrossSchemeRedirect: true,
 						}),
 					},
@@ -135,7 +135,7 @@ func TestInternalRedirectPolicy_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/"),
-						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/da39a3ee5e"), &envoy_config_route_v3.InternalRedirectPolicy{
+						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/d723398eb9fad288c4ea"), &envoy_config_route_v3.InternalRedirectPolicy{
 							AllowCrossSchemeRedirect: false,
 						}),
 					},
@@ -171,7 +171,7 @@ func TestInternalRedirectPolicy_HTTProxy(t *testing.T) {
 				envoy_v3.VirtualHost("hello.world",
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/"),
-						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/da39a3ee5e"), &envoy_config_route_v3.InternalRedirectPolicy{
+						Action: withInternalRedirectPolicy(routeCluster("default/svc1/80/d723398eb9fad288c4ea"), &envoy_config_route_v3.InternalRedirectPolicy{
 							MaxInternalRedirects:  wrapperspb.UInt32(2),
 							RedirectResponseCodes: []uint32{302, 307},
 							Predicates: []*envoy_config_core_v3.TypedExtensionConfig{

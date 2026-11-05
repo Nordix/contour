@@ -68,7 +68,7 @@ func TestIPFilterPolicy(t *testing.T) {
 			envoy_v3.RouteConfiguration("ingress_http", virtualHostWithFilters(envoy_v3.VirtualHost(hp1.Spec.VirtualHost.Fqdn,
 				&envoy_config_route_v3.Route{
 					Match:  routePrefix("/"),
-					Action: routeCluster("default/backend/80/da39a3ee5e"),
+					Action: routeCluster("default/backend/80/2bacce1a3d1c59f98d22"),
 				},
 			), withFilterConfig(envoy_v3.RBACFilterName, &envoy_filter_http_rbac_v3.RBACPerRoute{Rbac: &envoy_filter_http_rbac_v3.RBAC{
 				Rules: &envoy_config_rbac_v3.RBAC{
@@ -131,7 +131,7 @@ func TestIPFilterPolicy(t *testing.T) {
 			envoy_v3.RouteConfiguration("ingress_http", virtualHostWithFilters(envoy_v3.VirtualHost(hp1.Spec.VirtualHost.Fqdn,
 				&envoy_config_route_v3.Route{
 					Match:  routePrefix("/"),
-					Action: routeCluster("default/backend/80/da39a3ee5e"),
+					Action: routeCluster("default/backend/80/2bacce1a3d1c59f98d22"),
 					TypedPerFilterConfig: withFilterConfig(envoy_v3.RBACFilterName, &envoy_filter_http_rbac_v3.RBACPerRoute{
 						Rbac: &envoy_filter_http_rbac_v3.RBAC{
 							Rules: &envoy_config_rbac_v3.RBAC{
@@ -210,7 +210,7 @@ func TestIPFilterPolicy(t *testing.T) {
 			envoy_v3.RouteConfiguration("ingress_http", envoy_v3.VirtualHost(hp1.Spec.VirtualHost.Fqdn,
 				&envoy_config_route_v3.Route{
 					Match:  routePrefix("/"),
-					Action: routeCluster("default/backend/80/da39a3ee5e"),
+					Action: routeCluster("default/backend/80/2bacce1a3d1c59f98d22"),
 				},
 			))),
 		TypeUrl: routeType,

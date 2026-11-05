@@ -83,7 +83,7 @@ func TestRouteSourceMetadataIsSet(t *testing.T) {
 			envoy_v3.RouteConfiguration("ingress_http",
 				envoy_v3.VirtualHost("ingress.projectcontour.io", &envoy_config_route_v3.Route{
 					Match:  routePrefix("/"),
-					Action: routecluster("default/kuard/80/da39a3ee5e"),
+					Action: routecluster("default/kuard/80/3acee2fa4febcd64e2b0"),
 					Metadata: &envoy_config_core_v3.Metadata{
 						FilterMetadata: map[string]*structpb.Struct{
 							"envoy.access_loggers.file": {
@@ -128,7 +128,7 @@ func TestRouteSourceMetadataIsSet(t *testing.T) {
 			envoy_v3.RouteConfiguration("ingress_http",
 				envoy_v3.VirtualHost("httpproxy.projectcontour.io", &envoy_config_route_v3.Route{
 					Match:  routePrefix("/"),
-					Action: routecluster("default/kuard/80/da39a3ee5e"),
+					Action: routecluster("default/kuard/80/3acee2fa4febcd64e2b0"),
 					Metadata: &envoy_config_core_v3.Metadata{
 						FilterMetadata: map[string]*structpb.Struct{
 							"envoy.access_loggers.file": {
@@ -180,7 +180,7 @@ func TestRouteSourceMetadataIsSet(t *testing.T) {
 			envoy_v3.RouteConfiguration("http-80",
 				envoy_v3.VirtualHost("gatewayapi.projectcontour.io", &envoy_config_route_v3.Route{
 					Match:  routePrefix("/"),
-					Action: routecluster("default/kuard/80/da39a3ee5e"),
+					Action: routecluster("default/kuard/80/3acee2fa4febcd64e2b0"),
 					Metadata: &envoy_config_core_v3.Metadata{
 						FilterMetadata: map[string]*structpb.Struct{
 							"envoy.access_loggers.file": {

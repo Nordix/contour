@@ -163,7 +163,7 @@ func TestTracing(t *testing.T) {
 				h2cCluster(cluster("extension/projectcontour/otel-collector", "extension/projectcontour/otel-collector", "extension_projectcontour_otel-collector")),
 			),
 			DefaultCluster(
-				cluster("projectcontour/app-server/80/da39a3ee5e", "projectcontour/app-server", "projectcontour_app-server_80"),
+				cluster("projectcontour/app-server/80/6c72612546c26158c46d", "projectcontour/app-server", "projectcontour_app-server_80"),
 			),
 		),
 	})

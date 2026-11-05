@@ -115,7 +115,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							Invert:              true,
 							TreatMissingAsEmpty: true,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/blog", dag.HeaderMatchCondition{
@@ -125,7 +125,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							Invert:              true,
 							TreatMissingAsEmpty: true,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/blog", dag.HeaderMatchCondition{
@@ -134,7 +134,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -143,11 +143,11 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -197,7 +197,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    true,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -206,11 +206,11 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    true,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -260,7 +260,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "exact",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -269,11 +269,11 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "exact",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -323,7 +323,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "exact",
 							Invert:    true,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -332,11 +332,11 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "exact",
 							Invert:    true,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -385,7 +385,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "present",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -393,11 +393,11 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "present",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -448,7 +448,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -457,7 +457,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 				),
 			),
@@ -508,7 +508,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    false,
 						}),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -517,7 +517,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							MatchType: "contains",
 							Invert:    true,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 				),
 			),
@@ -567,7 +567,7 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							Value:     "^123.*",
 							MatchType: "regex",
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithHeaderConditions("/", dag.HeaderMatchCondition{
@@ -575,11 +575,11 @@ func TestConditions_ContainsHeader_HTTProxy(t *testing.T) {
 							Value:     "^789.*",
 							MatchType: "regex",
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefixWithHeaderConditions("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),

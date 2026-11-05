@@ -125,7 +125,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -170,7 +170,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routeRegex("/[^/]+/invoices(/.*|/?)"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -214,7 +214,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					),
 				),
@@ -262,7 +262,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -325,7 +325,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -333,7 +333,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -401,7 +401,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/backend/8080/da39a3ee5e"),
+							Action: routecluster("default/backend/8080/8b91cacfeba7e16dbc71"),
 						},
 					),
 				),
@@ -468,7 +468,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -543,7 +543,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -606,11 +606,11 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/ws1"),
-							Action: websocketroute("default/kuard/8080/da39a3ee5e"),
+							Action: websocketroute("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -649,7 +649,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -688,7 +688,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routetimeout("default/kuard/8080/da39a3ee5e", 0),
+							Action: routetimeout("default/kuard/8080/b22243c6f0853102c24e", 0),
 						},
 					),
 				),
@@ -727,7 +727,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routetimeout("default/kuard/8080/da39a3ee5e", 90*time.Second),
+							Action: routetimeout("default/kuard/8080/b22243c6f0853102c24e", 90*time.Second),
 						},
 					),
 				),
@@ -800,27 +800,27 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routeExact("/foo4"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routeRegex("/foo3[a|b]?"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/foo2"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routePrefixIngress("/foo"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/foo"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/8080/da39a3ee5e"),
+							Action: routecluster("default/kuard/8080/b22243c6f0853102c24e"),
 						},
 					),
 				),
@@ -872,7 +872,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("my-very-very-long-service-host-name.subdomain.boring-dept.my.company",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/kuard/80/da39a3ee5e"),
+							Action: routecluster("default/kuard/80/3acee2fa4febcd64e2b0"),
 						},
 					),
 				),
@@ -911,7 +911,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routeretry("default/kuard/8080/da39a3ee5e", "5xx,gateway-error", 1, 0),
+							Action: routeretry("default/kuard/8080/b22243c6f0853102c24e", "5xx,gateway-error", 1, 0),
 						},
 					),
 				),
@@ -951,7 +951,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routeretry("default/kuard/8080/da39a3ee5e", "5xx,gateway-error", 7, 0),
+							Action: routeretry("default/kuard/8080/b22243c6f0853102c24e", "5xx,gateway-error", 7, 0),
 						},
 					),
 				),
@@ -992,7 +992,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routeretry("default/kuard/8080/da39a3ee5e", "5xx,gateway-error", 0, 0),
+							Action: routeretry("default/kuard/8080/b22243c6f0853102c24e", "5xx,gateway-error", 0, 0),
 						},
 					),
 				),
@@ -1033,7 +1033,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("*",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routeretry("default/kuard/8080/da39a3ee5e", "5xx,gateway-error", 1, 150*time.Millisecond),
+							Action: routeretry("default/kuard/8080/b22243c6f0853102c24e", "5xx,gateway-error", 1, 150*time.Millisecond),
 						},
 					),
 				),
@@ -1085,7 +1085,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routeretry("default/backend/80/da39a3ee5e", "5xx,gateway-error", 0, 0),
+							Action: routeretry("default/backend/80/2bacce1a3d1c59f98d22", "5xx,gateway-error", 0, 0),
 						},
 					),
 				),
@@ -1154,8 +1154,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -1229,8 +1229,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 0),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 50),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 0),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 50),
 											),
 										},
 									},
@@ -1305,8 +1305,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 22),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 50),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 22),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 50),
 											),
 										},
 									},
@@ -1414,8 +1414,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -1484,7 +1484,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: withMirrorPolicy(routecluster("default/backend/80/da39a3ee5e"), "default/backendtwo/80/da39a3ee5e"),
+							Action: withMirrorPolicy(routecluster("default/backend/80/2bacce1a3d1c59f98d22"), "default/backendtwo/80/b5de35d9e477a40ddb1a"),
 						},
 					),
 				),
@@ -1572,8 +1572,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -1677,7 +1677,7 @@ func TestRouteVisit(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/blog/info"),
-							Action: routecluster("teama/backend/80/da39a3ee5e"),
+							Action: routecluster("teama/backend/80/aeb9b7594ecf5291b283"),
 						},
 						&envoy_config_route_v3.Route{
 							Match: routePrefix("/"),
@@ -1686,8 +1686,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -1751,7 +1751,7 @@ func TestRouteVisit(t *testing.T) {
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					),
 				),
@@ -1841,7 +1841,7 @@ func TestRouteVisit(t *testing.T) {
 						},
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -1896,7 +1896,7 @@ func TestRouteVisit(t *testing.T) {
 								Value:     "abc",
 								MatchType: "contains",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -1955,7 +1955,7 @@ func TestRouteVisit(t *testing.T) {
 								MatchType: "contains",
 								Invert:    true,
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2014,7 +2014,7 @@ func TestRouteVisit(t *testing.T) {
 								MatchType: "exact",
 								Invert:    false,
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2073,7 +2073,7 @@ func TestRouteVisit(t *testing.T) {
 								MatchType: "exact",
 								Invert:    true,
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2130,7 +2130,7 @@ func TestRouteVisit(t *testing.T) {
 								Name:      "x-header",
 								MatchType: "present",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2189,7 +2189,7 @@ func TestRouteVisit(t *testing.T) {
 								MatchType: "regex",
 								Value:     "foo.*",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2244,7 +2244,7 @@ func TestRouteVisit(t *testing.T) {
 								Value:     "abc",
 								MatchType: "contains",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2302,7 +2302,7 @@ func TestRouteVisit(t *testing.T) {
 								Value:     "abc",
 								MatchType: "prefix",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2360,7 +2360,7 @@ func TestRouteVisit(t *testing.T) {
 								Value:     "abc",
 								MatchType: "suffix",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2420,7 +2420,7 @@ func TestRouteVisit(t *testing.T) {
 								MatchType:  "exact",
 								IgnoreCase: true,
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2478,7 +2478,7 @@ func TestRouteVisit(t *testing.T) {
 								Value:     "^abc.*",
 								MatchType: "regex",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2535,7 +2535,7 @@ func TestRouteVisit(t *testing.T) {
 								Name:      "param",
 								MatchType: "present",
 							}),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 						},
 					)),
 			),
@@ -2602,7 +2602,7 @@ func TestRouteVisit(t *testing.T) {
 							Action: &envoy_config_route_v3.Route_Route{
 								Route: &envoy_config_route_v3.RouteAction{
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-										Cluster: "default/backend/80/da39a3ee5e",
+										Cluster: "default/backend/80/2bacce1a3d1c59f98d22",
 									},
 								},
 							},
@@ -2722,8 +2722,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -2740,8 +2740,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -2886,8 +2886,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -2904,8 +2904,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -2922,8 +2922,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -3068,8 +3068,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -3086,8 +3086,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -3104,8 +3104,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -3120,8 +3120,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -3304,8 +3304,8 @@ func TestRouteVisit(t *testing.T) {
 									ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 										WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 											Clusters: weightedClusters(
-												weightedCluster("default/backend/80/da39a3ee5e", 1),
-												weightedCluster("default/backendtwo/80/da39a3ee5e", 1),
+												weightedCluster("default/backend/80/2bacce1a3d1c59f98d22", 1),
+												weightedCluster("default/backendtwo/80/b5de35d9e477a40ddb1a", 1),
 											),
 										},
 									},
@@ -3417,7 +3417,7 @@ func TestRouteVisit_GlobalExternalAuthorization(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 							TypedPerFilterConfig: map[string]*anypb.Any{
 								envoy_v3.ExtAuthzFilterName: protobuf.MustMarshalAny(&envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute{
 									Override: &envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute_CheckSettings{
@@ -3483,7 +3483,7 @@ func TestRouteVisit_GlobalExternalAuthorization(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 							TypedPerFilterConfig: map[string]*anypb.Any{
 								envoy_v3.ExtAuthzFilterName: protobuf.MustMarshalAny(&envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute{
 									Override: &envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute_Disabled{
@@ -3566,7 +3566,7 @@ func TestRouteVisit_GlobalExternalAuthorization(t *testing.T) {
 					envoy_v3.VirtualHost("www.example.com",
 						&envoy_config_route_v3.Route{
 							Match:  routePrefix("/"),
-							Action: routecluster("default/backend/80/da39a3ee5e"),
+							Action: routecluster("default/backend/80/2bacce1a3d1c59f98d22"),
 							TypedPerFilterConfig: map[string]*anypb.Any{
 								envoy_v3.ExtAuthzFilterName: protobuf.MustMarshalAny(&envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute{
 									Override: &envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute_CheckSettings{

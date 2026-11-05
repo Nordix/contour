@@ -132,7 +132,7 @@ func TestRootNamespaces(t *testing.T) {
 				envoy_v3.VirtualHost("hp2.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("roots/kuard/8080/da39a3ee5e"),
+						Action: routeCluster("roots/kuard/8080/b65c9c9fd0ddae11051e"),
 					},
 				),
 			),

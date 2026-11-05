@@ -105,7 +105,7 @@ func TestTCPRoute(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 18000),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("tcp-10000", "default/backend-1/80/da39a3ee5e"),
+						tcpproxy("tcp-10000", "default/backend-1/80/7d70dc8227f85fb1a9f4"),
 					),
 				}},
 				SocketOptions: envoy_v3.NewSocketOptions().TCPKeepalive().Build(),
@@ -156,7 +156,7 @@ func TestTCPRoute(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 18000),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("tcp-10000", "default/backend-1/80/da39a3ee5e"),
+						tcpproxy("tcp-10000", "default/backend-1/80/7d70dc8227f85fb1a9f4"),
 					),
 				}},
 				SocketOptions: envoy_v3.NewSocketOptions().TCPKeepalive().Build(),
@@ -166,7 +166,7 @@ func TestTCPRoute(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 18001),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("tcp-10001", "default/backend-2/80/da39a3ee5e"),
+						tcpproxy("tcp-10001", "default/backend-2/80/b8bffab7e36da375db87"),
 					),
 				}},
 				SocketOptions: envoy_v3.NewSocketOptions().TCPKeepalive().Build(),
@@ -260,7 +260,7 @@ func TestTCPRoute_TLSTermination(t *testing.T) {
 					envoy_v3.TLSInspector(),
 				),
 				FilterChains: appendFilterChains(
-					filterchaintls("*", sec1, tcpproxy("https-5000", "default/backend-1/80/da39a3ee5e"), nil),
+					filterchaintls("*", sec1, tcpproxy("https-5000", "default/backend-1/80/7d70dc8227f85fb1a9f4"), nil),
 				),
 				SocketOptions: envoy_v3.NewSocketOptions().TCPKeepalive().Build(),
 			},

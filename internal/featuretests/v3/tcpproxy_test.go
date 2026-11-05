@@ -86,7 +86,7 @@ func TestTCPProxy(t *testing.T) {
 				Name:    "ingress_https",
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: appendFilterChains(
-					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "default/correct-backend/80/da39a3ee5e"), nil),
+					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "default/correct-backend/80/84a0f22e863ec3cab368"), nil),
 				),
 				ListenerFilters: envoy_v3.ListenerFilters(
 					envoy_v3.TLSInspector(),
@@ -170,7 +170,7 @@ func TestTCPProxyDelegation(t *testing.T) {
 				Name:    "ingress_https",
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: appendFilterChains(
-					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "app/backend/80/da39a3ee5e"), nil),
+					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "app/backend/80/d874ecaa3547ac20979d"), nil),
 				),
 				ListenerFilters: envoy_v3.ListenerFilters(
 					envoy_v3.TLSInspector(),
@@ -250,7 +250,7 @@ func TestTCPProxyTLSPassthrough(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("ingress_https", "default/correct-backend/80/da39a3ee5e"),
+						tcpproxy("ingress_https", "default/correct-backend/80/84a0f22e863ec3cab368"),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
 						ServerNames: []string{"kuard-tcp.example.com"},
@@ -327,7 +327,7 @@ func TestTCPProxyTLSBackend(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: appendFilterChains(
 					filterchaintls("k8s.run.ubisoft.org", s1,
-						tcpproxy("ingress_https", svc.Namespace+"/"+svc.Name+"/443/4929fca9d4"), nil),
+						tcpproxy("ingress_https", svc.Namespace+"/"+svc.Name+"/443/40ecaba3e5a16e62aa81"), nil),
 				),
 				ListenerFilters: envoy_v3.ListenerFilters(
 					envoy_v3.TLSInspector(),
@@ -341,7 +341,7 @@ func TestTCPProxyTLSBackend(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			tlsCluster(cluster(
-				svc.Namespace+"/"+svc.Name+"/443/4929fca9d4",
+				svc.Namespace+"/"+svc.Name+"/443/40ecaba3e5a16e62aa81",
 				svc.Namespace+"/"+svc.Name+"/https",
 				svc.Namespace+"_"+svc.Name+"_443",
 			), nil, "", "", nil, nil),
@@ -412,7 +412,7 @@ func TestTCPProxyAndHTTPService(t *testing.T) {
 				Name:    "ingress_https",
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: appendFilterChains(
-					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "default/backend/80/da39a3ee5e"), nil),
+					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "default/backend/80/2bacce1a3d1c59f98d22"), nil),
 				),
 				ListenerFilters: envoy_v3.ListenerFilters(
 					envoy_v3.TLSInspector(),
@@ -495,7 +495,7 @@ func TestTCPProxyAndHTTPServicePermitInsecure(t *testing.T) {
 				Name:    "ingress_https",
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: appendFilterChains(
-					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "default/backend/80/da39a3ee5e"), nil),
+					filterchaintls("kuard-tcp.example.com", s1, tcpproxy("ingress_https", "default/backend/80/2bacce1a3d1c59f98d22"), nil),
 				),
 				ListenerFilters: envoy_v3.ListenerFilters(
 					envoy_v3.TLSInspector(),
@@ -518,7 +518,7 @@ func TestTCPProxyAndHTTPServicePermitInsecure(t *testing.T) {
 						Match: routePrefix("/"),
 						// this is a regular route cluster, not a 301 upgrade as
 						// permitInsecure: true was set.
-						Action: routeCluster("default/backend/80/da39a3ee5e"),
+						Action: routeCluster("default/backend/80/2bacce1a3d1c59f98d22"),
 					},
 				),
 			),
@@ -579,7 +579,7 @@ func TestTCPProxyTLSPassthroughAndHTTPService(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("ingress_https", "default/backend/80/da39a3ee5e"),
+						tcpproxy("ingress_https", "default/backend/80/2bacce1a3d1c59f98d22"),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
 						ServerNames: []string{"kuard-tcp.example.com"},
@@ -668,7 +668,7 @@ func TestTCPProxyTLSPassthroughAndHTTPServicePermitInsecure(t *testing.T) {
 				Address: envoy_v3.SocketAddress("0.0.0.0", 8443),
 				FilterChains: []*envoy_config_listener_v3.FilterChain{{
 					Filters: envoy_v3.Filters(
-						tcpproxy("ingress_https", "default/backend/80/da39a3ee5e"),
+						tcpproxy("ingress_https", "default/backend/80/2bacce1a3d1c59f98d22"),
 					),
 					FilterChainMatch: &envoy_config_listener_v3.FilterChainMatch{
 						ServerNames: []string{"kuard-tcp.example.com"},
@@ -694,7 +694,7 @@ func TestTCPProxyTLSPassthroughAndHTTPServicePermitInsecure(t *testing.T) {
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/"),
 						// not a 301 upgrade because permitInsecure: true is in use.
-						Action: routeCluster("default/backend/80/da39a3ee5e"),
+						Action: routeCluster("default/backend/80/2bacce1a3d1c59f98d22"),
 					},
 				),
 			),
@@ -852,7 +852,7 @@ func TestTCPProxyInvalidLoadBalancerPolicy(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			cluster(
-				svc.Namespace+"/"+svc.Name+"/80/da39a3ee5e",
+				svc.Namespace+"/"+svc.Name+"/80/2bacce1a3d1c59f98d22",
 				svc.Namespace+"/"+svc.Name,
 				svc.Namespace+"_"+svc.Name+"_80",
 			),
@@ -889,7 +889,7 @@ func TestTCPProxyInvalidLoadBalancerPolicy(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			cluster(
-				svc.Namespace+"/"+svc.Name+"/80/da39a3ee5e",
+				svc.Namespace+"/"+svc.Name+"/80/2bacce1a3d1c59f98d22",
 				svc.Namespace+"/"+svc.Name,
 				svc.Namespace+"_"+svc.Name+"_80",
 			),

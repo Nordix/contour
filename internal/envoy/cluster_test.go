@@ -17,30 +17,26 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	core_v1 "k8s.io/api/core/v1"
+	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/projectcontour/contour/internal/dag"
 )
 
-func TestTruncate(t *testing.T) {
-	tests := []struct {
-		name   string
-		l      int
-		s      string
-		suffix string
-		want   string
+func TestTruncatedPath(t *testing.T) {
+	tests := map[string]struct {
+		parts []string
+		want  string
 	}{
-		{name: "no truncate", l: 10, s: "quijibo", suffix: "a8c5e6", want: "quijibo"},
-		{name: "limit", l: len("quijibo"), s: "quijibo", suffix: "a8c5e6", want: "quijibo"},
-		{name: "truncate some", l: 6, s: "quijibo", suffix: "a8c5", want: "q-a8c5"},
-		{name: "truncate suffix", l: 4, s: "quijibo", suffix: "a8c5", want: "a8c5"},
-		{name: "truncate more", l: 3, s: "quijibo", suffix: "a8c5", want: "a8c"},
-		{name: "long single element, truncated", l: 9, s: "gammagamma", suffix: "0d350e", want: "ga-0d350e"},
-		{name: "long single element, truncated", l: 12, s: "gammagammagamma", suffix: "0d350e", want: "gamma-0d350e"},
-		{name: "issue/25", l: 60 / 3, s: "my-very-very-long-service-host-name.my.domainname", suffix: "a8c5e6", want: "my-very-very--a8c5e6"},
+		"short":       {parts: []string{"default", "kuard", "80"}, want: "default/kuard/80"},
+		"exactly 15":  {parts: []string{"fifteen-chars-x", "kuard"}, want: "fifteen-chars-x/kuard"},
+		"long":        {parts: []string{"long-namespace-name", "long-service-name", "8080"}, want: "long-namespace-/long-service-na/8080"},
+		"single part": {parts: []string{"kuard"}, want: "kuard"},
+		"no parts":    {parts: nil, want: ""},
 	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			got := truncate(tc.l, tc.s, tc.suffix)
-			assert.Equal(t, tc.want, got)
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			assert.Equal(t, tc.want, truncatedPath(tc.parts...))
 		})
 	}
 }
@@ -53,26 +49,63 @@ func TestAnyPositive(t *testing.T) {
 	assert.True(t, AnyPositive(0, 1))
 }
 
-func TestHashname(t *testing.T) {
-	tests := []struct {
-		name string
-		l    int
-		s    []string
-		want string
-	}{
-		{name: "empty s", l: 99, s: nil, want: ""},
-		{name: "single element", l: 99, s: []string{"alpha"}, want: "alpha"},
-		{name: "long single element, hashed", l: 12, s: []string{"gammagammagamma"}, want: "0d350ea5c204"},
-		{name: "single element, truncated", l: 4, s: []string{"alpha"}, want: "8ed3"},
-		{name: "two elements, truncated", l: 19, s: []string{"gammagamma", "betabeta"}, want: "ga-edf159/betabeta"},
-		{name: "three elements", l: 99, s: []string{"alpha", "beta", "gamma"}, want: "alpha/beta/gamma"},
-		{name: "issue/25", l: 60, s: []string{"default", "my-service-name", "my-very-very-long-service-host-name.my.domainname"}, want: "default/my-service-name/my-very-very--c4d2d4"},
+func TestClusternameUnique(t *testing.T) {
+	svc := func(ns, name string) *dag.Service {
+		return &dag.Service{Weighted: dag.WeightedService{ServiceNamespace: ns, ServiceName: name, ServicePort: core_v1.ServicePort{Port: 8080}}}
 	}
+	ca := func(ns string) []*dag.Secret {
+		return []*dag.Secret{{Object: &core_v1.Secret{ObjectMeta: meta_v1.ObjectMeta{Namespace: ns, Name: "ca"}}}}
+	}
+	kuard := svc("default", "kuard")
 
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			got := Hashname(tc.l, append([]string{}, tc.s...)...)
-			assert.Equal(t, tc.want, got)
+	tests := map[string][2]*dag.Cluster{
+		"long names in different namespaces": {
+			{Upstream: svc("long-namespace-name-number-one", "long-service-name-one")},
+			{Upstream: svc("long-namespace-name-number-two", "long-service-name-two")},
+		},
+		"health check host": {
+			{Upstream: kuard, HTTPHealthCheckPolicy: &dag.HTTPHealthCheckPolicy{Host: "a.internal"}},
+			{Upstream: kuard, HTTPHealthCheckPolicy: &dag.HTTPHealthCheckPolicy{Host: "b.internal"}},
+		},
+		"health check expected statuses": {
+			{Upstream: kuard, HTTPHealthCheckPolicy: &dag.HTTPHealthCheckPolicy{}},
+			{Upstream: kuard, HTTPHealthCheckPolicy: &dag.HTTPHealthCheckPolicy{ExpectedStatuses: []dag.HTTPStatusRange{{Start: 200, End: 300}}}},
+		},
+		"health check thresholds 1, 23 and 12, 3": {
+			{Upstream: kuard, HTTPHealthCheckPolicy: &dag.HTTPHealthCheckPolicy{UnhealthyThreshold: 1, HealthyThreshold: 23}},
+			{Upstream: kuard, HTTPHealthCheckPolicy: &dag.HTTPHealthCheckPolicy{UnhealthyThreshold: 12, HealthyThreshold: 3}},
+		},
+		"tcp health check": {
+			{Upstream: kuard},
+			{Upstream: kuard, TCPHealthCheckPolicy: &dag.TCPHealthCheckPolicy{}},
+		},
+		"CA namespace": {
+			{Upstream: kuard, UpstreamValidation: &dag.PeerValidationContext{CACertificates: ca("default")}},
+			{Upstream: kuard, UpstreamValidation: &dag.PeerValidationContext{CACertificates: ca("other")}},
+		},
+		"second subject name": {
+			{Upstream: kuard, UpstreamValidation: &dag.PeerValidationContext{SubjectNames: []string{"a"}}},
+			{Upstream: kuard, UpstreamValidation: &dag.PeerValidationContext{SubjectNames: []string{"a", "b"}}},
+		},
+	}
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			assert.NotEqual(t, Clustername(tc[0]), Clustername(tc[1]))
 		})
 	}
+
+	assert.Regexp(t, `^long-namespace-/long-service-na/8080/[0-9a-f]{20}$`, Clustername(tests["long names in different namespaces"][0]))
+}
+
+func TestSecretnameUnique(t *testing.T) {
+	secret := func(ns, name string) *dag.Secret {
+		return &dag.Secret{Object: &core_v1.Secret{
+			ObjectMeta: meta_v1.ObjectMeta{Namespace: ns, Name: name},
+			Data:       map[string][]byte{core_v1.TLSCertKey: []byte("cert")},
+		}}
+	}
+	assert.NotEqual(t,
+		Secretname(secret("long-namespace-name-number-one", "long-secret-name-one")),
+		Secretname(secret("long-namespace-name-number-two", "long-secret-name-two")))
+	assert.Regexp(t, `^default/secret/[0-9a-f]{20}$`, Secretname(secret("default", "secret")))
 }

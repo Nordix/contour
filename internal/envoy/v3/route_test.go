@@ -91,7 +91,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 				},
 			},
@@ -104,7 +104,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					UpgradeConfigs: []*envoy_config_route_v3.RouteAction_UpgradeConfig{{
 						UpgradeType: "websocket",
@@ -140,10 +140,10 @@ func TestRouteRoute(t *testing.T) {
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 						WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 							Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-								Name:   "default/kuard/8080/da39a3ee5e",
+								Name:   "default/kuard/8080/b22243c6f0853102c24e",
 								Weight: wrapperspb.UInt32(0),
 							}, {
-								Name:   "default/kuard/8080/da39a3ee5e",
+								Name:   "default/kuard/8080/b22243c6f0853102c24e",
 								Weight: wrapperspb.UInt32(90),
 							}},
 						},
@@ -181,10 +181,10 @@ func TestRouteRoute(t *testing.T) {
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 						WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 							Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-								Name:   "default/kuard/8080/da39a3ee5e",
+								Name:   "default/kuard/8080/b22243c6f0853102c24e",
 								Weight: wrapperspb.UInt32(0),
 							}, {
-								Name:   "default/kuard/8080/da39a3ee5e",
+								Name:   "default/kuard/8080/b22243c6f0853102c24e",
 								Weight: wrapperspb.UInt32(90),
 							}},
 						},
@@ -228,7 +228,7 @@ func TestRouteRoute(t *testing.T) {
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 						WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 							Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-								Name:   "default/kuard/8080/da39a3ee5e",
+								Name:   "default/kuard/8080/b22243c6f0853102c24e",
 								Weight: wrapperspb.UInt32(1),
 								RequestHeadersToAdd: []*envoy_config_core_v3.HeaderValueOption{{
 									Header: &envoy_config_core_v3.HeaderValue{
@@ -272,7 +272,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 				},
 			},
@@ -289,7 +289,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					RetryPolicy: &envoy_config_route_v3.RetryPolicy{
 						RetryOn:       "503",
@@ -312,7 +312,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					RetryPolicy: &envoy_config_route_v3.RetryPolicy{
 						RetryOn:              "retriable-status-codes",
@@ -333,7 +333,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					Timeout: durationpb.New(90 * time.Second),
 				},
@@ -349,7 +349,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					Timeout: durationpb.New(0),
 				},
@@ -365,7 +365,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					IdleTimeout: durationpb.New(600 * time.Second),
 				},
@@ -381,7 +381,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					IdleTimeout: durationpb.New(0),
 				},
@@ -401,7 +401,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/e4f81994fe",
+						Cluster: "default/kuard/8080/874b33e629ce14270ce0",
 					},
 					HashPolicy: []*envoy_config_route_v3.RouteAction_HashPolicy{{
 						PolicySpecifier: &envoy_config_route_v3.RouteAction_HashPolicy_Cookie_{
@@ -431,10 +431,10 @@ func TestRouteRoute(t *testing.T) {
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 						WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 							Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-								Name:   "default/kuard/8080/e4f81994fe",
+								Name:   "default/kuard/8080/874b33e629ce14270ce0",
 								Weight: wrapperspb.UInt32(1),
 							}, {
-								Name:   "default/kuard/8080/e4f81994fe",
+								Name:   "default/kuard/8080/874b33e629ce14270ce0",
 								Weight: wrapperspb.UInt32(1),
 							}},
 						},
@@ -471,7 +471,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/1a2ffc1fef",
+						Cluster: "default/kuard/8080/3d99813e27ba70a70e4f",
 					},
 					HashPolicy: []*envoy_config_route_v3.RouteAction_HashPolicy{
 						{
@@ -510,7 +510,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/1a2ffc1fef",
+						Cluster: "default/kuard/8080/3d99813e27ba70a70e4f",
 					},
 					HashPolicy: []*envoy_config_route_v3.RouteAction_HashPolicy{
 						{
@@ -551,7 +551,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/1a2ffc1fef",
+						Cluster: "default/kuard/8080/3d99813e27ba70a70e4f",
 					},
 					HashPolicy: []*envoy_config_route_v3.RouteAction_HashPolicy{
 						{
@@ -583,7 +583,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					HostRewriteSpecifier: &envoy_config_route_v3.RouteAction_HostRewriteLiteral{HostRewriteLiteral: "bar.com"},
 				},
@@ -614,7 +614,7 @@ func TestRouteRoute(t *testing.T) {
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 						WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 							Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-								Name:                 "default/kuard/8080/da39a3ee5e",
+								Name:                 "default/kuard/8080/b22243c6f0853102c24e",
 								Weight:               wrapperspb.UInt32(1),
 								HostRewriteSpecifier: &envoy_config_route_v3.WeightedCluster_ClusterWeight_HostRewriteLiteral{HostRewriteLiteral: "s1.com"},
 							}},
@@ -664,11 +664,11 @@ func TestRouteRoute(t *testing.T) {
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_WeightedClusters{
 						WeightedClusters: &envoy_config_route_v3.WeightedCluster{
 							Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-								Name:                 "default/kuard/8080/da39a3ee5e",
+								Name:                 "default/kuard/8080/b22243c6f0853102c24e",
 								Weight:               wrapperspb.UInt32(20),
 								HostRewriteSpecifier: &envoy_config_route_v3.WeightedCluster_ClusterWeight_HostRewriteLiteral{HostRewriteLiteral: "s2.com"},
 							}, {
-								Name:                 "default/kuard/8080/da39a3ee5e",
+								Name:                 "default/kuard/8080/b22243c6f0853102c24e",
 								Weight:               wrapperspb.UInt32(80),
 								HostRewriteSpecifier: &envoy_config_route_v3.WeightedCluster_ClusterWeight_HostRewriteLiteral{HostRewriteLiteral: "s1.com"},
 							}},
@@ -711,10 +711,10 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					RequestMirrorPolicies: []*envoy_config_route_v3.RouteAction_RequestMirrorPolicy{{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 						RuntimeFraction: &envoy_config_core_v3.RuntimeFractionalPercent{
 							DefaultValue: &envoy_type_v3.FractionalPercent{
 								Numerator:   100,
@@ -770,11 +770,11 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					RequestMirrorPolicies: []*envoy_config_route_v3.RouteAction_RequestMirrorPolicy{
 						{
-							Cluster: "default/kuard/8080/da39a3ee5e",
+							Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 							RuntimeFraction: &envoy_config_core_v3.RuntimeFractionalPercent{
 								DefaultValue: &envoy_type_v3.FractionalPercent{
 									Numerator:   100,
@@ -783,7 +783,7 @@ func TestRouteRoute(t *testing.T) {
 							},
 						},
 						{
-							Cluster: "default/kuard2/8080/da39a3ee5e",
+							Cluster: "default/kuard2/8080/3e1c85a380f6a6fa1cf8",
 							RuntimeFraction: &envoy_config_core_v3.RuntimeFractionalPercent{
 								DefaultValue: &envoy_type_v3.FractionalPercent{
 									Numerator:   100,
@@ -803,7 +803,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					PrefixRewrite: "/rewrite",
 				},
@@ -817,7 +817,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					RegexRewrite: &envoy_matcher_v3.RegexMatchAndSubstitute{
 						Pattern: &envoy_matcher_v3.RegexMatcher{
@@ -836,7 +836,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					RegexRewrite: &envoy_matcher_v3.RegexMatchAndSubstitute{
 						Pattern: &envoy_matcher_v3.RegexMatcher{
@@ -860,7 +860,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					InternalRedirectPolicy: &envoy_config_route_v3.InternalRedirectPolicy{
 						MaxInternalRedirects:  wrapperspb.UInt32(5),
@@ -891,7 +891,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					InternalRedirectPolicy: &envoy_config_route_v3.InternalRedirectPolicy{
 						MaxInternalRedirects:     wrapperspb.UInt32(5),
@@ -912,7 +912,7 @@ func TestRouteRoute(t *testing.T) {
 			want: &envoy_config_route_v3.Route_Route{
 				Route: &envoy_config_route_v3.RouteAction{
 					ClusterSpecifier: &envoy_config_route_v3.RouteAction_Cluster{
-						Cluster: "default/kuard/8080/da39a3ee5e",
+						Cluster: "default/kuard/8080/b22243c6f0853102c24e",
 					},
 					InternalRedirectPolicy: &envoy_config_route_v3.InternalRedirectPolicy{
 						MaxInternalRedirects: nil,
@@ -1102,10 +1102,10 @@ func TestWeightedClusters(t *testing.T) {
 			},
 			want: &envoy_config_route_v3.WeightedCluster{
 				Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-					Name:   "default/kuard/8080/da39a3ee5e",
+					Name:   "default/kuard/8080/b22243c6f0853102c24e",
 					Weight: wrapperspb.UInt32(1),
 				}, {
-					Name:   "default/nginx/8080/da39a3ee5e",
+					Name:   "default/nginx/8080/488f93a8035a6edebdd8",
 					Weight: wrapperspb.UInt32(1),
 				}},
 			},
@@ -1140,10 +1140,10 @@ func TestWeightedClusters(t *testing.T) {
 			},
 			want: &envoy_config_route_v3.WeightedCluster{
 				Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-					Name:   "default/kuard/8080/da39a3ee5e",
+					Name:   "default/kuard/8080/b22243c6f0853102c24e",
 					Weight: wrapperspb.UInt32(80),
 				}, {
-					Name:   "default/nginx/8080/da39a3ee5e",
+					Name:   "default/nginx/8080/488f93a8035a6edebdd8",
 					Weight: wrapperspb.UInt32(20),
 				}},
 			},
@@ -1189,13 +1189,13 @@ func TestWeightedClusters(t *testing.T) {
 			},
 			want: &envoy_config_route_v3.WeightedCluster{
 				Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-					Name:   "default/kuard/8080/da39a3ee5e",
+					Name:   "default/kuard/8080/b22243c6f0853102c24e",
 					Weight: wrapperspb.UInt32(80),
 				}, {
-					Name:   "default/nginx/8080/da39a3ee5e",
+					Name:   "default/nginx/8080/488f93a8035a6edebdd8",
 					Weight: wrapperspb.UInt32(20),
 				}, {
-					Name:   "default/notraffic/8080/da39a3ee5e",
+					Name:   "default/notraffic/8080/64520f741afefadbd67f",
 					Weight: wrapperspb.UInt32(0),
 				}},
 			},
@@ -1232,7 +1232,7 @@ func TestWeightedClusters(t *testing.T) {
 			},
 			want: &envoy_config_route_v3.WeightedCluster{
 				Clusters: []*envoy_config_route_v3.WeightedCluster_ClusterWeight{{
-					Name:   "default/kuard/8080/da39a3ee5e",
+					Name:   "default/kuard/8080/b22243c6f0853102c24e",
 					Weight: wrapperspb.UInt32(1),
 					// Must target only the cookie rewrite Lua filter, not the misdirected requests filter.
 					TypedPerFilterConfig: map[string]*anypb.Any{
@@ -1242,7 +1242,7 @@ func TestWeightedClusters(t *testing.T) {
 						}}),
 					},
 				}, {
-					Name:   "default/nginx/8080/da39a3ee5e",
+					Name:   "default/nginx/8080/488f93a8035a6edebdd8",
 					Weight: wrapperspb.UInt32(1),
 				}},
 			},

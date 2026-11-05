@@ -300,7 +300,7 @@ func globalExternalAuthorizationWithMergedAuthPolicy(t *testing.T, rh ResourceEv
 				envoy_v3.VirtualHost("foo.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.ExtAuthzFilterName: protobuf.MustMarshalAny(
 								&envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute{
@@ -368,7 +368,7 @@ func globalExternalAuthorizationDisabledByDefault(t *testing.T, rh ResourceEvent
 				envoy_v3.VirtualHost("foo.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.ExtAuthzFilterName: protobuf.MustMarshalAny(
 								&envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute{
@@ -433,7 +433,7 @@ func GlobalExternalAuthorizationDisabledByDefaultAndEnabledOnRoute(t *testing.T,
 				envoy_v3.VirtualHost("foo.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.ExtAuthzFilterName: protobuf.MustMarshalAny(
 								&envoy_filter_http_ext_authz_v3.ExtAuthzPerRoute{
@@ -549,7 +549,7 @@ func globalExternalAuthorizationWithMergedAuthPolicyTLS(t *testing.T, rh Resourc
 				envoy_v3.VirtualHost("foo.com",
 					&envoy_config_route_v3.Route{
 						Match:                routePrefix("/"),
-						Action:               routeCluster("default/s1/80/da39a3ee5e"),
+						Action:               routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: expectedAuthContext,
 					},
 				),

@@ -102,7 +102,7 @@ func TestBackendClientAuthenticationWithHTTPProxy(t *testing.T) {
 
 	expectedResponse := &envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
-			tlsCluster(cluster("default/backend/443/950c17581f", "default/backend/http", "default_backend_443"), caSecret, "subjname", "", clientSecret, nil),
+			tlsCluster(cluster("default/backend/443/84bf79d040d43f6c0b22", "default/backend/http", "default_backend_443"), caSecret, "subjname", "", clientSecret, nil),
 		),
 		TypeUrl: clusterType,
 	}
@@ -167,7 +167,7 @@ func TestBackendClientAuthenticationWithIngress(t *testing.T) {
 
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
-			tlsClusterWithoutValidation(cluster("default/backend/443/4929fca9d4", "default/backend/http", "default_backend_443"), "", clientSecret, nil),
+			tlsClusterWithoutValidation(cluster("default/backend/443/3e489c5a54c5170c0485", "default/backend/http", "default_backend_443"), "", clientSecret, nil),
 		),
 		TypeUrl: clusterType,
 	})

@@ -61,7 +61,7 @@ func TestLoadBalancerPolicySessionAffinity(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			DefaultCluster(&envoy_config_cluster_v3.Cluster{
-				Name:                 s1.Namespace + "/" + s1.Name + "/80/e4f81994fe",
+				Name:                 s1.Namespace + "/" + s1.Name + "/80/7f4fa509d797cc7c1d05",
 				ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				AltStatName:          s1.Namespace + "_" + s1.Name + "_80",
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -80,7 +80,7 @@ func TestLoadBalancerPolicySessionAffinity(t *testing.T) {
 				envoy_v3.VirtualHost("www.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/cart"),
-						Action: withSessionAffinity(routeCluster("default/app/80/e4f81994fe")),
+						Action: withSessionAffinity(routeCluster("default/app/80/7f4fa509d797cc7c1d05")),
 					},
 				),
 			),
@@ -113,7 +113,7 @@ func TestLoadBalancerPolicySessionAffinity(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			DefaultCluster(&envoy_config_cluster_v3.Cluster{
-				Name:                 s1.Namespace + "/" + s1.Name + "/80/e4f81994fe",
+				Name:                 s1.Namespace + "/" + s1.Name + "/80/7f4fa509d797cc7c1d05",
 				ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				AltStatName:          s1.Namespace + "_" + s1.Name + "_80",
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -123,7 +123,7 @@ func TestLoadBalancerPolicySessionAffinity(t *testing.T) {
 				LbPolicy: envoy_config_cluster_v3.Cluster_RING_HASH,
 			}),
 			DefaultCluster(&envoy_config_cluster_v3.Cluster{
-				Name:                 s1.Namespace + "/" + s1.Name + "/8080/e4f81994fe",
+				Name:                 s1.Namespace + "/" + s1.Name + "/8080/25ad3a7275041f4e85ee",
 				ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				AltStatName:          s1.Namespace + "_" + s1.Name + "_8080",
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -144,8 +144,8 @@ func TestLoadBalancerPolicySessionAffinity(t *testing.T) {
 						Match: routePrefix("/cart"),
 						Action: withSessionAffinity(
 							routeWeightedCluster(
-								weightedCluster{"default/app/80/e4f81994fe", 1},
-								weightedCluster{"default/app/8080/e4f81994fe", 1},
+								weightedCluster{"default/app/80/7f4fa509d797cc7c1d05", 1},
+								weightedCluster{"default/app/8080/25ad3a7275041f4e85ee", 1},
 							),
 						),
 					},
@@ -202,7 +202,7 @@ func TestLoadBalancerPolicyRequestHashHeader(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			DefaultCluster(&envoy_config_cluster_v3.Cluster{
-				Name:                 s1.Namespace + "/" + s1.Name + "/80/1a2ffc1fef",
+				Name:                 s1.Namespace + "/" + s1.Name + "/80/c114fe4db092ee94f818",
 				ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				AltStatName:          s1.Namespace + "_" + s1.Name + "_80",
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -222,7 +222,7 @@ func TestLoadBalancerPolicyRequestHashHeader(t *testing.T) {
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/cart"),
 						Action: withRequestHashPolicySpecifiers(
-							routeCluster("default/app/80/1a2ffc1fef"),
+							routeCluster("default/app/80/c114fe4db092ee94f818"),
 							hashPolicySpecifier{headerName: "X-Some-Header", terminal: true},
 							hashPolicySpecifier{headerName: "X-Some-Other-Header"},
 						),
@@ -276,7 +276,7 @@ func TestLoadBalancerPolicyRequestHashSourceIP(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			DefaultCluster(&envoy_config_cluster_v3.Cluster{
-				Name:                 s1.Namespace + "/" + s1.Name + "/80/1a2ffc1fef",
+				Name:                 s1.Namespace + "/" + s1.Name + "/80/c114fe4db092ee94f818",
 				ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				AltStatName:          s1.Namespace + "_" + s1.Name + "_80",
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -296,7 +296,7 @@ func TestLoadBalancerPolicyRequestHashSourceIP(t *testing.T) {
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/cart"),
 						Action: withRequestHashPolicySpecifiers(
-							routeCluster("default/app/80/1a2ffc1fef"),
+							routeCluster("default/app/80/c114fe4db092ee94f818"),
 							hashPolicySpecifier{headerName: "X-Some-Header"},
 							hashPolicySpecifier{hashSourceIP: true},
 						),
@@ -353,7 +353,7 @@ func TestLoadBalancerPolicyRequestHashQueryParameter(t *testing.T) {
 	c.Request(clusterType).Equals(&envoy_service_discovery_v3.DiscoveryResponse{
 		Resources: resources(t,
 			DefaultCluster(&envoy_config_cluster_v3.Cluster{
-				Name:                 s1.Namespace + "/" + s1.Name + "/80/1a2ffc1fef",
+				Name:                 s1.Namespace + "/" + s1.Name + "/80/c114fe4db092ee94f818",
 				ClusterDiscoveryType: envoy_v3.ClusterDiscoveryType(envoy_config_cluster_v3.Cluster_EDS),
 				AltStatName:          s1.Namespace + "_" + s1.Name + "_80",
 				EdsClusterConfig: &envoy_config_cluster_v3.Cluster_EdsClusterConfig{
@@ -373,7 +373,7 @@ func TestLoadBalancerPolicyRequestHashQueryParameter(t *testing.T) {
 					&envoy_config_route_v3.Route{
 						Match: routePrefix("/cart"),
 						Action: withRequestHashPolicySpecifiers(
-							routeCluster("default/app/80/1a2ffc1fef"),
+							routeCluster("default/app/80/c114fe4db092ee94f818"),
 							hashPolicySpecifier{parameterName: "something", terminal: true},
 							hashPolicySpecifier{parameterName: "other"},
 						),

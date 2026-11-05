@@ -138,10 +138,10 @@ func TestGateway_TLS(t *testing.T) {
 				envoy_v3.VirtualHost("test.projectcontour.io",
 					&envoy_config_route_v3.Route{
 						Match:  routeSegmentPrefix("/blog"),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					}, &envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -149,10 +149,10 @@ func TestGateway_TLS(t *testing.T) {
 				envoy_v3.VirtualHost("test.projectcontour.io",
 					&envoy_config_route_v3.Route{
 						Match:  routeSegmentPrefix("/blog"),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					}, &envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),

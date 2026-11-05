@@ -90,7 +90,7 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "contains",
 							IgnoreCase: true,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithQueryParameterConditions("/", dag.QueryParamMatchCondition{
@@ -99,11 +99,11 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "contains",
 							IgnoreCase: false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefixWithQueryParameterConditions("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -153,7 +153,7 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "exact",
 							IgnoreCase: true,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithQueryParameterConditions("/", dag.QueryParamMatchCondition{
@@ -162,11 +162,11 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "exact",
 							IgnoreCase: false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefixWithQueryParameterConditions("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -216,7 +216,7 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "prefix",
 							IgnoreCase: true,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithQueryParameterConditions("/", dag.QueryParamMatchCondition{
@@ -225,11 +225,11 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "prefix",
 							IgnoreCase: false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefixWithQueryParameterConditions("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -279,7 +279,7 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "suffix",
 							IgnoreCase: true,
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithQueryParameterConditions("/", dag.QueryParamMatchCondition{
@@ -288,11 +288,11 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							MatchType:  "suffix",
 							IgnoreCase: false,
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefixWithQueryParameterConditions("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -341,7 +341,7 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							Value:     "^123.*",
 							MatchType: "regex",
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithQueryParameterConditions("/", dag.QueryParamMatchCondition{
@@ -349,11 +349,11 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							Value:     "^123.*",
 							MatchType: "regex",
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefixWithQueryParameterConditions("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -401,18 +401,18 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							Name:      "query-param",
 							MatchType: "present",
 						}),
-						Action: routeCluster("default/svc3/80/da39a3ee5e"),
+						Action: routeCluster("default/svc3/80/820cb44afd0684049705"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithQueryParameterConditions("/", dag.QueryParamMatchCondition{
 							Name:      "query-param",
 							MatchType: "present",
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefixWithQueryParameterConditions("/"),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 				),
 			),
@@ -462,7 +462,7 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							Value:     "abc",
 							MatchType: "contains",
 						}),
-						Action: routeCluster("default/svc1/80/da39a3ee5e"),
+						Action: routeCluster("default/svc1/80/d723398eb9fad288c4ea"),
 					},
 					&envoy_config_route_v3.Route{
 						Match: routePrefixWithQueryParameterConditions("/", dag.QueryParamMatchCondition{
@@ -470,7 +470,7 @@ func TestConditions_ContainsQueryParameter_HTTProxy(t *testing.T) {
 							Value:     "def",
 							MatchType: "contains",
 						}),
-						Action: routeCluster("default/svc2/80/da39a3ee5e"),
+						Action: routeCluster("default/svc2/80/f5fd1e067250ece39430"),
 					},
 				),
 			),

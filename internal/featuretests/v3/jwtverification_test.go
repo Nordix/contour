@@ -221,7 +221,7 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -325,11 +325,11 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/css"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -433,11 +433,11 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/css"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -563,7 +563,7 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-2"},
@@ -706,7 +706,7 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -874,7 +874,7 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -1019,7 +1019,7 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -1164,7 +1164,7 @@ func TestJWTVerification(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -1378,7 +1378,7 @@ func TestJWTVerification_Inclusion(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -1492,11 +1492,11 @@ func TestJWTVerification_Inclusion(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/css"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -1610,11 +1610,11 @@ func TestJWTVerification_Inclusion(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/css"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 					},
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-1"},
@@ -1750,7 +1750,7 @@ func TestJWTVerification_Inclusion(t *testing.T) {
 				envoy_v3.VirtualHost("jwt.example.com",
 					&envoy_config_route_v3.Route{
 						Match:  routePrefix("/"),
-						Action: routeCluster("default/s1/80/da39a3ee5e"),
+						Action: routeCluster("default/s1/80/b664a94e69a45e3bac25"),
 						TypedPerFilterConfig: map[string]*anypb.Any{
 							envoy_v3.JWTAuthnFilterName: protobuf.MustMarshalAny(&envoy_filter_http_jwt_authn_v3.PerRouteConfig{
 								RequirementSpecifier: &envoy_filter_http_jwt_authn_v3.PerRouteConfig_RequirementName{RequirementName: "provider-2"},
